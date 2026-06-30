@@ -30,6 +30,11 @@ export const planGuard = (feature) => {
         }
         case 'upload_photo': {
           if (limits.maxPhotosPerOrder === -1) return next();
+          const { Order } = await import('../models/index.js');
+          const order = await Order.findOne({ _id: req.params.id, tenantId: req.tenantId });
+          if (order && order.photos.length >= limits.maxPhotosPerOrder) {
+            return res.status(403).json({ error: 'PLAN_LIMIT_PHOTOS', message: 'Photo limit reached for this order' });
+          }
           break;
         }
         case 'custom_garment': {

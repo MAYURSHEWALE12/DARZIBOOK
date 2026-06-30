@@ -13,7 +13,14 @@ export const listStaff = async (req, res) => {
 
 export const createStaff = async (req, res) => {
   try {
-    const staff = new Staff({ ...req.body, tenantId: req.tenantId });
+    const allowedFields = ['name', 'phone', 'role', 'salaryType', 'baseSalary', 'status', 'joinDate', 'notes'];
+    const staffData = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) staffData[field] = req.body[field];
+    });
+    staffData.tenantId = req.tenantId;
+    
+    const staff = new Staff(staffData);
     await staff.save();
     res.status(201).json({ staff });
   } catch (error) {
@@ -33,9 +40,15 @@ export const getStaff = async (req, res) => {
 
 export const updateStaff = async (req, res) => {
   try {
+    const allowedFields = ['name', 'phone', 'role', 'salaryType', 'baseSalary', 'status', 'joinDate', 'notes'];
+    const staffData = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) staffData[field] = req.body[field];
+    });
+
     const staff = await Staff.findOneAndUpdate(
       { _id: req.params.id, tenantId: req.tenantId },
-      req.body,
+      staffData,
       { new: true, runValidators: true }
     );
     if (!staff) return res.status(404).json({ error: 'Staff not found' });

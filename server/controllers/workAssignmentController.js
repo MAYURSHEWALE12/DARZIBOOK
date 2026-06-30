@@ -13,7 +13,13 @@ export const listAssignments = async (req, res) => {
 
 export const createAssignment = async (req, res) => {
   try {
-    const assignment = new WorkAssignment({ ...req.body, tenantId: req.tenantId });
+    const allowedFields = ['staffId', 'orderId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
+    const assignmentData = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) assignmentData[field] = req.body[field];
+    });
+    assignmentData.tenantId = req.tenantId;
+    const assignment = new WorkAssignment(assignmentData);
     await assignment.save();
     res.status(201).json({ assignment });
   } catch (error) {
@@ -23,9 +29,15 @@ export const createAssignment = async (req, res) => {
 
 export const updateAssignment = async (req, res) => {
   try {
+    const allowedFields = ['staffId', 'orderId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
+    const assignmentData = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) assignmentData[field] = req.body[field];
+    });
+
     const assignment = await WorkAssignment.findOneAndUpdate(
       { _id: req.params.id, tenantId: req.tenantId },
-      req.body,
+      assignmentData,
       { new: true, runValidators: true }
     );
     if (!assignment) return res.status(404).json({ error: 'Assignment not found' });
