@@ -257,9 +257,6 @@ export default function MeasurementForm() {
         <button type="button" onClick={() => setForm({...form, values: {}})} className="px-6 py-2.5 rounded-lg border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-colors">
           {t('common.reset', 'Reset')}
         </button>
-        <button type="button" className="px-6 py-2.5 rounded-lg bg-[#1e3a8a] hover:bg-[#152c6e] text-white font-bold text-sm shadow-md shadow-[#1e3a8a]/20 transition-colors">
-          {t('common.saveDraft', 'Save Draft')}
-        </button>
         <button 
           onClick={handleSubmit} 
           disabled={!form.customerId || !form.templateId || loading} 
