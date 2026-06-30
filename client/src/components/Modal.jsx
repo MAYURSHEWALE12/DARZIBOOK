@@ -5,7 +5,7 @@ export default function Modal({ open, onClose, title, children, className }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 pb-safe">
+    <div className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-16 sm:p-6 sm:pt-20 animate-in fade-in duration-200 pb-safe">
       <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
       <div className={cn('relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] flex flex-col overflow-hidden border border-slate-200 animate-in zoom-in-95 duration-200', className)}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50 shrink-0">
