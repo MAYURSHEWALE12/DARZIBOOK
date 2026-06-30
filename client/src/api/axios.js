@@ -22,7 +22,9 @@ api.interceptors.response.use(
         await axios.post(`${API_URL}/auth/refresh-token`, {}, { withCredentials: true });
         return api(originalRequest);
       } catch {
-        window.location.href = '/login';
+        if (window.location.pathname !== '/login' && window.location.pathname !== '/superadmin/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
     }
