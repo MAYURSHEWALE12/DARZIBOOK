@@ -56,67 +56,79 @@ export default function StaffList() {
 
       <Card>
         <CardContent className="p-0 overflow-x-auto">
-          {loading ? (
-            <div className="p-16 text-center">
-              <div className="flex justify-center items-center gap-3">
-                <span className="animate-spin w-6 h-6 border-2 border-slate-200 border-t-[#1e3a8a] rounded-full"></span>
-                <span className="text-slate-500 font-medium">Loading staff...</span>
-              </div>
-            </div>
-          ) : staffList.length === 0 ? (
-            <div className="p-12 text-center text-slate-500">
-              <span className="material-symbols-outlined text-[48px] text-slate-300 mb-4 block">badge</span>
-              <p>No staff members found.</p>
-              <p className="text-sm">Click "Add Staff" to create your first team member.</p>
-            </div>
-          ) : (
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Phone</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Balance</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {staffList.map((staff) => (
-                  <tr key={staff._id} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
-                          {staff.name.charAt(0).toUpperCase()}
-                        </div>
-                        <span className="font-semibold text-slate-800">{staff.name}</span>
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Name</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Phone</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Balance</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {staffList.map((staff) => (
+                <tr key={staff._id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
+                        {staff.name.charAt(0).toUpperCase()}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 text-[13px] font-medium text-slate-600">
-                      <span className="px-2 py-1 bg-slate-100 rounded-md text-slate-600">{staff.role}</span>
-                    </td>
-                    <td className="px-6 py-4 text-[13px] text-slate-500">{staff.phone || '-'}</td>
-                    <td className="px-6 py-4 text-[13px] font-bold text-right">
-                      {staff.balance > 0 ? (
-                        <span className="text-emerald-600">₹{staff.balance} (Payable)</span>
-                      ) : staff.balance < 0 ? (
-                        <span className="text-rose-600">₹{Math.abs(staff.balance)} (Advance)</span>
-                      ) : (
-                        <span className="text-slate-400">₹0</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <Link 
-                        to={`/staff/${staff._id}`} 
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-[#1e3a8a] hover:bg-blue-50 transition-colors"
-                      >
-                        <span className="material-symbols-outlined text-[20px]">chevron_right</span>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                      <span className="font-semibold text-slate-800">{staff.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-[13px] font-medium text-slate-600">
+                    <span className="px-2 py-1 bg-slate-100 rounded-md text-slate-600">{staff.role}</span>
+                  </td>
+                  <td className="px-6 py-4 text-[13px] text-slate-500">{staff.phone || '-'}</td>
+                  <td className="px-6 py-4 text-[13px] font-bold text-right">
+                    {staff.balance > 0 ? (
+                      <span className="text-emerald-600">₹{staff.balance} (Payable)</span>
+                    ) : staff.balance < 0 ? (
+                      <span className="text-rose-600">₹{Math.abs(staff.balance)} (Advance)</span>
+                    ) : (
+                      <span className="text-slate-400">₹0</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <Link 
+                      to={`/staff/${staff._id}`} 
+                      className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-[#1e3a8a] hover:bg-blue-50 transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+
+              {staffList.length === 0 && !loading && (
+                <tr>
+                  <td colSpan={5} className="py-16 text-center">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4 border border-slate-100">
+                        <span className="material-symbols-outlined text-[40px] text-slate-300">badge</span>
+                      </div>
+                      <p className="text-slate-600 font-semibold text-lg">No staff members found</p>
+                      <p className="text-slate-400 mt-1 max-w-[250px] mx-auto text-sm">
+                        Click "Add Staff" to create your first team member.
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+
+              {loading && (
+                <tr>
+                  <td colSpan={5} className="py-16 text-center">
+                    <div className="flex justify-center items-center gap-3">
+                       <span className="animate-spin w-6 h-6 border-2 border-slate-200 border-t-[#1e3a8a] rounded-full"></span>
+                       <span className="text-slate-500 font-medium">Loading staff...</span>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </CardContent>
       </Card>
 
