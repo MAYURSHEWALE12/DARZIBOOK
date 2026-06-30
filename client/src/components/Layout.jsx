@@ -139,8 +139,12 @@ export default function Layout() {
 
           <div className="mt-6 p-4 mx-4 bg-[#1e293b] rounded-xl border border-white/10 backdrop-blur-sm shadow-inner shrink-0">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#ffb869] to-[#fdad4e] flex items-center justify-center text-[#2b1700] font-bold text-lg shadow-md border border-white/20">
-                {tenant?.shopName?.charAt(0) || 'S'}
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#ffb869] to-[#fdad4e] flex items-center justify-center text-[#2b1700] font-bold text-lg shadow-md border border-white/20 overflow-hidden shrink-0">
+                {tenant?.logo ? (
+                  <img src={tenant.logo} alt={tenant.shopName} className="w-full h-full object-cover" />
+                ) : (
+                  tenant?.shopName?.charAt(0) || 'S'
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[15px] font-semibold text-white truncate">{tenant?.shopName || 'My Shop'}</p>
