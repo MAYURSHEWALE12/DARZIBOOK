@@ -70,6 +70,23 @@ export const createOrder = async (req, res) => {
   // Update customer pending total
   await Customer.findByIdAndUpdate(data.customerId, { $inc: { totalPending: pendingAmount } });
 
+  // If advance was paid, create a Payment record so it shows up in Revenue
+  if (data.advancePaid > 0) {
+    try {
+      await Payment.create({
+        tenantId: req.tenantId,
+        customerId: data.customerId,
+        orderId: order._id,
+        amount: data.advancePaid,
+        method: 'cash',
+        note: 'Advance payment at time of order',
+        date: new Date(),
+      });
+    } catch (paymentErr) {
+      console.error('Failed to create advance payment record:', paymentErr);
+    }
+  }
+
   res.status(201).json({ order });
 };
 
