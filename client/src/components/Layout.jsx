@@ -11,10 +11,10 @@ import LanguageSwitcher from './LanguageSwitcher.jsx';
 const navItems = [
   { path: '/dashboard', icon: 'dashboard', label: 'nav.dashboard' },
   { path: '/customers', icon: 'groups', label: 'nav.customers' },
-  { path: '/measurements/new', icon: 'straighten', label: 'Measurements' },
+  { path: '/measurements/new', icon: 'straighten', label: 'nav.measurements' },
   { path: '/orders', icon: 'format_list_bulleted', label: 'nav.orders' },
   { path: '/reports', icon: 'analytics', label: 'nav.reports' },
-  { path: '/staff', icon: 'badge', label: 'Staff' },
+  { path: '/staff', icon: 'badge', label: 'nav.staff' },
   { path: '/profile', icon: 'person', label: 'nav.profile' },
   { path: '/subscription', icon: 'workspace_premium', label: 'nav.subscription' },
 ];
@@ -163,7 +163,7 @@ export default function Layout() {
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-white/80 bg-white/5 hover:bg-rose-500/20 hover:text-rose-300 border border-transparent hover:border-rose-500/30 transition-all text-[13px] font-bold uppercase tracking-wider"
             >
               <span className="material-symbols-outlined text-[18px]">logout</span> 
-              Logout
+              {t('nav.logout')}
             </button>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function Layout() {
       <main className="flex-1 min-w-0 flex flex-col overflow-y-auto bg-slate-50 relative">
         <header className="h-20 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 flex items-center justify-between sticky top-0 z-40 shadow-sm">
           <div>
-            <h1 className="text-xl font-bold text-slate-800 tracking-tight hidden md:block">Overview</h1>
+            <h1 className="text-xl font-bold text-slate-800 tracking-tight hidden md:block">{t('nav.overview', 'Overview')}</h1>
             <div className="md:hidden flex items-center gap-3">
               <button 
                 onClick={() => setIsMobileMenuOpen(true)}
@@ -206,16 +206,16 @@ export default function Layout() {
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-top-2">
                   <div className="px-4 py-3 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h3 className="text-sm font-bold text-slate-800">Notifications</h3>
+                    <h3 className="text-sm font-bold text-slate-800">{t('nav.notifications', 'Notifications')}</h3>
                     {unreadCount > 0 && (
                       <button onClick={handleMarkAllRead} className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider hover:underline">
-                        Mark all read
+                        {t('nav.markAllRead', 'Mark all read')}
                       </button>
                     )}
                   </div>
                   <div className="max-h-[350px] overflow-y-auto no-scrollbar">
                     {notifications.length === 0 ? (
-                      <div className="p-6 text-center text-slate-500 text-sm">No notifications.</div>
+                      <div className="p-6 text-center text-slate-500 text-sm">{t('nav.noNotifications', 'No notifications.')}</div>
                     ) : (
                       <div className="divide-y divide-slate-100">
                         {notifications.map(notif => (

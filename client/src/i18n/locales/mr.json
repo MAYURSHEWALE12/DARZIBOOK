@@ -105,5 +105,11 @@
   "common.saveDraft": "मसुदा जतन करा",
   "common.saving": "जतन करत आहे...",
   "measurement.update": "माप अपडेट करा",
-  "measurement.save": "माप जतन करा"
+  "measurement.save": "माप जतन करा",
+  "nav.measurements": "मापे",
+  "nav.staff": "कर्मचारी",
+  "nav.overview": "आढावा",
+  "nav.notifications": "सूचना",
+  "nav.markAllRead": "सर्व वाचलेले चिन्हांकित करा",
+  "nav.noNotifications": "कोणत्याही सूचना नाहीत."
 }

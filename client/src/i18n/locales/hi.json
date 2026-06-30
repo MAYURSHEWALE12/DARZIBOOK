@@ -105,5 +105,11 @@
   "common.saveDraft": "ड्राफ्ट सहेजें",
   "common.saving": "सहेजा जा रहा है...",
   "measurement.update": "नाप अपडेट करें",
-  "measurement.save": "नाप सहेजें"
+  "measurement.save": "नाप सहेजें",
+  "nav.measurements": "नाप",
+  "nav.staff": "कर्मचारी",
+  "nav.overview": "अवलोकन",
+  "nav.notifications": "सूचनाएं",
+  "nav.markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
+  "nav.noNotifications": "कोई सूचना नहीं."
 }

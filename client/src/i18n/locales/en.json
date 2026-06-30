@@ -118,5 +118,11 @@
   "common.saveDraft": "Save Draft",
   "common.saving": "Saving...",
   "measurement.update": "Update Measurement",
-  "measurement.save": "Save Measurement"
+  "measurement.save": "Save Measurement",
+  "nav.measurements": "Measurements",
+  "nav.staff": "Staff",
+  "nav.overview": "Overview",
+  "nav.notifications": "Notifications",
+  "nav.markAllRead": "Mark all read",
+  "nav.noNotifications": "No notifications."
 }
