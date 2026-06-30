@@ -72,7 +72,16 @@ export default function StaffDetails() {
     setIsTxModalOpen(true);
   };
 
-  if (loading) return <div className="p-8 text-center text-slate-500">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <div className="flex flex-col items-center gap-4">
+          <span className="animate-spin w-8 h-8 border-4 border-slate-200 border-t-[#1e3a8a] rounded-full"></span>
+          <span className="text-slate-500 font-medium text-lg">Loading staff details...</span>
+        </div>
+      </div>
+    );
+  }
   if (!staff) return <div className="p-8 text-center text-slate-500">Staff not found</div>;
 
   return (

@@ -57,7 +57,12 @@ export default function StaffList() {
       <Card>
         <CardContent className="p-0 overflow-x-auto">
           {loading ? (
-            <div className="p-8 text-center text-slate-500">Loading staff...</div>
+            <div className="p-16 text-center">
+              <div className="flex justify-center items-center gap-3">
+                <span className="animate-spin w-6 h-6 border-2 border-slate-200 border-t-[#1e3a8a] rounded-full"></span>
+                <span className="text-slate-500 font-medium">Loading staff...</span>
+              </div>
+            </div>
           ) : staffList.length === 0 ? (
             <div className="p-12 text-center text-slate-500">
               <span className="material-symbols-outlined text-[48px] text-slate-300 mb-4 block">badge</span>
