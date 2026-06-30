@@ -111,5 +111,18 @@
   "nav.overview": "अवलोकन",
   "nav.notifications": "सूचनाएं",
   "nav.markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
-  "nav.noNotifications": "कोई सूचना नहीं."
+  "nav.noNotifications": "कोई सूचना नहीं.",
+  "measurement.chest": "छाती",
+  "measurement.waist": "कमर",
+  "measurement.shoulder": "कंधा",
+  "measurement.sleeve": "आस्तीन",
+  "measurement.length": "लंबाई",
+  "measurement.neck": "गर्दन",
+  "measurement.armhole": "बगल",
+  "measurement.cuff": "कफ",
+  "measurement.hip": "कूल्हा",
+  "measurement.thigh": "जांघ",
+  "measurement.knee": "घुटना",
+  "measurement.bottom": "बॉटम",
+  "measurement.inseam": "इनसीम"
 }

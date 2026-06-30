@@ -111,5 +111,18 @@
   "nav.overview": "आढावा",
   "nav.notifications": "सूचना",
   "nav.markAllRead": "सर्व वाचलेले चिन्हांकित करा",
-  "nav.noNotifications": "कोणत्याही सूचना नाहीत."
+  "nav.noNotifications": "कोणत्याही सूचना नाहीत.",
+  "measurement.chest": "छाती",
+  "measurement.waist": "कंबर",
+  "measurement.shoulder": "खांदा",
+  "measurement.sleeve": "बाह्या",
+  "measurement.length": "लांबी",
+  "measurement.neck": "मान",
+  "measurement.armhole": "आर्महोल",
+  "measurement.cuff": "कफ",
+  "measurement.hip": "हिप",
+  "measurement.thigh": "मांडी",
+  "measurement.knee": "गुडघा",
+  "measurement.bottom": "बॉटम",
+  "measurement.inseam": "इनसीम"
 }
