@@ -133,23 +133,25 @@ export default function MeasurementForm() {
             <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 rounded-t-[11px]">
               <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('customer.info', 'Customer Information')}</h3>
             </div>
-            <div className="p-4 flex flex-col gap-4 flex-1">
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[12px] font-semibold text-slate-500">{t('customer.name', 'Customer Name')}</span>
-                <CustomSelect
-                  value={form.customerId}
-                  onChange={(val) => setForm({ ...form, customerId: val })}
-                  options={customers.map((c) => ({ value: c._id, label: c.name }))}
-                  placeholder={t('customer.select', 'Select customer...')}
-                />
+            <div className="p-4 grid grid-cols-1 gap-y-4 flex-1">
+              <div className="flex items-center gap-3">
+                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('customer.name', 'Customer Name')}</span>
+                <div className="flex-1 min-w-0">
+                  <CustomSelect
+                    value={form.customerId}
+                    onChange={(val) => setForm({ ...form, customerId: val })}
+                    options={customers.map((c) => ({ value: c._id, label: c.name }))}
+                    placeholder={t('customer.select', 'Select customer...')}
+                  />
+                </div>
               </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[12px] font-semibold text-slate-500">{t('customer.phone', 'Phone Number')}</span>
-                <input type="text" readOnly value={selectedCustomer?.phone || ''} className="w-full h-9 px-3 rounded-md text-[13px] font-medium border border-slate-200 bg-slate-50/50 text-slate-600 outline-none" />
+              <div className="flex items-center gap-3">
+                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('customer.phone', 'Phone Number')}</span>
+                <input type="text" readOnly value={selectedCustomer?.phone || ''} className="flex-1 w-full h-10 px-3 rounded-md text-[13px] font-medium border border-slate-200 bg-slate-50/50 text-slate-600 outline-none" />
               </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[12px] font-semibold text-slate-500">{t('customer.address', 'Address')}</span>
-                <input type="text" readOnly value={selectedCustomer?.address?.city || ''} className="w-full h-9 px-3 rounded-md text-[13px] font-medium border border-slate-200 bg-slate-50/50 text-slate-600 outline-none" />
+              <div className="flex items-center gap-3">
+                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('customer.address', 'Address')}</span>
+                <input type="text" readOnly value={selectedCustomer?.address?.city || ''} className="flex-1 w-full h-10 px-3 rounded-md text-[13px] font-medium border border-slate-200 bg-slate-50/50 text-slate-600 outline-none" />
               </div>
             </div>
           </div>
@@ -159,31 +161,37 @@ export default function MeasurementForm() {
             <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 rounded-t-[11px]">
               <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('garment.details', 'Garment Details')}</h3>
             </div>
-            <div className="p-4 flex flex-col gap-4 flex-1">
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[12px] font-semibold text-slate-500">{t('order.garmentType', 'Garment Type')}</span>
-                <CustomSelect
-                  value={form.templateId}
-                  onChange={(val) => handleTemplateChange(val)}
-                  options={templates.map((t) => ({ value: t._id, label: t.garmentType }))}
-                  placeholder={t('garment.select', 'Select garment...')}
-                />
+            <div className="p-4 grid grid-cols-1 gap-y-4 flex-1">
+              <div className="flex items-center gap-3">
+                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('order.garmentType', 'Garment Type')}</span>
+                <div className="flex-1 min-w-0">
+                  <CustomSelect
+                    value={form.templateId}
+                    onChange={(val) => handleTemplateChange(val)}
+                    options={templates.map((t) => ({ value: t._id, label: t.garmentType }))}
+                    placeholder={t('garment.select', 'Select garment...')}
+                  />
+                </div>
               </div>
-              <div className="flex flex-col gap-1.5 opacity-60 pointer-events-none">
-                <span className="text-[12px] font-semibold text-slate-500">{t('garment.fit', 'Fit')}</span>
-                <CustomSelect
-                  value="Regular Fit"
-                  onChange={() => {}}
-                  options={[{ value: 'Regular Fit', label: 'Regular Fit' }]}
-                />
+              <div className="flex items-center gap-3 opacity-60 pointer-events-none">
+                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('garment.fit', 'Fit')}</span>
+                <div className="flex-1 min-w-0">
+                  <CustomSelect
+                    value="Regular Fit"
+                    onChange={() => {}}
+                    options={[{ value: 'Regular Fit', label: 'Regular Fit' }]}
+                  />
+                </div>
               </div>
-              <div className="flex flex-col gap-1.5 opacity-60 pointer-events-none">
-                <span className="text-[12px] font-semibold text-slate-500">{t('garment.fabric', 'Fabric')}</span>
-                <CustomSelect
-                  value="Cotton"
-                  onChange={() => {}}
-                  options={[{ value: 'Cotton', label: 'Cotton' }]}
-                />
+              <div className="flex items-center gap-3 opacity-60 pointer-events-none">
+                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('garment.fabric', 'Fabric')}</span>
+                <div className="flex-1 min-w-0">
+                  <CustomSelect
+                    value="Cotton"
+                    onChange={() => {}}
+                    options={[{ value: 'Cotton', label: 'Cotton' }]}
+                  />
+                </div>
               </div>
             </div>
           </div>
