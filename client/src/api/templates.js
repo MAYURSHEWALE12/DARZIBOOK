@@ -1,0 +1,6 @@
+import api from './axios.js';
+
+export const listTemplates = () => api.get('/templates');
+export const createTemplate = (data) => api.post('/templates', data);
+export const updateTemplate = (id, data) => api.put(`/templates/${id}`, data);
+export const deleteTemplate = (id) => api.delete(`/templates/${id}`);
