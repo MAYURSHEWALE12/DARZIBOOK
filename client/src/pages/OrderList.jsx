@@ -23,7 +23,12 @@ export default function OrderList() {
     }
   };
 
-  useEffect(() => { fetchOrders(); }, [filters.status]);
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchOrders();
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
+  }, [filters.status, filters.search]);
 
   const getStatusColor = (status) => {
     switch (status) {
