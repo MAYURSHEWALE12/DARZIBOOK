@@ -19,7 +19,7 @@ const generateInvoiceNumber = async (tenantId) => {
 };
 
 export const listOrders = async (req, res) => {
-  const { status, customerId, startDate, endDate, overdue } = req.query;
+  const { status, customerId, startDate, endDate, overdue, search } = req.query;
   const filter = { tenantId: req.tenantId };
 
   if (status) filter.status = status;
@@ -32,6 +32,22 @@ export const listOrders = async (req, res) => {
   if (overdue === 'true') {
     filter.deliveryDate = { $lt: new Date() };
     filter.status = { $ne: 'delivered' };
+  }
+
+  if (search) {
+    const matchedCustomers = await Customer.find({
+      tenantId: req.tenantId,
+      $or: [
+        { name: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } }
+      ]
+    }).select('_id');
+    const customerIds = matchedCustomers.map(c => c._id);
+
+    filter.$or = [
+      { customerId: { $in: customerIds } },
+      { invoiceNumber: { $regex: search, $options: 'i' } }
+    ];
   }
 
   const orders = await Order.find(filter)
