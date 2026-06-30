@@ -7,7 +7,7 @@ export const formatLabel = (str) => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 };
 
-export default function CustomSelect({ value, onChange, options, placeholder = "Select...", className }) {
+export default function CustomSelect({ value, onChange, options = [], placeholder = "Select...", className }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
