@@ -26,8 +26,12 @@ export default function OrderForm() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    listCustomers().then(({ data }) => setCustomers(data.customers));
-    listTemplates().then(({ data }) => setTemplates(data.templates));
+    listCustomers()
+      .then(({ data }) => setCustomers(data.customers))
+      .catch(() => toast.error('Failed to load customers'));
+    listTemplates()
+      .then(({ data }) => setTemplates(data.templates))
+      .catch(() => toast.error('Failed to load garment templates'));
   }, []);
 
   const handleSubmit = async (e) => {
