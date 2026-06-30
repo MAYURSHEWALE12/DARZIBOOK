@@ -250,7 +250,7 @@ export default function MeasurementForm() {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 md:left-72 right-0 bg-white border-t border-slate-200 p-4 px-6 flex flex-wrap items-center justify-center sm:justify-end gap-3 z-[45] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+      <div className="fixed bottom-16 md:bottom-0 left-0 md:left-72 right-0 bg-white border-t border-slate-200 p-4 px-6 flex flex-wrap items-center justify-center sm:justify-end gap-3 z-[45] shadow-[0_-10px_30px_rgba(0,0,0,0.05)] pb-safe md:pb-4">
         <button type="button" onClick={() => navigate(-1)} className="px-6 py-2.5 rounded-lg border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-colors">
           Cancel
         </button>
