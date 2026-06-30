@@ -248,7 +248,7 @@ export default function Layout() {
           </div>
         </header>
 
-        <div className="p-6 md:p-8 space-y-8 max-w-[1400px] mx-auto w-full pb-24 md:pb-8">
+        <div className="p-6 md:p-8 space-y-8 max-w-[1400px] mx-auto w-full pb-40 md:pb-8">
           <Outlet />
         </div>
       </main>
