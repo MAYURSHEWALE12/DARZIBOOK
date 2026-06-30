@@ -11,10 +11,10 @@ import LanguageSwitcher from './LanguageSwitcher.jsx';
 const navItems = [
   { path: '/dashboard', icon: 'dashboard', label: 'nav.dashboard' },
   { path: '/customers', icon: 'groups', label: 'nav.customers' },
-  { path: '/staff', icon: 'badge', label: 'Staff' },
   { path: '/measurements/new', icon: 'straighten', label: 'Measurements' },
   { path: '/orders', icon: 'format_list_bulleted', label: 'nav.orders' },
   { path: '/reports', icon: 'analytics', label: 'nav.reports' },
+  { path: '/staff', icon: 'badge', label: 'Staff' },
   { path: '/profile', icon: 'person', label: 'nav.profile' },
   { path: '/subscription', icon: 'workspace_premium', label: 'nav.subscription' },
 ];
