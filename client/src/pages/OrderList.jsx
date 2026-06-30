@@ -70,7 +70,7 @@ export default function OrderList() {
               placeholder={t('customer.search') + "..."}
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-              className="w-full pl-11 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1e3a8a] focus:border-[#1e3a8a] transition-all text-[13px] text-slate-700 font-medium"
+              className="w-full pl-11 pr-4 h-12 bg-white border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-1 focus:ring-[#1e3a8a] focus:border-[#1e3a8a] transition-all text-[15px] text-slate-700 font-medium"
             />
           </div>
           <div className="w-full sm:w-48 z-10">
