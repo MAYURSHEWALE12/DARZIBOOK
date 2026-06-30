@@ -8,3 +8,6 @@ export { default as Payment } from './Payment.js';
 export { default as Plan } from './Plan.js';
 export { default as SuperAdmin } from './SuperAdmin.js';
 export { default as Notification } from './Notification.js';
+export { default as Staff } from './Staff.js';
+export { default as WorkAssignment } from './WorkAssignment.js';
+export { default as SalaryTransaction } from './SalaryTransaction.js';
