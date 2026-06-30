@@ -19,7 +19,7 @@ const generateInvoiceNumber = async (tenantId) => {
 };
 
 export const listOrders = async (req, res) => {
-  const { status, customerId, startDate, endDate, overdue, search } = req.query;
+  const { status, customerId, startDate, endDate, overdue, search, page = 1, limit = 10 } = req.query;
   const filter = { tenantId: req.tenantId };
 
   if (status) filter.status = status;
@@ -50,10 +50,23 @@ export const listOrders = async (req, res) => {
     ];
   }
 
+  const parsedPage = parseInt(page);
+  const parsedLimit = parseInt(limit);
+  const skip = (parsedPage - 1) * parsedLimit;
+
+  const totalItems = await Order.countDocuments(filter);
+  const totalPages = Math.ceil(totalItems / parsedLimit);
+
   const orders = await Order.find(filter)
     .populate('customerId', 'name phone')
-    .sort({ createdAt: -1 });
-  res.json({ orders });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(parsedLimit);
+
+  res.json({ 
+    orders,
+    pagination: { totalItems, totalPages, currentPage: parsedPage, limit: parsedLimit }
+  });
 };
 
 export const createOrder = async (req, res) => {

@@ -1,7 +1,7 @@
 import api from './axios.js';
 
 // Staff
-export const listStaff = () => api.get('/staff');
+export const listStaff = (params) => api.get('/staff', { params });
 export const getStaff = (id) => api.get(`/staff/${id}`);
 export const createStaff = (data) => api.post('/staff', data);
 export const updateStaff = (id, data) => api.put(`/staff/${id}`, data);

@@ -11,7 +11,7 @@ const customerSchema = z.object({
 });
 
 export const listCustomers = async (req, res) => {
-  const { search, pending } = req.query;
+  const { search, pending, page = 1, limit = 10 } = req.query;
   const filter = { tenantId: req.tenantId };
 
   if (search) {
@@ -22,8 +22,22 @@ export const listCustomers = async (req, res) => {
   }
   if (pending === 'true') filter.totalPending = { $gt: 0 };
 
-  const customers = await Customer.find(filter).sort({ createdAt: -1 });
-  res.json({ customers });
+  const parsedPage = parseInt(page);
+  const parsedLimit = parseInt(limit);
+  const skip = (parsedPage - 1) * parsedLimit;
+
+  const totalItems = await Customer.countDocuments(filter);
+  const totalPages = Math.ceil(totalItems / parsedLimit);
+
+  const customers = await Customer.find(filter)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(parsedLimit);
+
+  res.json({ 
+    customers, 
+    pagination: { totalItems, totalPages, currentPage: parsedPage, limit: parsedLimit } 
+  });
 };
 
 export const createCustomer = async (req, res) => {

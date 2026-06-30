@@ -6,21 +6,26 @@ import Button from '../components/Button.jsx';
 import Input from '../components/Input.jsx';
 import Modal from '../components/Modal.jsx';
 import toast from 'react-hot-toast';
+import Pagination from '../components/Pagination.jsx';
 
 export default function StaffList() {
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStaff, setNewStaff] = useState({ name: '', phone: '', role: 'Tailor', salaryType: 'weekly', baseSalary: 0 });
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
 
   useEffect(() => {
     fetchStaff();
-  }, []);
+  }, [page]);
 
   const fetchStaff = async () => {
+    setLoading(true);
     try {
-      const { data } = await listStaff();
+      const { data } = await listStaff({ page, limit: 10 });
       setStaffList(data.staff);
+      setPagination(data.pagination);
     } catch (err) {
       toast.error('Failed to load staff');
     } finally {
@@ -55,7 +60,7 @@ export default function StaffList() {
       </div>
 
       <Card>
-        <CardContent className="p-0 overflow-x-auto">
+        <CardContent className="p-0 overflow-x-auto pb-4">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
@@ -129,6 +134,10 @@ export default function StaffList() {
               )}
             </tbody>
           </table>
+          
+          <div className="px-4">
+            <Pagination pagination={pagination} onPageChange={setPage} />
+          </div>
         </CardContent>
       </Card>
 

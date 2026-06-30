@@ -4,8 +4,25 @@ import WorkAssignment from '../models/WorkAssignment.js';
 
 export const listStaff = async (req, res) => {
   try {
-    const staff = await Staff.find({ tenantId: req.tenantId }).sort({ createdAt: -1 });
-    res.json({ staff });
+    const { page = 1, limit = 10 } = req.query;
+    const filter = { tenantId: req.tenantId };
+    
+    const parsedPage = parseInt(page);
+    const parsedLimit = parseInt(limit);
+    const skip = (parsedPage - 1) * parsedLimit;
+
+    const totalItems = await Staff.countDocuments(filter);
+    const totalPages = Math.ceil(totalItems / parsedLimit);
+
+    const staff = await Staff.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parsedLimit);
+      
+    res.json({ 
+      staff,
+      pagination: { totalItems, totalPages, currentPage: parsedPage, limit: parsedLimit }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

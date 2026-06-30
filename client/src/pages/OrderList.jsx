@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { listOrders } from '../api/orders.js';
 import Select from '../components/Select.jsx';
 import toast from 'react-hot-toast';
+import Pagination from '../components/Pagination.jsx';
 
 export default function OrderList() {
   const { t } = useTranslation();
@@ -11,11 +12,17 @@ export default function OrderList() {
   const [orders, setOrders] = useState([]);
   const [filters, setFilters] = useState({ status: '', search: '' });
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
+
+  useEffect(() => { setPage(1); }, [filters.status, filters.search]);
 
   const fetchOrders = async () => {
+    setLoading(true);
     try {
-      const { data } = await listOrders(filters);
+      const { data } = await listOrders({ ...filters, page, limit: 10 });
       setOrders(data.orders);
+      setPagination(data.pagination);
     } catch {
       toast.error('Failed to fetch orders');
     } finally {
@@ -28,7 +35,7 @@ export default function OrderList() {
       fetchOrders();
     }, 300);
     return () => clearTimeout(delayDebounceFn);
-  }, [filters.status, filters.search]);
+  }, [filters.status, filters.search, page]);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -61,8 +68,8 @@ export default function OrderList() {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row gap-4">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-1 pb-4">
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row gap-4 rounded-t-lg">
           <div className="relative flex-1 max-w-md">
             <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">search</span>
             <input 
@@ -161,6 +168,10 @@ export default function OrderList() {
               )}
             </tbody>
           </table>
+        </div>
+
+        <div className="px-4">
+          <Pagination pagination={pagination} onPageChange={setPage} />
         </div>
       </div>
     </div>

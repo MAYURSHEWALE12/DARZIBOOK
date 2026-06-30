@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { listCustomers } from '../api/customers.js';
 import toast from 'react-hot-toast';
+import Pagination from '../components/Pagination.jsx';
 
 export default function CustomerList() {
   const { t } = useTranslation();
@@ -10,11 +11,18 @@ export default function CustomerList() {
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
+
+  // Reset page when search changes
+  useEffect(() => { setPage(1); }, [search]);
 
   const fetchCustomers = async () => {
+    setLoading(true);
     try {
-      const { data } = await listCustomers({ search });
+      const { data } = await listCustomers({ search, page, limit: 10 });
       setCustomers(data.customers);
+      setPagination(data.pagination);
     } catch {
       toast.error('Failed to fetch customers');
     } finally {
@@ -22,7 +30,7 @@ export default function CustomerList() {
     }
   };
 
-  useEffect(() => { fetchCustomers(); }, [search]);
+  useEffect(() => { fetchCustomers(); }, [search, page]);
 
   return (
     <div className="space-y-6">
@@ -45,8 +53,8 @@ export default function CustomerList() {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-1 pb-4">
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 rounded-t-lg">
           <div className="relative max-w-md">
             <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">search</span>
             <input 
@@ -129,6 +137,10 @@ export default function CustomerList() {
               )}
             </tbody>
           </table>
+        </div>
+        
+        <div className="px-4">
+          <Pagination pagination={pagination} onPageChange={setPage} />
         </div>
       </div>
     </div>
