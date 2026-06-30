@@ -104,13 +104,13 @@ export default function MeasurementForm() {
             <span className="material-symbols-outlined text-[28px]">straighten</span>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-[#001f3f] tracking-tight uppercase">{id ? 'Edit Measurement' : 'Measurement Sheet'}</h1>
-            <p className="text-sm text-slate-500 font-medium">Accurate Measurements, Perfect Fit</p>
+            <h1 className="text-2xl font-bold text-[#001f3f] tracking-tight uppercase">{id ? t('measurement.edit', 'Edit Measurement') : t('measurement.sheet', 'Measurement Sheet')}</h1>
+            <p className="text-sm text-slate-500 font-medium">{t('measurement.subtitle', 'Accurate Measurements, Perfect Fit')}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-4 text-sm font-semibold text-slate-600 w-full md:w-auto">
           <div className="flex-1 md:flex-none flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 bg-slate-50 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-slate-200 focus-within:border-[#1e3a8a] focus-within:ring-1 focus-within:ring-[#1e3a8a] transition-all relative">
-            <span className="uppercase text-[10px] sm:text-xs text-slate-400">Date</span>
+            <span className="uppercase text-[10px] sm:text-xs text-slate-400">{t('common.date', 'Date')}</span>
             <input 
               type="date" 
               value={form.date}
@@ -119,8 +119,8 @@ export default function MeasurementForm() {
             />
           </div>
           <div className="flex-1 md:flex-none flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 bg-slate-50 px-2 sm:px-4 py-2 rounded-lg border border-slate-200">
-            <span className="uppercase text-[10px] sm:text-xs text-slate-400">Order No.</span>
-            <span className="text-slate-700 text-[11px] sm:text-sm">NEW</span>
+            <span className="uppercase text-[10px] sm:text-xs text-slate-400">{t('common.orderNo', 'Order No.')}</span>
+            <span className="text-slate-700 text-[11px] sm:text-sm">{t('common.new', 'NEW')}</span>
           </div>
         </div>
       </div>
@@ -131,25 +131,25 @@ export default function MeasurementForm() {
           {/* Customer Info */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-visible flex flex-col z-20">
             <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 rounded-t-[11px]">
-              <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Customer Information</h3>
+              <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('customer.info', 'Customer Information')}</h3>
             </div>
             <div className="p-4 grid grid-cols-1 gap-y-3 flex-1">
               <div className="flex items-center gap-3">
-                <span className="w-28 text-[12px] font-semibold text-slate-500">Customer Name</span>
+                <span className="w-28 text-[12px] font-semibold text-slate-500">{t('customer.name', 'Customer Name')}</span>
                 <CustomSelect
                   value={form.customerId}
                   onChange={(val) => setForm({ ...form, customerId: val })}
                   options={customers.map((c) => ({ value: c._id, label: c.name }))}
-                  placeholder="Select customer..."
+                  placeholder={t('customer.select', 'Select customer...')}
                   className="flex-1"
                 />
               </div>
               <div className="flex items-center gap-3">
-                <span className="w-28 text-[12px] font-semibold text-slate-500">Phone Number</span>
+                <span className="w-28 text-[12px] font-semibold text-slate-500">{t('customer.phone', 'Phone Number')}</span>
                 <input type="text" readOnly value={selectedCustomer?.phone || ''} className="flex-1 h-9 px-3 rounded-md text-[13px] font-medium border border-slate-200 bg-slate-50/50 text-slate-600 outline-none" />
               </div>
               <div className="flex items-center gap-3">
-                <span className="w-28 text-[12px] font-semibold text-slate-500">Address</span>
+                <span className="w-28 text-[12px] font-semibold text-slate-500">{t('customer.address', 'Address')}</span>
                 <input type="text" readOnly value={selectedCustomer?.address?.city || ''} className="flex-1 h-9 px-3 rounded-md text-[13px] font-medium border border-slate-200 bg-slate-50/50 text-slate-600 outline-none" />
               </div>
             </div>
@@ -158,21 +158,21 @@ export default function MeasurementForm() {
           {/* Garment Details */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-visible flex flex-col z-10">
             <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 rounded-t-[11px]">
-              <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Garment Details</h3>
+              <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('garment.details', 'Garment Details')}</h3>
             </div>
             <div className="p-4 grid grid-cols-1 gap-y-3 flex-1">
               <div className="flex items-center gap-3">
-                <span className="w-28 text-[12px] font-semibold text-slate-500">Garment Type</span>
+                <span className="w-28 text-[12px] font-semibold text-slate-500">{t('order.garmentType', 'Garment Type')}</span>
                 <CustomSelect
                   value={form.templateId}
                   onChange={(val) => handleTemplateChange(val)}
                   options={templates.map((t) => ({ value: t._id, label: t.garmentType }))}
-                  placeholder="Select garment..."
+                  placeholder={t('garment.select', 'Select garment...')}
                   className="flex-1"
                 />
               </div>
               <div className="flex items-center gap-3 opacity-60 pointer-events-none">
-                <span className="w-28 text-[12px] font-semibold text-slate-500">Fit</span>
+                <span className="w-28 text-[12px] font-semibold text-slate-500">{t('garment.fit', 'Fit')}</span>
                 <CustomSelect
                   value="Regular Fit"
                   onChange={() => {}}
@@ -181,7 +181,7 @@ export default function MeasurementForm() {
                 />
               </div>
               <div className="flex items-center gap-3 opacity-60 pointer-events-none">
-                <span className="w-28 text-[12px] font-semibold text-slate-500">Fabric</span>
+                <span className="w-28 text-[12px] font-semibold text-slate-500">{t('garment.fabric', 'Fabric')}</span>
                 <CustomSelect
                   value="Cotton"
                   onChange={() => {}}
@@ -195,14 +195,14 @@ export default function MeasurementForm() {
           {/* Remarks */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col md:col-span-2 lg:col-span-1">
             <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
-              <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Remarks / Notes</h3>
+              <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('measurement.remarks', 'Remarks / Notes')}</h3>
             </div>
             <div className="p-4 flex-1 flex flex-col">
               <textarea 
                 value={form.notes} 
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
                 className="flex-1 w-full p-3 border border-slate-200 rounded-md outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a] text-[13px] resize-none font-medium text-slate-700"
-                placeholder="Any additional notes..."
+                placeholder={t('measurement.notesPlaceholder', 'Any additional notes...')}
               ></textarea>
             </div>
           </div>
@@ -213,7 +213,7 @@ export default function MeasurementForm() {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
             <div className="bg-[#0f172a] px-4 py-3 text-center border-b border-slate-200">
               <h3 className="text-[11px] font-bold text-white uppercase tracking-wider">
-                {form.garmentType} Measurements
+                {form.garmentType} {t('measurement.title', 'Measurements')}
               </h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2 p-5 bg-slate-50/30">
@@ -244,7 +244,7 @@ export default function MeasurementForm() {
         ) : (
           <div className="bg-white rounded-xl border border-slate-200 border-dashed p-12 text-center shadow-sm">
             <span className="material-symbols-outlined text-[48px] text-slate-300 mb-4">straighten</span>
-            <p className="text-slate-500 font-medium">Select a Garment Type to reveal measurement fields.</p>
+            <p className="text-slate-500 font-medium">{t('measurement.empty', 'Select a Garment Type to reveal measurement fields.')}</p>
           </div>
         )}
       </div>
@@ -252,20 +252,20 @@ export default function MeasurementForm() {
       {/* Bottom Action Bar */}
       <div className="mt-8 flex flex-wrap items-center justify-center sm:justify-end gap-3 pb-8">
         <button type="button" onClick={() => navigate(-1)} className="px-6 py-2.5 rounded-lg border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-colors">
-          Cancel
+          {t('common.cancel', 'Cancel')}
         </button>
         <button type="button" onClick={() => setForm({...form, values: {}})} className="px-6 py-2.5 rounded-lg border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-colors">
-          Reset
+          {t('common.reset', 'Reset')}
         </button>
         <button type="button" className="px-6 py-2.5 rounded-lg bg-[#1e3a8a] hover:bg-[#152c6e] text-white font-bold text-sm shadow-md shadow-[#1e3a8a]/20 transition-colors">
-          Save Draft
+          {t('common.saveDraft', 'Save Draft')}
         </button>
         <button 
           onClick={handleSubmit} 
           disabled={!form.customerId || !form.templateId || loading} 
           className="px-8 py-2.5 rounded-lg bg-[#008f39] hover:bg-[#00702b] text-white font-bold text-sm shadow-md shadow-[#008f39]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Saving...' : (id ? 'Update Measurement' : 'Save Measurement')}
+          {loading ? t('common.saving', 'Saving...') : (id ? t('measurement.update', 'Update Measurement') : t('measurement.save', 'Save Measurement'))}
         </button>
       </div>
     </div>
