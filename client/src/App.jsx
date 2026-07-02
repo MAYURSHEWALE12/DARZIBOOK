@@ -17,6 +17,7 @@ import OrderForm from './pages/OrderForm.jsx';
 import MeasurementForm from './pages/MeasurementForm.jsx';
 import MeasurementList from './pages/MeasurementList.jsx';
 import Reports from './pages/Reports.jsx';
+import Expenses from './pages/Expenses.jsx';
 import StaffList from './pages/StaffList.jsx';
 import StaffDetails from './pages/StaffDetails.jsx';
 import Profile from './pages/Profile.jsx';
@@ -71,6 +72,7 @@ export default function App() {
           <Route path="/staff" element={<StaffList />} />
           <Route path="/staff/:id" element={<StaffDetails />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/expenses" element={<Expenses />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/subscription" element={<Subscription />} />
         </Route>

@@ -1,14 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getSummary, getPendingDues, getOrderReport, getRevenueReport } from '../api/reports.js';
+import { 
+  getSummary, 
+  getPendingDues, 
+  getOrderReport, 
+  getRevenueReport,
+  getExpenseReport,
+  getSalaryReport,
+  getDailyStitchingReport
+} from '../api/reports.js';
 import Select from '../components/Select.jsx';
+import Button from '../components/Button.jsx';
+import { cn } from '../utils/cn.js';
 
 export default function Reports() {
   const { t } = useTranslation();
   const [period, setPeriod] = useState('daily');
+  const [activeTab, setActiveTab] = useState('overview');
+  
   const [summary, setSummary] = useState(null);
   const [dues, setDues] = useState([]);
   const [revenue, setRevenue] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [salaries, setSalaries] = useState([]);
+  const [dailyStitching, setDailyStitching] = useState([]);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,15 +33,183 @@ export default function Reports() {
     Promise.all([
       getSummary({ period }),
       getPendingDues(),
-      getRevenueReport()
-    ]).then(([summaryRes, duesRes, revenueRes]) => {
+      getRevenueReport(),
+      getOrderReport({ period }),
+      getExpenseReport({ period }),
+      getSalaryReport({ period }),
+      getDailyStitchingReport()
+    ]).then(([summaryRes, duesRes, revenueRes, orderRes, expenseRes, salaryRes, stitchRes]) => {
       setSummary(summaryRes.data);
       setDues(duesRes.data.customers);
       setRevenue(revenueRes.data.revenue);
+      setOrders(orderRes.data.orders);
+      setExpenses(expenseRes.data.expenses);
+      setSalaries(salaryRes.data.salaries);
+      setDailyStitching(stitchRes.data.assignments);
     }).finally(() => {
       setLoading(false);
     });
   }, [period]);
+
+  const tabs = [
+    { id: 'overview', label: 'Overview & Financials', icon: 'analytics' },
+    { id: 'orders', label: 'Order Status', icon: 'format_list_bulleted' },
+    { id: 'staff', label: 'Staff & Stitching', icon: 'badge' }
+  ];
+
+  const renderOverviewTab = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Revenue</p>
+          <h3 className="text-2xl font-bold text-emerald-600">₹{summary?.payments?.total || 0}</h3>
+        </div>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Expenses</p>
+          <h3 className="text-2xl font-bold text-rose-500">₹{summary?.expenses?.total || 0}</h3>
+        </div>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Salaries Paid</p>
+          <h3 className="text-2xl font-bold text-amber-500">₹{summary?.salaries?.total || 0}</h3>
+        </div>
+        <div className="bg-[#1e3a8a] rounded-xl border border-[#1e3a8a] shadow-sm p-5 relative overflow-hidden text-white">
+          <p className="text-[11px] font-bold text-blue-200 uppercase tracking-wider mb-1">Net Profit</p>
+          <h3 className="text-2xl font-bold">₹{summary?.netProfit || 0}</h3>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Expenses Breakdown */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[400px]">
+          <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
+            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Expense Breakdown</h3>
+          </div>
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
+            {expenses.length > 0 ? (
+              <div className="divide-y divide-slate-100">
+                {expenses.map((exp) => (
+                  <div key={exp._id} className="flex justify-between items-center p-4">
+                    <span className="font-medium text-slate-700 text-[13px]">{exp._id}</span>
+                    <span className="font-bold text-rose-500 text-[14px]">₹{exp.total}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="h-full flex items-center justify-center text-slate-400 text-sm">No expenses for this period</div>
+            )}
+          </div>
+        </div>
+
+        {/* Pending Dues */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[400px]">
+          <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
+            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Pending Dues (Top 10)</h3>
+          </div>
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
+            {dues.length > 0 ? (
+              <div className="divide-y divide-slate-100">
+                {dues.slice(0, 10).map((c) => (
+                  <div key={c._id} className="flex justify-between items-center p-4">
+                    <span className="font-bold text-slate-800 text-[13px]">{c.name}</span>
+                    <span className="font-bold text-rose-600 text-[14px]">₹{c.totalPending}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="h-full flex items-center justify-center text-slate-400 text-sm">No pending dues</div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderOrdersTab = () => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+        <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider mb-6">Orders by Status</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {['received', 'in_progress', 'ready', 'delivered'].map((status) => {
+            const stat = orders.find(o => o._id === status) || { count: 0, totalRevenue: 0 };
+            return (
+              <div key={status} className="border border-slate-100 rounded-xl p-4 bg-slate-50 text-center">
+                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">{status.replace('_', ' ')}</p>
+                <p className="text-3xl font-bold text-slate-800 mb-1">{stat.count}</p>
+                <p className="text-[12px] font-medium text-emerald-600">₹{stat.totalRevenue}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStaffTab = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-2">
+      {/* Daily Stitching */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[600px]">
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
+          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Today's Initiated Stitching</h3>
+          <p className="text-[11px] text-slate-500 mt-0.5">Orders assigned to staff today</p>
+        </div>
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
+          {dailyStitching.length > 0 ? (
+            <div className="divide-y divide-slate-100">
+              {dailyStitching.map((wa) => (
+                <div key={wa._id} className="p-4 flex justify-between items-start">
+                  <div>
+                    <p className="font-bold text-[13px] text-slate-800">{wa.staffId?.name} <span className="text-slate-400 font-normal">({wa.staffId?.role})</span></p>
+                    <p className="text-[12px] font-medium text-slate-600 mt-1">Order: #{wa.orderId?.invoiceNumber} - {wa.orderId?.garmentType}</p>
+                    <p className="text-[11px] text-slate-400 mt-1">Customer: {wa.orderId?.customerId?.name}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className={cn(
+                      "text-[10px] font-bold uppercase px-2 py-1 rounded-md",
+                      wa.status === 'completed' ? "bg-emerald-50 text-emerald-600" :
+                      wa.status === 'in_progress' ? "bg-amber-50 text-amber-600" :
+                      "bg-slate-100 text-slate-600"
+                    )}>{wa.status.replace('_', ' ')}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-full flex items-center justify-center text-slate-400 text-sm">No stitching initiated today</div>
+          )}
+        </div>
+      </div>
+
+      {/* Salary Reports */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[600px]">
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
+          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Salary Payouts ({period})</h3>
+        </div>
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
+          {salaries.length > 0 ? (
+            <div className="divide-y divide-slate-100">
+              {salaries.map((s) => (
+                <div key={s._id} className="p-4 flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-[11px] uppercase">
+                      {s.staffName?.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-[13px] text-slate-800">{s.staffName}</p>
+                      <p className="text-[11px] text-slate-500">{s.staffRole}</p>
+                    </div>
+                  </div>
+                  <span className="font-bold text-[14px] text-emerald-600">₹{s.totalAmount}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-full flex items-center justify-center text-slate-400 text-sm">No salary payouts for this period</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
@@ -34,9 +219,9 @@ export default function Reports() {
             <div className="p-2.5 bg-[#1e3a8a]/10 text-[#1e3a8a] rounded-xl shadow-sm border border-[#1e3a8a]/10">
               <span className="material-symbols-outlined text-[24px]">analytics</span>
             </div>
-            {t('nav.reports')}
+            Comprehensive Reports
           </h1>
-          <p className="text-slate-500 mt-1 text-[15px]">Analyze your business performance and pending dues.</p>
+          <p className="text-slate-500 mt-1 text-[15px]">Analyze your shop's financials, orders, and staff performance.</p>
         </div>
         
         <div className="w-full sm:w-48 z-10">
@@ -46,116 +231,42 @@ export default function Reports() {
             options={[
               { value: 'daily', label: 'Daily' },
               { value: 'weekly', label: 'Weekly' },
-              { value: 'monthly', label: 'Monthly' }
+              { value: 'monthly', label: 'Monthly' },
+              { value: 'yearly', label: 'Yearly' }
             ]}
           />
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden relative group hover:shadow-md transition-shadow">
-          <div className="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-[#1e3a8a] to-[#152a66] opacity-[0.08] group-hover:scale-150 transition-transform duration-700 ease-out"></div>
-          <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:justify-between relative z-10 gap-3 sm:gap-0">
-            <div className="order-2 sm:order-1">
-              <p className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider mb-1 sm:mb-2 line-clamp-1">{t('dashboard.todayOrders')}</p>
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">{summary?.orders?.count || 0}</h3>
-              <p className="text-[11px] font-medium text-slate-500 mt-1 sm:mt-2">Revenue: <span className="text-[#1e3a8a] font-bold">₹{summary?.orders?.totalRevenue || 0}</span></p>
-            </div>
-            <div className="order-1 sm:order-2 self-start p-2 sm:p-3 rounded-[10px] bg-gradient-to-br from-[#1e3a8a] to-[#152a66] shadow-sm text-white">
-              <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>shopping_bag</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden relative group hover:shadow-md transition-shadow">
-          <div className="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-rose-500 to-red-600 opacity-[0.08] group-hover:scale-150 transition-transform duration-700 ease-out"></div>
-          <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:justify-between relative z-10 gap-3 sm:gap-0">
-            <div className="order-2 sm:order-1">
-              <p className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider mb-1 sm:mb-2 line-clamp-1">{t('dashboard.pendingDues')}</p>
-              <h3 className="text-xl sm:text-2xl font-bold text-rose-600 tracking-tight">₹{summary?.orders?.pendingAmount || 0}</h3>
-              <p className="text-[11px] font-medium text-slate-500 mt-1 sm:mt-2 line-clamp-1">Total outstanding</p>
-            </div>
-            <div className="order-1 sm:order-2 self-start p-2 sm:p-3 rounded-[10px] bg-gradient-to-br from-rose-500 to-red-600 shadow-sm text-white">
-              <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance_wallet</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-span-2 md:col-span-1 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden relative group hover:shadow-md transition-shadow">
-          <div className="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-emerald-500 to-[#1e3a8a] opacity-[0.08] group-hover:scale-150 transition-transform duration-700 ease-out"></div>
-          <div className="p-4 sm:p-5 flex flex-row justify-between relative z-10">
-            <div>
-              <p className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider mb-1 sm:mb-2 line-clamp-1">{t('dashboard.revenue')}</p>
-              <h3 className="text-2xl sm:text-3xl font-bold text-emerald-600 tracking-tight">₹{summary?.payments?.total || 0}</h3>
-              <p className="text-[11px] font-medium text-slate-500 mt-1 sm:mt-2">{summary?.payments?.count || 0} transactions</p>
-            </div>
-            <div className="self-start p-2 sm:p-3 rounded-[10px] bg-gradient-to-br from-emerald-500 to-[#1e3a8a] shadow-sm text-white">
-              <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>payments</span>
-            </div>
-          </div>
-        </div>
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 border-b border-slate-200">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2.5 rounded-t-lg font-bold text-[13px] uppercase tracking-wider transition-all whitespace-nowrap",
+              activeTab === tab.id 
+                ? "bg-[#1e3a8a] text-white border-b-2 border-transparent" 
+                : "bg-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+            )}
+          >
+            <span className="material-symbols-outlined text-[18px]">{tab.icon}</span>
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px]">
-          <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
-            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('report.pendingDues')} Top 10</h3>
-          </div>
-          <div className="flex-1 overflow-y-auto p-0 custom-scrollbar">
-            {dues.length > 0 ? (
-              <div className="divide-y divide-slate-100">
-                {dues.slice(0, 10).map((customer) => (
-                  <div key={customer._id} className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-[11px] uppercase border border-slate-200">
-                        {customer.name?.charAt(0) || '?'}
-                      </div>
-                      <span className="font-bold text-[13px] text-slate-800">{customer.name}</span>
-                    </div>
-                    <span className="text-rose-600 font-bold text-[13px]">₹{customer.totalPending}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-6">
-                <span className="material-symbols-outlined text-[32px] text-slate-300 mb-2">task_alt</span>
-                <p className="text-slate-500 font-medium text-[13px]">{t('common.noResults')}</p>
-                <p className="text-[12px] text-slate-400 mt-1 max-w-[250px]">All dues are cleared. Outstanding balances will appear here.</p>
-              </div>
-            )}
-          </div>
+      {loading ? (
+        <div className="flex justify-center items-center py-20">
+          <span className="material-symbols-outlined animate-spin text-[#1e3a8a] text-[32px]">progress_activity</span>
         </div>
-
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[500px]">
-          <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
-            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('report.revenue')} History</h3>
-          </div>
-          <div className="flex-1 overflow-y-auto p-0 custom-scrollbar">
-            {revenue.length > 0 ? (
-              <div className="divide-y divide-slate-100">
-                {revenue.slice(0, 10).map((item) => (
-                  <div key={item._id} className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center border border-slate-200">
-                        <span className="material-symbols-outlined text-[14px]">calendar_today</span>
-                      </div>
-                      <span className="text-[13px] font-bold text-slate-700">{item._id}</span>
-                    </div>
-                    <span className="text-emerald-600 font-bold text-[13px]">₹{item.total}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-6">
-                <span className="material-symbols-outlined text-[32px] text-slate-300 mb-2">show_chart</span>
-                <p className="text-slate-500 font-medium text-[13px]">{t('common.noResults')}</p>
-                <p className="text-[12px] text-slate-400 mt-1 max-w-[250px]">No revenue data found for this period.</p>
-              </div>
-            )}
-          </div>
+      ) : (
+        <div className="min-h-[500px]">
+          {activeTab === 'overview' && renderOverviewTab()}
+          {activeTab === 'orders' && renderOrdersTab()}
+          {activeTab === 'staff' && renderStaffTab()}
         </div>
-      </div>
+      )}
     </div>
   );
 }

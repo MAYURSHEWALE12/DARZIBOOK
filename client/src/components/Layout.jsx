@@ -14,6 +14,7 @@ const navItems = [
   { path: '/measurements/new', icon: 'straighten', label: 'nav.measurements' },
   { path: '/orders', icon: 'format_list_bulleted', label: 'nav.orders' },
   { path: '/reports', icon: 'analytics', label: 'nav.reports' },
+  { path: '/expenses', icon: 'receipt_long', label: 'nav.expenses' },
   { path: '/staff', icon: 'badge', label: 'nav.staff' },
   { path: '/profile', icon: 'person', label: 'nav.profile' },
   { path: '/subscription', icon: 'workspace_premium', label: 'nav.subscription' },

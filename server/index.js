@@ -25,6 +25,7 @@ import staffRoutes from './routes/staffRoutes.js';
 import workAssignmentRoutes from './routes/workAssignmentRoutes.js';
 import salaryRoutes from './routes/salaryRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
 
 dotenv.config();
 
@@ -69,6 +70,7 @@ app.use('/api/staff', staffRoutes);
 app.use('/api/work-assignments', workAssignmentRoutes);
 app.use('/api/salary', salaryRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/expenses', expenseRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
