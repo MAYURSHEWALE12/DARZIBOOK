@@ -23,11 +23,14 @@ const generateTokens = (tenantId) => {
   return { accessToken, refreshToken };
 };
 
-const setTokenCookies = (res, { accessToken, refreshToken }) => {
+const setTokenCookies = (req, res, { accessToken, refreshToken }) => {
+  // Check if running on localhost. If so, use lax/false. Otherwise, use none/true for cross-origin mobile support
+  const isLocal = req.hostname === 'localhost' || req.hostname === '127.0.0.1';
+  
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: !isLocal,
+    sameSite: !isLocal ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   };
   res.cookie('accessToken', accessToken, cookieOptions);
@@ -111,7 +114,7 @@ export const register = async (req, res) => {
     await seedDefaultTemplates(tenant._id, data.language);
 
     const tokens = generateTokens(tenant._id);
-    setTokenCookies(res, tokens);
+    setTokenCookies(req, res, tokens);
 
     res.status(201).json({
       tenant: { id: tenant._id, shopName: tenant.shopName, phone: tenant.phone, language: tenant.language },
@@ -134,7 +137,7 @@ export const login = async (req, res) => {
     if (!tenant.isActive) return res.status(403).json({ error: 'Account is deactivated' });
 
     const tokens = generateTokens(tenant._id);
-    setTokenCookies(res, tokens);
+    setTokenCookies(req, res, tokens);
 
     res.json({
       tenant: { id: tenant._id, shopName: tenant.shopName, phone: tenant.phone, language: tenant.language },
@@ -146,10 +149,11 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
+  const isLocal = req.hostname === 'localhost' || req.hostname === '127.0.0.1';
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: !isLocal,
+    sameSite: !isLocal ? 'none' : 'lax',
   };
   res.clearCookie('accessToken', cookieOptions);
   res.clearCookie('refreshToken', cookieOptions);
@@ -166,7 +170,7 @@ export const refreshToken = async (req, res) => {
     if (!tenant || !tenant.isActive) return res.status(401).json({ error: 'Invalid tenant' });
 
     const tokens = generateTokens(tenant._id);
-    setTokenCookies(res, tokens);
+    setTokenCookies(req, res, tokens);
     res.json({ message: 'Token refreshed' });
   } catch (error) {
     res.status(401).json({ error: 'Invalid refresh token' });
