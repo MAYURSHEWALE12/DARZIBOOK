@@ -79,7 +79,13 @@ export default function Layout() {
   };
 
   const handleLogout = async () => {
-    await logoutApi();
+    try {
+      await logoutApi();
+    } catch (err) {
+      console.error(err);
+    }
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     logout();
     navigate('/login');
   };

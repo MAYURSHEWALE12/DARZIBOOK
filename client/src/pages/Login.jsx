@@ -21,6 +21,8 @@ export default function Login() {
     setLoading(true);
     try {
       const { data } = await login(form);
+      if (data.accessToken) localStorage.setItem('accessToken', data.accessToken);
+      if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
       setTenant(data.tenant);
       toast.success('Welcome back!');
       navigate('/dashboard');

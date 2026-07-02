@@ -8,6 +8,14 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -19,9 +27,21 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        await axios.post(`${API_URL}/auth/refresh-token`, {}, { withCredentials: true });
+        const rToken = localStorage.getItem('refreshToken');
+        const { data } = await axios.post(`${API_URL}/auth/refresh-token`, { refreshToken: rToken }, { withCredentials: true });
+        
+        if (data.accessToken) {
+          localStorage.setItem('accessToken', data.accessToken);
+          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        }
+        if (data.refreshToken) {
+          localStorage.setItem('refreshToken', data.refreshToken);
+        }
+        
         return api(originalRequest);
       } catch {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         if (window.location.pathname !== '/login' && window.location.pathname !== '/superadmin/login') {
           window.location.href = '/login';
         }

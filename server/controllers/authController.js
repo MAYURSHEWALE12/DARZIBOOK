@@ -118,6 +118,8 @@ export const register = async (req, res) => {
 
     res.status(201).json({
       tenant: { id: tenant._id, shopName: tenant.shopName, phone: tenant.phone, language: tenant.language },
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
     });
   } catch (error) {
     if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
@@ -141,6 +143,8 @@ export const login = async (req, res) => {
 
     res.json({
       tenant: { id: tenant._id, shopName: tenant.shopName, phone: tenant.phone, language: tenant.language },
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
     });
   } catch (error) {
     if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
@@ -162,7 +166,7 @@ export const logout = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const token = req.cookies.refreshToken;
+    const token = req.body.refreshToken || req.cookies.refreshToken;
     if (!token) return res.status(401).json({ error: 'Refresh token required' });
 
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
@@ -171,7 +175,11 @@ export const refreshToken = async (req, res) => {
 
     const tokens = generateTokens(tenant._id);
     setTokenCookies(req, res, tokens);
-    res.json({ message: 'Token refreshed' });
+    res.json({ 
+      message: 'Token refreshed',
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
+    });
   } catch (error) {
     res.status(401).json({ error: 'Invalid refresh token' });
   }
