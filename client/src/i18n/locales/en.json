@@ -124,5 +124,6 @@
   "nav.overview": "Overview",
   "nav.notifications": "Notifications",
   "nav.markAllRead": "Mark all read",
-  "nav.noNotifications": "No notifications."
+  "nav.noNotifications": "No notifications.",
+  "nav.expenses": "Expenses"
 }
