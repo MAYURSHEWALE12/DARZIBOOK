@@ -5,6 +5,7 @@ import { createOrder, uploadOrderPhotos } from '../api/orders.js';
 import { listCustomers } from '../api/customers.js';
 import { listTemplates } from '../api/templates.js';
 import Button from '../components/Button.jsx';
+import CustomSelect from '../components/CustomSelect.jsx';
 import Card, { CardHeader, CardContent } from '../components/Card.jsx';
 import toast from 'react-hot-toast';
 import { User, Shirt, CalendarDays, IndianRupee, CreditCard, AlignLeft } from 'lucide-react';
@@ -88,43 +89,35 @@ export default function OrderForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('customer.name')}</label>
-                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all overflow-hidden bg-white">
-                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200">
+                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white">
+                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200 rounded-l-lg shrink-0">
                     <User className="w-4 h-4 text-slate-400" />
                   </div>
-                  <select 
+                  <CustomSelect 
                     value={form.customerId} 
-                    onChange={(e) => setForm({ ...form, customerId: e.target.value })} 
-                    required 
-                    className="w-full h-full px-4 bg-transparent outline-none text-[13px] text-slate-800 appearance-none cursor-pointer font-medium"
-                  >
-                    <option value="" disabled>Select customer</option>
-                    {customers.map((c) => (
-                      <option key={c._id} value={c._id}>{c.name} ({c.phone})</option>
-                    ))}
-                  </select>
-                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[18px]">expand_more</span>
+                    onChange={(val) => setForm({ ...form, customerId: val })}
+                    options={customers.map((c) => ({ value: c._id, label: `${c.name} (${c.phone})` }))}
+                    placeholder="Select customer"
+                    className="flex-1 min-w-0"
+                    buttonClassName="!border-transparent !bg-transparent h-12 shadow-none focus:ring-0 rounded-l-none"
+                  />
                 </div>
               </div>
 
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.garmentType')}</label>
-                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all overflow-hidden bg-white">
-                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200">
+                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white">
+                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200 rounded-l-lg shrink-0">
                     <Shirt className="w-4 h-4 text-slate-400" />
                   </div>
-                  <select 
+                  <CustomSelect 
                     value={form.garmentType} 
-                    onChange={(e) => setForm({ ...form, garmentType: e.target.value })} 
-                    required 
-                    className="w-full h-full px-4 bg-transparent outline-none text-[13px] text-slate-800 appearance-none cursor-pointer font-medium"
-                  >
-                    <option value="" disabled>Select type</option>
-                    {templates.map((t) => (
-                      <option key={t._id} value={t.garmentType}>{t.garmentType}</option>
-                    ))}
-                  </select>
-                  <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[18px]">expand_more</span>
+                    onChange={(val) => setForm({ ...form, garmentType: val })}
+                    options={templates.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
+                    placeholder="Select type"
+                    className="flex-1 min-w-0"
+                    buttonClassName="!border-transparent !bg-transparent h-12 shadow-none focus:ring-0 rounded-l-none"
+                  />
                 </div>
               </div>
             </div>

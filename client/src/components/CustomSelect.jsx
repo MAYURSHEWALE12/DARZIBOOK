@@ -7,7 +7,7 @@ export const formatLabel = (str) => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 };
 
-export default function CustomSelect({ value, onChange, options = [], placeholder = "Select...", className, searchable = true }) {
+export default function CustomSelect({ value, onChange, options = [], placeholder = "Select...", className, buttonClassName, searchable = true }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef(null);
@@ -51,7 +51,7 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
           isOpen 
             ? 'border-[#1e3a8a] bg-blue-50/30 ring-4 ring-[#1e3a8a]/10' 
             : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
-        }`}
+        } ${buttonClassName || ''}`}
       >
         <span className={!value ? "text-slate-400 font-medium truncate pr-2" : "text-slate-800 truncate pr-2"}>{displayLabel}</span>
         <span className={`material-symbols-outlined text-[18px] shrink-0 transition-transform duration-300 ${
