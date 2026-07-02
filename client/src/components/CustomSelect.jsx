@@ -7,19 +7,28 @@ export const formatLabel = (str) => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 };
 
-export default function CustomSelect({ value, onChange, options = [], placeholder = "Select...", className }) {
+export default function CustomSelect({ value, onChange, options = [], placeholder = "Select...", className, searchable = true }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
         setIsOpen(false);
+        setSearchTerm('');
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (isOpen && searchable && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen, searchable]);
 
   const selectedOption = options.find(opt => 
     typeof opt === 'object' ? opt.value === value : opt === value
@@ -27,6 +36,11 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
   const displayLabel = selectedOption 
     ? (typeof selectedOption === 'object' ? selectedOption.label : formatLabel(selectedOption)) 
     : placeholder;
+
+  const filteredOptions = options.filter(opt => {
+    const label = typeof opt === 'object' ? opt.label : formatLabel(opt);
+    return label.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
@@ -39,8 +53,8 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
             : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
         }`}
       >
-        <span className={!value ? "text-slate-400 font-medium" : "text-slate-800"}>{displayLabel}</span>
-        <span className={`material-symbols-outlined text-[18px] transition-transform duration-300 ${
+        <span className={!value ? "text-slate-400 font-medium truncate pr-2" : "text-slate-800 truncate pr-2"}>{displayLabel}</span>
+        <span className={`material-symbols-outlined text-[18px] shrink-0 transition-transform duration-300 ${
           isOpen ? 'rotate-180 text-[#1e3a8a]' : 'text-slate-400'
         }`}>
           expand_more
@@ -48,33 +62,60 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
       </button>
 
       {isOpen && (
-        <div className="absolute z-[100] top-full left-0 right-0 mt-2 max-h-[280px] overflow-y-auto custom-scrollbar flex flex-col gap-2 animate-in fade-in zoom-in-95 duration-200 origin-top pb-2">
-          {options.map((opt, i) => {
-            const val = typeof opt === 'object' ? opt.value : opt;
-            const label = typeof opt === 'object' ? opt.label : formatLabel(opt);
-            const isSelected = val === value;
+        <div className="absolute z-[100] top-full left-0 right-0 mt-2 max-h-[320px] bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200 origin-top">
+          
+          {searchable && options.length > 5 && (
+            <div className="p-2 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10 shrink-0">
+              <div className="relative flex items-center">
+                <span className="material-symbols-outlined absolute left-2.5 text-slate-400 text-[18px]">search</span>
+                <input 
+                  ref={inputRef}
+                  type="text" 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search..." 
+                  className="w-full h-9 pl-9 pr-3 rounded-lg text-[13px] border border-slate-200 bg-white focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/10 outline-none font-medium transition-all placeholder:text-slate-400"
+                />
+              </div>
+            </div>
+          )}
 
-            return (
-              <button
-                key={i}
-                type="button"
-                onClick={() => {
-                  onChange(val);
-                  setIsOpen(false);
-                }}
-                className={`w-full text-left px-4 py-3.5 text-[14px] font-bold transition-all rounded-xl border flex items-center justify-between group shadow-sm hover:shadow-md ${
-                  isSelected 
-                    ? 'bg-[#1e3a8a]/5 border-[#1e3a8a]/30 text-[#1e3a8a]' 
-                    : 'bg-white border-slate-200 text-slate-700 hover:border-[#1e3a8a]/30 hover:text-[#1e3a8a]'
-                }`}
-              >
-                <span>{label}</span>
-                {isSelected && (
-                  <span className="material-symbols-outlined text-[18px] text-[#1e3a8a]">check</span>
-                )}
-              </button>
-            );
-          })}
+          <div className="overflow-y-auto custom-scrollbar flex flex-col gap-1 p-2">
+            {filteredOptions.length === 0 ? (
+              <div className="py-6 text-center text-slate-400 text-[13px] font-medium flex flex-col items-center gap-1">
+                <span className="material-symbols-outlined text-[24px] opacity-50">search_off</span>
+                No matches found
+              </div>
+            ) : (
+              filteredOptions.map((opt, i) => {
+                const val = typeof opt === 'object' ? opt.value : opt;
+                const label = typeof opt === 'object' ? opt.label : formatLabel(opt);
+                const isSelected = val === value;
+
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => {
+                      onChange(val);
+                      setIsOpen(false);
+                      setSearchTerm('');
+                    }}
+                    className={`w-full text-left px-3 py-2.5 text-[14px] font-semibold transition-all rounded-lg flex items-center justify-between group ${
+                      isSelected 
+                        ? 'bg-blue-50/60 text-[#1e3a8a]' 
+                        : 'bg-transparent text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span className="truncate pr-4">{label}</span>
+                    {isSelected && (
+                      <span className="material-symbols-outlined text-[18px] text-[#1e3a8a] shrink-0">check</span>
+                    )}
+                  </button>
+                );
+              })
+            )}
+          </div>
         </div>
       )}
     </div>
