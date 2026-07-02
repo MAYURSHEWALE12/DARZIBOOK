@@ -42,6 +42,8 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
     return label.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  const showOptions = !(searchable && options.length > 5 && searchTerm.trim() === '');
+
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
       <button
@@ -81,13 +83,18 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
           )}
 
           <div className="overflow-y-auto custom-scrollbar flex flex-col gap-1 p-2">
-            {filteredOptions.length === 0 ? (
+            {!showOptions ? (
+              <div className="py-6 text-center text-slate-400 text-[13px] font-medium flex flex-col items-center gap-1">
+                <span className="material-symbols-outlined text-[24px] opacity-50">search</span>
+                Type to search...
+              </div>
+            ) : filteredOptions.length === 0 ? (
               <div className="py-6 text-center text-slate-400 text-[13px] font-medium flex flex-col items-center gap-1">
                 <span className="material-symbols-outlined text-[24px] opacity-50">search_off</span>
                 No matches found
               </div>
             ) : (
-              filteredOptions.map((opt, i) => {
+              filteredOptions.slice(0, 50).map((opt, i) => {
                 const val = typeof opt === 'object' ? opt.value : opt;
                 const label = typeof opt === 'object' ? opt.label : formatLabel(opt);
                 const isSelected = val === value;
