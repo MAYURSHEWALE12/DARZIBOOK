@@ -7,7 +7,7 @@ export const formatLabel = (str) => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 };
 
-export default function CustomSelect({ value, onChange, options = [], placeholder = "Select...", className, buttonClassName, searchable = true }) {
+export default function CustomSelect({ value, onChange, options = [], placeholder = "Select...", className, buttonClassName, searchable = true, emptyState }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef(null);
@@ -89,10 +89,14 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
                 Type to search...
               </div>
             ) : filteredOptions.length === 0 ? (
-              <div className="py-6 text-center text-slate-400 text-[13px] font-medium flex flex-col items-center gap-1">
-                <span className="material-symbols-outlined text-[24px] opacity-50">search_off</span>
-                No matches found
-              </div>
+              emptyState ? (
+                emptyState
+              ) : (
+                <div className="py-6 text-center text-slate-400 text-[13px] font-medium flex flex-col items-center gap-1">
+                  <span className="material-symbols-outlined text-[24px] opacity-50">search_off</span>
+                  No matches found
+                </div>
+              )
             ) : (
               filteredOptions.slice(0, 50).map((opt, i) => {
                 const val = typeof opt === 'object' ? opt.value : opt;

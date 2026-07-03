@@ -60,6 +60,23 @@ export default function OrderForm() {
     customerMeasurements.some(m => m.garmentType === t.garmentType)
   );
 
+  const garmentEmptyState = form.customerId && availableGarments.length === 0 ? (
+    <div className="py-6 text-center flex flex-col items-center px-4">
+      <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center mb-3">
+        <span className="material-symbols-outlined text-[20px] text-slate-300">straighten</span>
+      </div>
+      <p className="text-slate-500 font-medium text-[13px] mb-3 leading-snug">No measurements found for this customer.</p>
+      <button 
+        type="button"
+        onClick={() => navigate(`/measurements/new?customerId=${form.customerId}`)}
+        className="text-[#1e3a8a] text-[12px] font-bold bg-[#1e3a8a]/10 hover:bg-[#1e3a8a]/20 px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5"
+      >
+        <span className="material-symbols-outlined text-[16px]">add</span>
+        Add Measurement
+      </button>
+    </div>
+  ) : undefined;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -146,6 +163,7 @@ export default function OrderForm() {
                           ? "No measurements found" 
                           : "Select type"
                     }
+                    emptyState={garmentEmptyState}
                     className="flex-1 min-w-0"
                     buttonClassName="!border-transparent !bg-transparent h-12 shadow-none focus:ring-0 rounded-l-none"
                   />
