@@ -17,6 +17,21 @@ export default function StaffList() {
   const [pagination, setPagination] = useState(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+
+  const handleDeleteStaff = async () => {
+    if (!deleteConfirmId) return;
+    try {
+      const { deleteStaff } = await import('../api/staff.js');
+      await deleteStaff(deleteConfirmId);
+      toast.success('Staff deleted successfully');
+      setDeleteConfirmId(null);
+      fetchStaff();
+    } catch (err) {
+      toast.error('Failed to delete staff');
+      setDeleteConfirmId(null);
+    }
+  };
 
   useEffect(() => {
     fetchStaff();
@@ -104,18 +119,7 @@ export default function StaffList() {
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button 
-                        onClick={() => {
-                          if (window.confirm('Are you sure you want to delete this staff member?')) {
-                            import('../api/staff.js').then(({ deleteStaff }) => {
-                              deleteStaff(staff._id)
-                                .then(() => {
-                                  toast.success('Staff deleted successfully');
-                                  fetchStaff();
-                                })
-                                .catch(() => toast.error('Failed to delete staff'));
-                            });
-                          }
-                        }}
+                        onClick={() => setDeleteConfirmId(staff._id)}
                         className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
                         title="Delete Staff"
                       >
@@ -223,6 +227,16 @@ export default function StaffList() {
             <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="bg-[#1e3a8a] text-white">Save Staff</Button>
           </div>
         </form>
+      </Modal>
+
+      <Modal open={!!deleteConfirmId} onClose={() => setDeleteConfirmId(null)} title="Delete Staff">
+        <div className="space-y-4">
+          <p className="text-slate-600 text-sm font-medium">Are you sure you want to delete this staff member? This action cannot be undone.</p>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button type="button" variant="outline" onClick={() => setDeleteConfirmId(null)}>Cancel</Button>
+            <Button type="button" onClick={handleDeleteStaff} className="bg-rose-600 text-white hover:bg-rose-700">Delete</Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
