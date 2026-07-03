@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { z } from 'zod';
-import { Order, Customer, Payment } from '../models/index.js';
+import { Order, Customer, Payment, Measurement } from '../models/index.js';
 
 const orderSchema = z.object({
   customerId: z.string().min(1),
@@ -71,6 +71,12 @@ export const listOrders = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   const data = orderSchema.parse(req.body);
+
+  const measurement = await Measurement.findOne({ tenantId: req.tenantId, customerId: data.customerId, garmentType: data.garmentType });
+  if (!measurement) {
+    return res.status(400).json({ error: `Please add a ${data.garmentType} measurement for this customer first.` });
+  }
+
   const pendingAmount = data.totalPrice - data.advancePaid;
 
   let order;
