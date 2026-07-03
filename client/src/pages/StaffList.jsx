@@ -151,8 +151,12 @@ export default function StaffList() {
           />
           <Input 
             label="Phone Number" 
+            type="tel"
+            pattern="[0-9]{10}"
+            maxLength="10"
+            title="Please enter a valid 10-digit phone number"
             value={newStaff.phone} 
-            onChange={(e) => setNewStaff({...newStaff, phone: e.target.value})} 
+            onChange={(e) => setNewStaff({...newStaff, phone: e.target.value.replace(/\D/g, '')})} 
           />
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Role</label>
