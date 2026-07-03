@@ -16,6 +16,7 @@ export default function OrderForm() {
   const [searchParams] = useSearchParams();
   const [customers, setCustomers] = useState([]);
   const [templates, setTemplates] = useState([]);
+  const [customerMeasurements, setCustomerMeasurements] = useState([]);
   const [form, setForm] = useState({
     customerId: searchParams.get('customerId') || '',
     garmentType: '',
@@ -34,6 +35,30 @@ export default function OrderForm() {
       .then(({ data }) => setTemplates(data.templates))
       .catch(() => toast.error('Failed to load garment templates'));
   }, []);
+
+  useEffect(() => {
+    if (!form.customerId) {
+      setCustomerMeasurements([]);
+      return;
+    }
+    
+    // We need to import listCustomerMeasurements
+    import('../api/measurements.js').then(({ listCustomerMeasurements }) => {
+      listCustomerMeasurements(form.customerId)
+        .then(({ data }) => {
+          setCustomerMeasurements(data.measurements || []);
+          // If the currently selected garmentType is not in the new measurements list, clear it
+          if (form.garmentType && !data.measurements.find(m => m.garmentType === form.garmentType)) {
+            setForm(prev => ({ ...prev, garmentType: '' }));
+          }
+        })
+        .catch(() => toast.error('Failed to load customer measurements'));
+    });
+  }, [form.customerId]);
+
+  const availableGarments = templates.filter(t => 
+    customerMeasurements.some(m => m.garmentType === t.garmentType)
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,8 +138,14 @@ export default function OrderForm() {
                   <CustomSelect 
                     value={form.garmentType} 
                     onChange={(val) => setForm({ ...form, garmentType: val })}
-                    options={templates.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
-                    placeholder="Select type"
+                    options={availableGarments.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
+                    placeholder={
+                      !form.customerId 
+                        ? "Select customer first" 
+                        : availableGarments.length === 0 
+                          ? "No measurements found" 
+                          : "Select type"
+                    }
                     className="flex-1 min-w-0"
                     buttonClassName="!border-transparent !bg-transparent h-12 shadow-none focus:ring-0 rounded-l-none"
                   />
