@@ -53,6 +53,11 @@ export default function StaffList() {
   const handleAddStaff = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (newStaff.phone && !/^\d{10}$/.test(newStaff.phone.trim())) {
+      return toast.error('Phone number must be exactly 10 digits');
+    }
+
     setIsSubmitting(true);
     try {
       await createStaff(newStaff);
