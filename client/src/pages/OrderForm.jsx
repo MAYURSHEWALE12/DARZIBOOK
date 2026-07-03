@@ -276,44 +276,44 @@ export default function OrderForm() {
 
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Order Reference Images</label>
-                <label className="flex flex-col items-center justify-center w-full min-h-[120px] h-full border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors overflow-hidden relative">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4 relative w-full h-full">
-                    {form.photos?.length > 0 ? (
-                      <div className="flex flex-col items-center gap-2 z-10 w-full relative">
-                        <p className="text-[13px] text-[#008f39] font-bold truncate max-w-full">{form.photos.length} image(s) selected</p>
-                        <button 
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setForm({ ...form, photos: [] });
-                          }}
-                          className="text-[11px] font-bold text-rose-500 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-md transition-colors"
-                        >
-                          Clear Photos
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    {form.photos?.length > 0 && Array.from(form.photos).map((file, idx) => (
+                      <div key={idx} className="relative w-20 h-20 rounded-lg border border-slate-200 overflow-hidden group shadow-sm">
+                        <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                        <button type="button" onClick={(e) => {
+                          e.preventDefault();
+                          const newPhotos = [...form.photos];
+                          newPhotos.splice(idx, 1);
+                          setForm({...form, photos: newPhotos});
+                        }} className="absolute inset-0 bg-slate-900/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span className="material-symbols-outlined text-white text-[20px]">delete</span>
                         </button>
                       </div>
-                    ) : (
-                      <>
-                        <span className="material-symbols-outlined text-slate-400 text-3xl mb-2">add_photo_alternate</span>
-                        <p className="text-[12px] text-slate-500 font-medium">Click to upload photos (max 3)</p>
-                      </>
+                    ))}
+                    {(!form.photos || form.photos.length < 3) && (
+                      <label className="flex flex-col items-center justify-center w-20 h-20 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors shadow-sm">
+                        <span className="material-symbols-outlined text-slate-400 text-[24px]">add_photo_alternate</span>
+                        <span className="text-[10px] text-slate-500 font-bold mt-1">ADD</span>
+                        <input 
+                          type="file" 
+                          multiple 
+                          className="hidden" 
+                          accept="image/*" 
+                          onChange={(e) => {
+                            if (!e.target.files?.length) return;
+                            const files = Array.from(e.target.files);
+                            const existing = form.photos ? Array.from(form.photos) : [];
+                            const combined = [...existing, ...files].slice(0, 3);
+                            setForm({ ...form, photos: combined });
+                            e.target.value = ''; 
+                          }} 
+                        />
+                      </label>
                     )}
                   </div>
-                  <input 
-                    type="file" 
-                    multiple 
-                    className="hidden" 
-                    accept="image/*" 
-                    onChange={(e) => {
-                      const files = Array.from(e.target.files);
-                      const existing = form.photos ? Array.from(form.photos) : [];
-                      const combined = [...existing, ...files].slice(0, 3);
-                      setForm({ ...form, photos: combined });
-                      e.target.value = null; // reset input so same file can be selected again
-                    }} 
-                  />
-                </label>
+                  <p className="text-[11px] text-slate-500 font-medium">Upload up to 3 reference images for design or fabric details.</p>
+                </div>
               </div>
             </div>
           </CardContent>
