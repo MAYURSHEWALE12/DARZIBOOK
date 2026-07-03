@@ -60,7 +60,14 @@ export default function OrderForm() {
     customerMeasurements.some(m => m.garmentType === t.garmentType)
   );
 
-  const garmentEmptyState = form.customerId && availableGarments.length === 0 ? (
+  const garmentEmptyState = !form.customerId ? (
+    <div className="py-6 text-center flex flex-col items-center px-4">
+      <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center mb-3">
+        <span className="material-symbols-outlined text-[20px] text-slate-300">person_search</span>
+      </div>
+      <p className="text-slate-500 font-medium text-[13px] leading-snug">Please select a customer first to view their available garments.</p>
+    </div>
+  ) : availableGarments.length === 0 ? (
     <div className="py-6 text-center flex flex-col items-center px-4">
       <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center mb-3">
         <span className="material-symbols-outlined text-[20px] text-slate-300">straighten</span>
