@@ -16,6 +16,8 @@ export default function StaffList() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     fetchStaff();
   }, [page]);
@@ -35,6 +37,8 @@ export default function StaffList() {
 
   const handleAddStaff = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       await createStaff(newStaff);
       toast.success('Staff added successfully');
@@ -43,6 +47,8 @@ export default function StaffList() {
       fetchStaff();
     } catch (err) {
       toast.error('Failed to add staff');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -96,12 +102,32 @@ export default function StaffList() {
                     )}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <Link 
-                      to={`/staff/${staff._id}`} 
-                      className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-[#1e3a8a] hover:bg-blue-50 transition-colors"
-                    >
-                      <span className="material-symbols-outlined text-[20px]">chevron_right</span>
-                    </Link>
+                    <div className="flex items-center justify-end gap-2">
+                      <button 
+                        onClick={() => {
+                          if (window.confirm('Are you sure you want to delete this staff member?')) {
+                            import('../api/staff.js').then(({ deleteStaff }) => {
+                              deleteStaff(staff._id)
+                                .then(() => {
+                                  toast.success('Staff deleted successfully');
+                                  fetchStaff();
+                                })
+                                .catch(() => toast.error('Failed to delete staff'));
+                            });
+                          }
+                        }}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                        title="Delete Staff"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">delete</span>
+                      </button>
+                      <Link 
+                        to={`/staff/${staff._id}`} 
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-[#1e3a8a] hover:bg-blue-50 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -194,7 +220,7 @@ export default function StaffList() {
           )}
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button type="submit" className="bg-[#1e3a8a] text-white">Save Staff</Button>
+            <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="bg-[#1e3a8a] text-white">Save Staff</Button>
           </div>
         </form>
       </Modal>
