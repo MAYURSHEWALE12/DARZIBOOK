@@ -277,7 +277,7 @@ export default function OrderForm() {
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Order Reference Images</label>
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     {form.photos?.length > 0 && Array.from(form.photos).map((file, idx) => (
                       <div key={idx} className="relative w-20 h-20 rounded-lg border border-slate-200 overflow-hidden group shadow-sm">
                         <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
@@ -291,7 +291,7 @@ export default function OrderForm() {
                         </button>
                       </div>
                     ))}
-                    {(!form.photos || form.photos.length < 3) && (
+                    {(!form.photos || form.photos.length < 5) && (
                       <label className="flex flex-col items-center justify-center w-20 h-20 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors shadow-sm">
                         <span className="material-symbols-outlined text-slate-400 text-[24px]">add_photo_alternate</span>
                         <span className="text-[10px] text-slate-500 font-bold mt-1">ADD</span>
@@ -304,7 +304,7 @@ export default function OrderForm() {
                             if (!e.target.files?.length) return;
                             const files = Array.from(e.target.files);
                             const existing = form.photos ? Array.from(form.photos) : [];
-                            const combined = [...existing, ...files].slice(0, 3);
+                            const combined = [...existing, ...files].slice(0, 5);
                             setForm({ ...form, photos: combined });
                             e.target.value = ''; 
                           }} 
@@ -312,7 +312,7 @@ export default function OrderForm() {
                       </label>
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-500 font-medium">Upload up to 3 reference images for design or fabric details.</p>
+                  <p className="text-[11px] text-slate-500 font-medium">Upload up to 5 reference images for design or fabric details.</p>
                 </div>
               </div>
             </div>
