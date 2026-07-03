@@ -261,9 +261,22 @@ export default function OrderForm() {
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Order Reference Images</label>
                 <label className="flex flex-col items-center justify-center w-full min-h-[120px] h-full border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors overflow-hidden relative">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4 relative w-full h-full">
                     {form.photos?.length > 0 ? (
-                      <p className="text-[13px] text-[#008f39] font-bold truncate max-w-full">{form.photos.length} image(s) selected</p>
+                      <div className="flex flex-col items-center gap-2 z-10 w-full relative">
+                        <p className="text-[13px] text-[#008f39] font-bold truncate max-w-full">{form.photos.length} image(s) selected</p>
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setForm({ ...form, photos: [] });
+                          }}
+                          className="text-[11px] font-bold text-rose-500 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-md transition-colors"
+                        >
+                          Clear Photos
+                        </button>
+                      </div>
                     ) : (
                       <>
                         <span className="material-symbols-outlined text-slate-400 text-3xl mb-2">add_photo_alternate</span>
@@ -276,7 +289,13 @@ export default function OrderForm() {
                     multiple 
                     className="hidden" 
                     accept="image/*" 
-                    onChange={(e) => setForm({ ...form, photos: e.target.files })} 
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files);
+                      const existing = form.photos ? Array.from(form.photos) : [];
+                      const combined = [...existing, ...files].slice(0, 3);
+                      setForm({ ...form, photos: combined });
+                      e.target.value = null; // reset input so same file can be selected again
+                    }} 
                   />
                 </label>
               </div>
