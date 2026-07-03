@@ -211,14 +211,11 @@ export default function OrderForm() {
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.deliveryDate')}</label>
                 <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white overflow-hidden">
-                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200 pointer-events-none z-0">
-                    <CalendarDays className="w-4 h-4 text-slate-400" />
-                  </div>
                   <input 
                     type="date"
                     value={form.deliveryDate} 
                     onChange={(e) => setForm({ ...form, deliveryDate: e.target.value })}
-                    className="w-full h-full px-4 bg-transparent outline-none text-[13px] text-slate-800 font-medium cursor-pointer relative z-10 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                    className="w-full h-full px-4 bg-transparent outline-none text-[13px] text-slate-800 font-medium cursor-pointer"
                   />
                 </div>
               </div>
