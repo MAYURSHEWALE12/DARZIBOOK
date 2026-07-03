@@ -94,7 +94,10 @@ export default function Dashboard() {
                       </span>
                       <div>
                         <p className="font-bold text-[13px] text-slate-800">{order.customerId?.name || 'Unknown'}</p>
-                        <p className="text-[12px] font-medium text-slate-500 capitalize">{order.garmentType}</p>
+                        <p className="text-[12px] font-medium text-slate-500 capitalize">
+                          {order.garmentType}
+                          {order.quantity > 1 && <span className="ml-1 text-[10px] bg-slate-200 text-slate-600 px-1 rounded-sm font-bold">x{order.quantity}</span>}
+                        </p>
                       </div>
                     </div>
                     <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded border text-[11px] font-bold ${getStatusColor(order.status)}`}>

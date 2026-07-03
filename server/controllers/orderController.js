@@ -6,6 +6,7 @@ const orderSchema = z.object({
   customerId: z.string().min(1),
   measurementId: z.string().optional(),
   garmentType: z.string().min(1),
+  quantity: z.number().int().min(1).optional().default(1),
   deliveryDate: z.string().optional(),
   totalPrice: z.number().min(0),
   advancePaid: z.number().min(0).optional().default(0),
@@ -134,7 +135,7 @@ export const getOrder = async (req, res) => {
 };
 
 export const updateOrder = async (req, res) => {
-  const allowedFields = ['garmentType', 'deliveryDate', 'totalPrice', 'advancePaid', 'specialInstructions'];
+  const allowedFields = ['garmentType', 'quantity', 'deliveryDate', 'totalPrice', 'advancePaid', 'specialInstructions'];
   const updates = {};
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) updates[field] = req.body[field];

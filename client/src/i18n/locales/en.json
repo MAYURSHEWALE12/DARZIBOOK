@@ -34,6 +34,7 @@
   "order.new": "New Order",
   "order.invoice": "Invoice",
   "order.garmentType": "Garment Type",
+  "order.quantity": "Quantity",
   "order.totalPrice": "Total Price",
   "order.advancePaid": "Advance Paid",
   "order.pendingAmount": "Pending Amount",

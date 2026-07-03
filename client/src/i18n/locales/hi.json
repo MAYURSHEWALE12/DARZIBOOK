@@ -34,6 +34,7 @@
   "order.new": "नया ऑर्डर",
   "order.invoice": "चालान",
   "order.garmentType": "परिधान प्रकार",
+  "order.quantity": "मात्रा (Quantity)",
   "order.totalPrice": "कुल कीमत",
   "order.advancePaid": "अग्रिम भुगतान",
   "order.pendingAmount": "बकाया राशि",

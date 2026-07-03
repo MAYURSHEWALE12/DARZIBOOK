@@ -5,6 +5,7 @@ const orderSchema = new mongoose.Schema({
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
   measurementId: { type: mongoose.Schema.Types.ObjectId, ref: 'Measurement' },
   garmentType: { type: String, required: true },
+  quantity: { type: Number, default: 1 },
   deliveryDate: Date,
   totalPrice: { type: Number, default: 0 },
   advancePaid: { type: Number, default: 0 },

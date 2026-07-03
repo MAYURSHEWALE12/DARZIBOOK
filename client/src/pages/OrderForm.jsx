@@ -20,6 +20,7 @@ export default function OrderForm() {
   const [form, setForm] = useState({
     customerId: searchParams.get('customerId') || '',
     garmentType: '',
+    quantity: 1,
     deliveryDate: '',
     totalPrice: '',
     advancePaid: '0',
@@ -186,7 +187,22 @@ export default function OrderForm() {
             <h2 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Order Details</h2>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="space-y-1">
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.quantity')}</label>
+                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all overflow-hidden bg-white">
+                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200">
+                    <span className="material-symbols-outlined text-[18px] text-slate-400">format_list_numbered</span>
+                  </div>
+                  <input 
+                    type="number"
+                    min="1"
+                    value={form.quantity || 1} 
+                    onChange={(e) => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })}
+                    className="w-full h-full px-4 bg-transparent outline-none text-[14px] text-slate-800 font-bold"
+                  />
+                </div>
+              </div>
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.deliveryDate')}</label>
                 <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all overflow-hidden bg-white">

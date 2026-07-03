@@ -202,7 +202,9 @@ export default function OrderDetail() {
             <div className="space-y-4">
               <div className="flex justify-between items-center pb-3 border-b border-slate-100">
                 <span className="text-[13px] text-slate-500 font-medium">{t('order.garmentType')}</span>
-                <span className="text-[13px] text-[#1e3a8a] font-bold capitalize">{order.garmentType}</span>
+                <span className="text-[13px] text-[#1e3a8a] font-bold capitalize">
+                  {order.garmentType} {order.quantity > 1 && <span className="text-[11px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded ml-1">x{order.quantity}</span>}
+                </span>
               </div>
               <div className="flex justify-between items-center py-3 border-b border-slate-100">
                 <span className="text-[13px] text-slate-500 font-medium">{t('order.totalPrice')}</span>

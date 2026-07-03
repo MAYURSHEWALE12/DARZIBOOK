@@ -34,6 +34,7 @@
   "order.new": "नवीन ऑर्डर",
   "order.invoice": "चलन",
   "order.garmentType": "पोशाख प्रकार",
+  "order.quantity": "प्रमाण (Quantity)",
   "order.totalPrice": "एकूण किंमत",
   "order.advancePaid": "अग्रिम भुगतान",
   "order.pendingAmount": "बाकी रक्कम",

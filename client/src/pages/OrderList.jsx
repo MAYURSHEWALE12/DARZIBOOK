@@ -123,7 +123,10 @@ export default function OrderList() {
                       <div className="text-[11px] text-slate-400 mt-0.5 group-hover:text-[#1e3a8a]/70">{order.customerId.phone}</div>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-slate-500 font-medium capitalize">{order.garmentType}</td>
+                  <td className="px-6 py-4 text-slate-500 font-medium capitalize">
+                    {order.garmentType} 
+                    {order.quantity > 1 && <span className="text-xs text-slate-400 ml-1.5 font-bold bg-slate-100 px-1.5 py-0.5 rounded">x{order.quantity}</span>}
+                  </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-[12px] font-bold border ${getStatusColor(order.status)}`}>
                       {t(`order.status.${order.status}`)}

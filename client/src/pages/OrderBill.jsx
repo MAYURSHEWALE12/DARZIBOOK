@@ -171,8 +171,8 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                 <td className="py-4 px-4 border-r border-slate-200 text-xs text-slate-500 font-medium">
                   {order.specialInstructions ? `Note: ${order.specialInstructions}` : 'Custom Stitching'}
                 </td>
-                <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">1</td>
-                <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{order.totalPrice.toFixed(2)}</td>
+                <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{order.quantity || 1}</td>
+                <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{(order.totalPrice / (order.quantity || 1)).toFixed(2)}</td>
                 <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice.toFixed(2)}</td>
               </tr>
               {/* Empty Rows */}
