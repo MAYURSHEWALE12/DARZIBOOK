@@ -49,7 +49,9 @@ export default function OrderForm() {
         .then(({ data }) => {
           setCustomerMeasurements(data.measurements || []);
           // If the currently selected garmentType is not in the new measurements list, clear it
-          if (form.garmentType && !data.measurements.find(m => m.garmentType === form.garmentType)) {
+          if (form.garmentType && !data.measurements.find(m => 
+            m.garmentType?.toLowerCase().trim() === form.garmentType.toLowerCase().trim()
+          )) {
             setForm(prev => ({ ...prev, garmentType: '' }));
           }
         })
@@ -58,7 +60,10 @@ export default function OrderForm() {
   }, [form.customerId]);
 
   const availableGarments = templates.filter(t => 
-    customerMeasurements.some(m => m.garmentType === t.garmentType)
+    customerMeasurements.some(m => 
+      m.templateId === t._id || 
+      (m.garmentType && t.garmentType && m.garmentType.toLowerCase().trim() === t.garmentType.toLowerCase().trim())
+    )
   );
 
   const garmentEmptyState = !form.customerId ? (
