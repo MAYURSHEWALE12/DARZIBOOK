@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { listOrders, createOrder, getOrder, updateOrder, updateOrderStatus, deleteOrder, uploadOrderPhotos, deleteOrderPhoto } from '../controllers/orderController.js';
 import { authMiddleware } from '../middlewares/auth.js';
 import { planGuard } from '../middlewares/planGuard.js';
-import { uploadArray } from '../middlewares/upload.js';
+import { uploadArray, handleUploadError } from '../middlewares/upload.js';
 
 const router = Router();
 
@@ -14,7 +14,7 @@ router.get('/:id', getOrder);
 router.put('/:id', updateOrder);
 router.patch('/:id/status', updateOrderStatus);
 router.delete('/:id', deleteOrder);
-router.post('/:id/photos', planGuard('upload_photo'), uploadArray, uploadOrderPhotos);
+router.post('/:id/photos', planGuard('upload_photo'), uploadArray, handleUploadError, uploadOrderPhotos);
 router.delete('/:id/photos/:photoId', deleteOrderPhoto);
 
 export default router;
