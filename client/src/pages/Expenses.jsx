@@ -26,6 +26,8 @@ export default function Expenses() {
     { value: 'Other', label: 'Other' }
   ];
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const fetchExpenses = async () => {
     try {
       const { data } = await listExpenses();
@@ -44,7 +46,9 @@ export default function Expenses() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.amount || !form.description) return toast.error('Amount and description required');
+    if (isSubmitting) return;
 
+    setIsSubmitting(true);
     try {
       await createExpense(form);
       toast.success('Expense added');
@@ -57,6 +61,8 @@ export default function Expenses() {
       fetchExpenses();
     } catch (err) {
       toast.error(err.response?.data?.error || 'Failed to add expense');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -133,7 +139,7 @@ export default function Expenses() {
               />
             </div>
 
-            <Button type="submit" className="w-full h-10 bg-rose-600 text-white font-bold hover:bg-rose-700">
+            <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="w-full h-10 bg-rose-600 text-white font-bold hover:bg-rose-700">
               Save Expense
             </Button>
           </form>
