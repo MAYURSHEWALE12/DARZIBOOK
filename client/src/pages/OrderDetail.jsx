@@ -20,6 +20,7 @@ export default function OrderDetail() {
   const [staffList, setStaffList] = useState([]);
   const [assignModal, setAssignModal] = useState(false);
   const [assignForm, setAssignForm] = useState({ staffId: '', notes: '' });
+  const [hasAssignment, setHasAssignment] = useState(false);
 
   useEffect(() => {
     getOrder(id)
@@ -29,6 +30,11 @@ export default function OrderDetail() {
       
     import('../api/staff.js').then((module) => {
       module.listStaff().then(({ data }) => setStaffList(data.staff)).catch(() => {});
+      module.listWorkAssignmentsByOrder(id).then(({ data }) => {
+        if (data.assignments && data.assignments.length > 0) {
+          setHasAssignment(true);
+        }
+      }).catch(() => {});
     });
   }, [id]);
 
@@ -39,6 +45,7 @@ export default function OrderDetail() {
       const module = await import('../api/staff.js');
       await module.createWorkAssignment({ staffId: assignForm.staffId, orderId: id, notes: assignForm.notes });
       toast.success('Work assigned successfully');
+      setHasAssignment(true);
       setAssignModal(false);
     } catch (err) {
       toast.error('Failed to assign work');
@@ -151,12 +158,12 @@ export default function OrderDetail() {
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-3">
-        <div className="flex gap-3 w-full sm:w-auto">
+        <div className="flex gap-3 w-full sm:w-auto relative group">
           <button 
             onClick={handleStatusUpdate} 
-            disabled={order.status === 'delivered'}
+            disabled={order.status === 'delivered' || (order.status === 'received' && !hasAssignment)}
             className={`flex-1 sm:flex-none justify-center px-5 py-2.5 rounded-lg border font-bold shadow-sm transition-all flex items-center gap-2 text-[13px] ${
-              order.status === 'delivered'
+              order.status === 'delivered' || (order.status === 'received' && !hasAssignment)
                 ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed'
                 : 'bg-white border-slate-200 text-[#1e3a8a] hover:bg-slate-50'
             }`}
@@ -175,6 +182,14 @@ export default function OrderDetail() {
                 : t(`order.status.${['received', 'in_progress', 'ready', 'delivered'][['received', 'in_progress', 'ready', 'delivered'].indexOf(order.status) + 1]}`)}
             </span>
           </button>
+          
+          {order.status === 'received' && !hasAssignment && (
+            <div className="absolute -top-10 left-0 hidden group-hover:block bg-slate-800 text-white text-[11px] px-3 py-1.5 rounded shadow-lg whitespace-nowrap z-10 animate-in fade-in zoom-in duration-200">
+              Please assign work to staff first
+              <div className="absolute -bottom-1 left-4 w-2 h-2 bg-slate-800 rotate-45"></div>
+            </div>
+          )}
+
           <button onClick={() => setBillModal(true)} className="flex-1 sm:flex-none justify-center px-5 py-2.5 rounded-lg bg-[#1e3a8a] text-white font-bold shadow-sm hover:bg-[#152a66] transition-all flex items-center gap-2 text-[13px]">
             <span className="material-symbols-outlined text-[18px]">preview</span> <span className="hidden sm:inline">Preview Bill</span><span className="sm:hidden">Bill</span>
           </button>

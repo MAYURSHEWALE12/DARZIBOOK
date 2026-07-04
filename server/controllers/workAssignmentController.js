@@ -11,6 +11,17 @@ export const listAssignments = async (req, res) => {
   }
 };
 
+export const listAssignmentsByOrder = async (req, res) => {
+  try {
+    const assignments = await WorkAssignment.find({ tenantId: req.tenantId, orderId: req.params.orderId })
+      .populate('staffId', 'name role')
+      .sort({ createdAt: -1 });
+    res.json({ assignments });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const createAssignment = async (req, res) => {
   try {
     const allowedFields = ['staffId', 'orderId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];

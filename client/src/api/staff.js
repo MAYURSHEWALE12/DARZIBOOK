@@ -9,6 +9,7 @@ export const deleteStaff = (id) => api.delete(`/staff/${id}`);
 
 // Work Assignments
 export const listWorkAssignments = (staffId) => api.get(`/work-assignments/staff/${staffId}`);
+export const listWorkAssignmentsByOrder = (orderId) => api.get(`/work-assignments/order/${orderId}`);
 export const createWorkAssignment = (data) => api.post('/work-assignments', data);
 export const updateWorkAssignment = (id, data) => api.put(`/work-assignments/${id}`, data);
 export const deleteWorkAssignment = (id) => api.delete(`/work-assignments/${id}`);
