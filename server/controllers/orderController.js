@@ -93,6 +93,7 @@ export const createOrder = async (req, res) => {
         tenantId: req.tenantId,
         invoiceNumber,
         ...data,
+        measurementId: measurement._id,
         pendingAmount,
         deliveryDate: data.deliveryDate ? new Date(data.deliveryDate) : undefined,
       });
