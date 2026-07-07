@@ -22,6 +22,9 @@ export default function OrderDetail() {
   const [assignForm, setAssignForm] = useState({ staffId: '', notes: '', pieceRate: '' });
   const [hasAssignment, setHasAssignment] = useState(false);
 
+  const [isAssigning, setIsAssigning] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
+
   useEffect(() => {
     getOrder(id)
       .then(({ data }) => setOrder(data.order))
@@ -41,6 +44,8 @@ export default function OrderDetail() {
   const handleAssignWork = async (e) => {
     e.preventDefault();
     if (!assignForm.staffId) return toast.error('Please select staff');
+    if (isAssigning) return;
+    setIsAssigning(true);
     try {
       const module = await import('../api/staff.js');
       await module.createWorkAssignment({ staffId: assignForm.staffId, orderId: id, notes: assignForm.notes, pieceRate: Number(assignForm.pieceRate) });
@@ -49,6 +54,8 @@ export default function OrderDetail() {
       setAssignModal(false);
     } catch (err) {
       toast.error('Failed to assign work');
+    } finally {
+      setIsAssigning(false);
     }
   };
 
@@ -72,6 +79,8 @@ export default function OrderDetail() {
     if (payAmount > order.pendingAmount) {
       return toast.error(`Amount cannot exceed pending amount of ₹${order.pendingAmount}`);
     }
+    if (isPaying) return;
+    setIsPaying(true);
     
     try {
       const customerId = typeof order.customerId === 'object' ? order.customerId?._id : order.customerId;
@@ -82,6 +91,8 @@ export default function OrderDetail() {
       setPayment({ amount: '', method: 'cash', note: '' });
     } catch (err) {
       toast.error(err.response?.data?.error || 'Failed');
+    } finally {
+      setIsPaying(false);
     }
   };
 
@@ -346,8 +357,8 @@ export default function OrderDetail() {
               className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent transition-all outline-none text-slate-700"
             />
           </div>
-          <button type="submit" className="w-full h-12 mt-2 rounded-xl bg-[#1e3a8a] text-white font-bold shadow-lg shadow-[#1e3a8a]/20 hover:-translate-y-0.5 transition-all">
-            {t('payment.add')}
+          <button type="submit" disabled={isPaying} className={`w-full h-12 mt-2 rounded-xl text-white font-bold shadow-lg transition-all ${isPaying ? 'bg-slate-400 cursor-not-allowed shadow-none' : 'bg-[#1e3a8a] shadow-[#1e3a8a]/20 hover:-translate-y-0.5'}`}>
+            {isPaying ? 'Processing...' : t('payment.add')}
           </button>
         </form>
       </Modal>
@@ -425,8 +436,8 @@ export default function OrderDetail() {
               placeholder="Any specific instructions for this garment..."
             />
           </div>
-          <button type="submit" className="w-full h-12 mt-2 rounded-xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-600/20 hover:-translate-y-0.5 transition-all">
-            Save Assignment
+          <button type="submit" disabled={isAssigning} className={`w-full h-12 mt-2 rounded-xl text-white font-bold shadow-lg transition-all ${isAssigning ? 'bg-slate-400 cursor-not-allowed shadow-none' : 'bg-blue-600 shadow-blue-600/20 hover:-translate-y-0.5'}`}>
+            {isAssigning ? 'Saving...' : 'Save Assignment'}
           </button>
         </form>
       </Modal>
