@@ -58,7 +58,7 @@ export default function CustomerForm() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight">{t('customer.add')}</h1>
-          <p className="text-slate-500 text-sm mt-0.5">Create a new customer profile</p>
+          <p className="text-slate-500 text-sm mt-0.5">{t('customer.createSubtitle')}</p>
         </div>
       </div>
       
@@ -80,7 +80,7 @@ export default function CustomerForm() {
                   className="text-[12px] font-bold text-[#1e3a8a] bg-[#1e3a8a]/10 hover:bg-[#1e3a8a]/20 px-2 py-1 rounded-md transition-colors flex items-center gap-1"
                 >
                   <span className="material-symbols-outlined text-[14px]">content_copy</span>
-                  Same as Phone
+                  {t('customer.sameAsPhone')}
                 </button>
               </div>
               <Input 

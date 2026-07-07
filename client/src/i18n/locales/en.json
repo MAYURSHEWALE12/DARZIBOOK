@@ -129,5 +129,7 @@
   "nav.expenses": "Expenses",
   "notification.completed": "Order {{invoice}} is now ready!",
   "notification.delayed": "Order {{invoice}} is delayed. Delivery was scheduled for {{date}}.",
-  "notification.missed_pickup": "Order {{invoice}} is ready but hasn't been picked up."
+  "notification.missed_pickup": "Order {{invoice}} is ready but hasn't been picked up.",
+  "customer.sameAsPhone": "Same as Phone",
+  "customer.createSubtitle": "Create a new customer profile"
 }
