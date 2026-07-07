@@ -31,7 +31,7 @@ export default function Dashboard() {
     { label: t('dashboard.todayOrders'), value: data?.orders?.count || 0, icon: 'shopping_bag', color: 'from-[#1e3a8a] to-[#152a66]' },
     { label: t('dashboard.pendingDues'), value: `₹${data?.orders?.pendingAmount || 0}`, icon: 'payments', color: 'from-rose-500 to-rose-600' },
     { label: t('dashboard.totalCustomers'), value: data?.totalCustomers || 0, icon: 'group', color: 'from-blue-600 to-blue-800' },
-    { label: t('dashboard.revenue'), value: `₹${data?.payments?.total || 0}`, icon: 'trending_up', color: 'from-amber-500 to-orange-500' },
+    { label: t('dashboard.revenue'), value: `₹${data?.netProfit || 0}`, icon: 'trending_up', color: 'from-amber-500 to-orange-500' },
   ];
 
   const getStatusColor = (status) => {
