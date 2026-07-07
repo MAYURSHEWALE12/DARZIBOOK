@@ -19,7 +19,7 @@ export default function OrderDetail() {
   const [payment, setPayment] = useState({ amount: '', method: 'cash', note: '' });
   const [staffList, setStaffList] = useState([]);
   const [assignModal, setAssignModal] = useState(false);
-  const [assignForm, setAssignForm] = useState({ staffId: '', notes: '' });
+  const [assignForm, setAssignForm] = useState({ staffId: '', notes: '', pieceRate: '' });
   const [hasAssignment, setHasAssignment] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function OrderDetail() {
     if (!assignForm.staffId) return toast.error('Please select staff');
     try {
       const module = await import('../api/staff.js');
-      await module.createWorkAssignment({ staffId: assignForm.staffId, orderId: id, notes: assignForm.notes });
+      await module.createWorkAssignment({ staffId: assignForm.staffId, orderId: id, notes: assignForm.notes, pieceRate: Number(assignForm.pieceRate) });
       toast.success('Work assigned successfully');
       setHasAssignment(true);
       setAssignModal(false);
@@ -379,6 +379,17 @@ export default function OrderDetail() {
               </select>
               <span className="material-symbols-outlined absolute right-3 top-3 text-slate-400 pointer-events-none">expand_more</span>
             </div>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Piece Rate / Amount (₹)</label>
+            <input 
+              type="number" 
+              value={assignForm.pieceRate} 
+              onChange={(e) => setAssignForm({ ...assignForm, pieceRate: e.target.value })} 
+              className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent transition-all outline-none text-slate-700"
+              placeholder="e.g. 200"
+              required
+            />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Notes / Instructions</label>

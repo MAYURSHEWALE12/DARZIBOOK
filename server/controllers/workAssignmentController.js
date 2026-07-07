@@ -46,12 +46,53 @@ export const updateAssignment = async (req, res) => {
       if (req.body[field] !== undefined) assignmentData[field] = req.body[field];
     });
 
+    // We need the old assignment to check status change
+    const oldAssignment = await WorkAssignment.findOne({ _id: req.params.id, tenantId: req.tenantId });
+    if (!oldAssignment) return res.status(404).json({ error: 'Assignment not found' });
+
     const assignment = await WorkAssignment.findOneAndUpdate(
       { _id: req.params.id, tenantId: req.tenantId },
       assignmentData,
       { new: true, runValidators: true }
     );
-    if (!assignment) return res.status(404).json({ error: 'Assignment not found' });
+
+    // Handle Salary hooks for piece-rate
+    if (req.body.status === 'completed' && oldAssignment.status !== 'completed') {
+      const pieceRate = assignment.pieceRate || 0;
+      if (pieceRate > 0) {
+        // Credit the staff
+        await import('../models/SalaryTransaction.js').then(async ({ default: SalaryTransaction }) => {
+          await SalaryTransaction.create({
+            tenantId: req.tenantId,
+            staffId: assignment.staffId,
+            type: 'salary_credit',
+            amount: pieceRate,
+            notes: `Piece rate for completed assignment on order`
+          });
+        });
+        await import('../models/Staff.js').then(async ({ default: Staff }) => {
+          await Staff.findOneAndUpdate({ _id: assignment.staffId, tenantId: req.tenantId }, { $inc: { balance: pieceRate } });
+        });
+      }
+    } else if (req.body.status && req.body.status !== 'completed' && oldAssignment.status === 'completed') {
+      // Revert the credit if unmarked
+      const pieceRate = oldAssignment.pieceRate || 0;
+      if (pieceRate > 0) {
+        await import('../models/SalaryTransaction.js').then(async ({ default: SalaryTransaction }) => {
+          await SalaryTransaction.create({
+            tenantId: req.tenantId,
+            staffId: assignment.staffId,
+            type: 'advance', // Deducts balance logically
+            amount: pieceRate,
+            notes: `Reversed piece rate for un-completed assignment`
+          });
+        });
+        await import('../models/Staff.js').then(async ({ default: Staff }) => {
+          await Staff.findOneAndUpdate({ _id: assignment.staffId, tenantId: req.tenantId }, { $inc: { balance: -pieceRate } });
+        });
+      }
+    }
+
     res.json({ assignment });
   } catch (error) {
     res.status(400).json({ error: error.message });

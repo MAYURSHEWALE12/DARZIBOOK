@@ -62,13 +62,21 @@ export default function StaffDetails() {
     }
   };
 
+  const handleUpdateAssignment = async (assignmentId, currentStatus) => {
+    try {
+      const { updateWorkAssignment } = await import('../api/staff.js');
+      const newStatus = currentStatus === 'completed' ? 'in_progress' : 'completed';
+      await updateWorkAssignment(assignmentId, { status: newStatus });
+      toast.success(`Work marked as ${newStatus.replace('_', ' ')}`);
+      fetchData();
+    } catch (err) {
+      toast.error('Failed to update assignment status');
+    }
+  };
+
   const openTxModal = (type) => {
     setTxType(type);
-    if (type === 'salary_credit' && staff?.salaryType === 'weekly' && staff?.baseSalary) {
-      setTxForm({ ...txForm, amount: staff.baseSalary });
-    } else {
-      setTxForm({ amount: '', notes: '' });
-    }
+    setTxForm({ amount: '', notes: '' });
     setIsTxModalOpen(true);
   };
 
@@ -131,7 +139,9 @@ export default function StaffDetails() {
                   <tr className="bg-slate-50 border-b border-slate-200">
                     <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Garment</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Assigned Date</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Piece Rate</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -143,6 +153,9 @@ export default function StaffDetails() {
                       <td className="px-6 py-4 text-[13px] text-slate-500">
                         {new Date(a.assignedDate).toLocaleDateString()}
                       </td>
+                      <td className="px-6 py-4 text-[13px] font-bold text-slate-700">
+                        ₹{a.pieceRate || 0}
+                      </td>
                       <td className="px-6 py-4">
                         <span className={cn(
                           "px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider",
@@ -152,6 +165,16 @@ export default function StaffDetails() {
                         )}>
                           {a.status.replace('_', ' ')}
                         </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Button 
+                          size="sm" 
+                          variant={a.status === 'completed' ? "outline" : "default"} 
+                          onClick={() => handleUpdateAssignment(a._id, a.status)}
+                          className={a.status === 'completed' ? "" : "bg-[#1e3a8a] text-white"}
+                        >
+                          {a.status === 'completed' ? 'Mark In Progress' : 'Mark Completed'}
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -180,7 +203,7 @@ export default function StaffDetails() {
             <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex items-center gap-3">
               <Button onClick={() => openTxModal('salary_credit')} className="bg-[#1e3a8a] text-white flex-1 hover:bg-[#152a66]">
                 <span className="material-symbols-outlined mr-2 text-[18px]">account_balance_wallet</span>
-                Add Weekly Salary
+                Add Custom Credit
               </Button>
               <Button onClick={() => openTxModal('advance')} className="bg-rose-50 text-rose-600 border border-rose-200 flex-1 hover:bg-rose-100">
                 <span className="material-symbols-outlined mr-2 text-[18px]">money_off</span>
@@ -246,7 +269,7 @@ export default function StaffDetails() {
         </div>
       )}
 
-      <Modal open={isTxModalOpen} onClose={() => setIsTxModalOpen(false)} title={txType === 'salary_credit' ? 'Add Salary' : txType === 'advance' ? 'Give Advance' : 'Settle Payment'}>
+      <Modal open={isTxModalOpen} onClose={() => setIsTxModalOpen(false)} title={txType === 'salary_credit' ? 'Add Custom Credit' : txType === 'advance' ? 'Give Advance' : 'Settle Payment'}>
         <form onSubmit={handleTxSubmit} className="space-y-4">
           <Input 
             label="Amount (₹)" 

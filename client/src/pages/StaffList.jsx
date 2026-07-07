@@ -12,7 +12,7 @@ export default function StaffList() {
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newStaff, setNewStaff] = useState({ name: '', phone: '', role: 'Tailor', salaryType: 'weekly', baseSalary: 0 });
+  const [newStaff, setNewStaff] = useState({ name: '', phone: '', role: 'Tailor', salaryType: 'piece_rate', baseSalary: 0 });
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
 
@@ -63,7 +63,7 @@ export default function StaffList() {
       await createStaff(newStaff);
       toast.success('Staff added successfully');
       setIsModalOpen(false);
-      setNewStaff({ name: '', phone: '', role: 'Tailor', salaryType: 'weekly', baseSalary: 0 });
+      setNewStaff({ name: '', phone: '', role: 'Tailor', salaryType: 'piece_rate', baseSalary: 0 });
       fetchStaff();
     } catch (err) {
       toast.error('Failed to add staff');
@@ -207,26 +207,6 @@ export default function StaffList() {
               <option value="Other">Other</option>
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Salary Type</label>
-            <select 
-              className="w-full h-10 px-3 rounded-lg border border-slate-200 outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a] text-[13px] font-medium text-slate-700 bg-white"
-              value={newStaff.salaryType}
-              onChange={(e) => setNewStaff({...newStaff, salaryType: e.target.value})}
-            >
-              <option value="weekly">Weekly Fixed</option>
-              <option value="piece_rate">Per Piece / Commission</option>
-              <option value="monthly">Monthly Fixed</option>
-            </select>
-          </div>
-          {newStaff.salaryType !== 'piece_rate' && (
-            <Input 
-              label="Base Salary (₹)" 
-              type="number"
-              value={newStaff.baseSalary} 
-              onChange={(e) => setNewStaff({...newStaff, baseSalary: Number(e.target.value)})} 
-            />
-          )}
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
             <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="bg-[#1e3a8a] text-white">Save Staff</Button>
