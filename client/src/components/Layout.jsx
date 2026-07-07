@@ -247,7 +247,13 @@ export default function Layout() {
                             </div>
                             <div className="flex-1">
                               <p className={cn("text-sm", notif.isRead ? "text-slate-600" : "text-slate-800 font-medium")}>
-                                {notif.message}
+                                {notif.type === 'completed' 
+                                  ? t('notification.completed', { invoice: notif.orderId?.invoiceNumber || 'Order' })
+                                  : notif.type === 'delayed'
+                                  ? t('notification.delayed', { invoice: notif.orderId?.invoiceNumber || 'Order', date: new Date(notif.orderId?.deliveryDate || notif.createdAt).toLocaleDateString() })
+                                  : notif.type === 'missed_pickup'
+                                  ? t('notification.missed_pickup', { invoice: notif.orderId?.invoiceNumber || 'Order' })
+                                  : notif.message}
                               </p>
                               <span className="text-[11px] text-slate-400 font-medium mt-1 block">
                                 {new Date(notif.createdAt).toLocaleDateString()}

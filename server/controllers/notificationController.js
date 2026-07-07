@@ -55,7 +55,7 @@ export const getNotifications = async (req, res) => {
     await Notification.deleteMany({ tenantId: req.tenantId, createdAt: { $lt: thirtyDaysAgo } });
 
     const notifications = await Notification.find({ tenantId: req.tenantId })
-      .populate('orderId', 'invoiceNumber customerId')
+      .populate('orderId', 'invoiceNumber customerId deliveryDate')
       .sort({ createdAt: -1 })
       .limit(50); // limit to recent 50
 

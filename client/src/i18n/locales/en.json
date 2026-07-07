@@ -126,5 +126,8 @@
   "nav.notifications": "Notifications",
   "nav.markAllRead": "Mark all read",
   "nav.noNotifications": "No notifications.",
-  "nav.expenses": "Expenses"
+  "nav.expenses": "Expenses",
+  "notification.completed": "Order {{invoice}} is now ready!",
+  "notification.delayed": "Order {{invoice}} is delayed. Delivery was scheduled for {{date}}.",
+  "notification.missed_pickup": "Order {{invoice}} is ready but hasn't been picked up."
 }

@@ -126,5 +126,8 @@
   "measurement.knee": "गुडघा",
   "measurement.bottom": "बॉटम",
   "measurement.inseam": "इनसीम",
-  "nav.expenses": "खर्च"
+  "nav.expenses": "खर्च",
+  "notification.completed": "ऑर्डर {{invoice}} आता तयार आहे!",
+  "notification.delayed": "ऑर्डर {{invoice}} लांबणीवर पडली आहे. वितरण {{date}} रोजी नियोजित होते.",
+  "notification.missed_pickup": "ऑर्डर {{invoice}} तयार आहे पण अजून उचलली गेली नाही."
 }
