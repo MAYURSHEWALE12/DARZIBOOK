@@ -52,9 +52,9 @@ export default function Reports() {
   }, [period]);
 
   const tabs = [
-    { id: 'overview', label: 'Overview & Financials', icon: 'analytics' },
-    { id: 'orders', label: 'Order Status', icon: 'format_list_bulleted' },
-    { id: 'staff', label: 'Staff & Stitching', icon: 'badge' }
+    { id: 'overview', label: t('report.tabOverview'), icon: 'analytics' },
+    { id: 'orders', label: t('report.tabOrders'), icon: 'format_list_bulleted' },
+    { id: 'staff', label: t('report.tabStaff'), icon: 'badge' }
   ];
 
   const renderOverviewTab = () => (
@@ -62,19 +62,19 @@ export default function Reports() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
-          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Revenue</p>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">{t("report.totalRevenue")}</p>
           <h3 className="text-2xl font-bold text-emerald-600">₹{summary?.payments?.total || 0}</h3>
         </div>
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
-          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Expenses</p>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">{t("report.totalExpenses")}</p>
           <h3 className="text-2xl font-bold text-rose-500">₹{summary?.expenses?.total || 0}</h3>
         </div>
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
-          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Salaries Paid</p>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">{t("report.totalSalariesPaid")}</p>
           <h3 className="text-2xl font-bold text-amber-500">₹{summary?.salaries?.total || 0}</h3>
         </div>
         <div className="bg-[#1e3a8a] rounded-xl border border-[#1e3a8a] shadow-sm p-5 relative overflow-hidden text-white">
-          <p className="text-[11px] font-bold text-blue-200 uppercase tracking-wider mb-1">Net Profit</p>
+          <p className="text-[11px] font-bold text-blue-200 uppercase tracking-wider mb-1">{t("report.netProfit")}</p>
           <h3 className="text-2xl font-bold">₹{summary?.netProfit || 0}</h3>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function Reports() {
         {/* Expenses Breakdown */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[400px]">
           <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
-            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Expense Breakdown</h3>
+            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t("report.expenseBreakdown")}</h3>
           </div>
           <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
             {expenses.length > 0 ? (
@@ -96,7 +96,7 @@ export default function Reports() {
                 ))}
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center text-slate-400 text-sm">No expenses for this period</div>
+              <div className="h-full flex items-center justify-center text-slate-400 text-sm">{t("report.noExpenses")}</div>
             )}
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function Reports() {
         {/* Pending Dues */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[400px]">
           <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
-            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Pending Dues (Top 10)</h3>
+            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t("report.pendingDuesTop10")}</h3>
           </div>
           <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
             {dues.length > 0 ? (
@@ -117,7 +117,7 @@ export default function Reports() {
                 ))}
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center text-slate-400 text-sm">No pending dues</div>
+              <div className="h-full flex items-center justify-center text-slate-400 text-sm">{t("report.noPendingDues")}</div>
             )}
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function Reports() {
   const renderOrdersTab = () => (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-        <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider mb-6">Orders by Status</h3>
+        <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider mb-6">{t("report.ordersByStatus")}</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {['received', 'in_progress', 'ready', 'delivered'].map((status) => {
             const stat = orders.find(o => o._id === status) || { count: 0, totalRevenue: 0 };
@@ -150,8 +150,8 @@ export default function Reports() {
       {/* Daily Stitching */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[600px]">
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
-          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Today's Initiated Stitching</h3>
-          <p className="text-[11px] text-slate-500 mt-0.5">Orders assigned to staff today</p>
+          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t("report.todaysStitching")}</h3>
+          <p className="text-[11px] text-slate-500 mt-0.5">{t("report.todaysStitchingDesc")}</p>
         </div>
         <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
           {dailyStitching.length > 0 ? (
@@ -175,7 +175,7 @@ export default function Reports() {
               ))}
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center text-slate-400 text-sm">No stitching initiated today</div>
+            <div className="h-full flex items-center justify-center text-slate-400 text-sm">{t("report.noStitching")}</div>
           )}
         </div>
       </div>
@@ -183,7 +183,7 @@ export default function Reports() {
       {/* Salary Reports */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[600px]">
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
-          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Salary Payouts ({period})</h3>
+          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('report.salaryPayouts')} ({t(`period.${period}`)})</h3>
         </div>
         <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
           {salaries.length > 0 ? (
@@ -204,7 +204,7 @@ export default function Reports() {
               ))}
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center text-slate-400 text-sm">No salary payouts for this period</div>
+            <div className="h-full flex items-center justify-center text-slate-400 text-sm">{t("report.noSalaries")}</div>
           )}
         </div>
       </div>
@@ -221,7 +221,7 @@ export default function Reports() {
             </div>
             Comprehensive Reports
           </h1>
-          <p className="text-slate-500 mt-1 text-[15px]">Analyze your shop's financials, orders, and staff performance.</p>
+          <p className="text-slate-500 mt-1 text-[15px]">{t("report.subtitle")}</p>
         </div>
         
         <div className="w-full sm:w-48 z-10">
@@ -229,10 +229,10 @@ export default function Reports() {
             value={period} 
             onChange={(e) => setPeriod(e.target.value)}
             options={[
-              { value: 'daily', label: 'Daily' },
-              { value: 'weekly', label: 'Weekly' },
-              { value: 'monthly', label: 'Monthly' },
-              { value: 'yearly', label: 'Yearly' }
+              { value: 'daily', label: t('period.daily') },
+              { value: 'weekly', label: t('period.weekly') },
+              { value: 'monthly', label: t('period.monthly') },
+              { value: 'yearly', label: t('period.yearly') }
             ]}
           />
         </div>

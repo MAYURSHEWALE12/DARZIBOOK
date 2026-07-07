@@ -86,7 +86,7 @@ export default function Expenses() {
           </div>
           Shop Expenses
         </h1>
-        <p className="text-slate-500 mt-1 text-[15px]">Log daily expenses like thread, buttons, rent, etc.</p>
+        <p className="text-slate-500 mt-1 text-[15px]">{t("expense.subtitle")}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -123,7 +123,7 @@ export default function Expenses() {
                 value={form.description} 
                 onChange={(e) => setForm({...form, description: e.target.value})}
                 className="w-full h-10 px-3.5 rounded-lg border border-slate-200 text-[13px] font-medium outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
-                placeholder="E.g. Purchased new thread rolls"
+                placeholder={t("expense.placeholderDesc")}
                 required
               />
             </div>
@@ -189,8 +189,8 @@ export default function Expenses() {
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-center p-6 py-20">
                 <span className="material-symbols-outlined text-[40px] text-slate-200 mb-3">receipt_long</span>
-                <p className="text-slate-500 font-medium text-[14px]">No expenses logged yet</p>
-                <p className="text-[12px] text-slate-400 mt-1 max-w-[250px]">Keep track of your shop's outgoing money by adding expenses here.</p>
+                <p className="text-slate-500 font-medium text-[14px]">{t("expense.empty")}</p>
+                <p className="text-[12px] text-slate-400 mt-1 max-w-[250px]">{t("expense.emptyDesc")}</p>
               </div>
             )}
           </div>

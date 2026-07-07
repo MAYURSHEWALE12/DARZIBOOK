@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { listStaff, createStaff } from '../api/staff.js';
 import Card, { CardHeader, CardContent } from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
@@ -9,6 +10,7 @@ import toast from 'react-hot-toast';
 import Pagination from '../components/Pagination.jsx';
 
 export default function StaffList() {
+  const { t } = useTranslation();
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,12 +78,12 @@ export default function StaffList() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Staff Management</h1>
-          <p className="text-slate-500 text-sm mt-1">Manage your team, track workloads, and handle salaries.</p>
+          <h1 className="text-2xl font-bold text-slate-800">{t("staff.management")}</h1>
+          <p className="text-slate-500 text-sm mt-1">{t("staff.subtitle")}</p>
         </div>
         <Button onClick={() => setIsModalOpen(true)} className="bg-[#1e3a8a] text-white hover:bg-[#152a66]">
           <span className="material-symbols-outlined mr-2 text-[20px]">add</span>
-          Add Staff
+          {t("staff.add")}
         </Button>
       </div>
 
@@ -90,11 +92,11 @@ export default function StaffList() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Phone</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Balance</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t("staff.name")}</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t("staff.role")}</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">{t("staff.phone")}</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">{t("staff.balance")}</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">{t("staff.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -114,9 +116,9 @@ export default function StaffList() {
                   <td className="px-6 py-4 text-[13px] text-slate-500">{staff.phone || '-'}</td>
                   <td className="px-6 py-4 text-[13px] font-bold text-right">
                     {staff.balance > 0 ? (
-                      <span className="text-emerald-600">₹{staff.balance} (Payable)</span>
+                      <span className="text-emerald-600">₹{staff.balance} ({t("staff.payable")})</span>
                     ) : staff.balance < 0 ? (
-                      <span className="text-rose-600">₹{Math.abs(staff.balance)} (Advance)</span>
+                      <span className="text-rose-600">₹{Math.abs(staff.balance)} ({t("staff.advance")})</span>
                     ) : (
                       <span className="text-slate-400">₹0</span>
                     )}
@@ -126,7 +128,7 @@ export default function StaffList() {
                       <button 
                         onClick={() => setDeleteConfirmId(staff._id)}
                         className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                        title="Delete Staff"
+                        title={t("staff.deleteTitle")}
                       >
                         <span className="material-symbols-outlined text-[18px]">delete</span>
                       </button>
@@ -148,9 +150,9 @@ export default function StaffList() {
                       <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4 border border-slate-100">
                         <span className="material-symbols-outlined text-[40px] text-slate-300">badge</span>
                       </div>
-                      <p className="text-slate-600 font-semibold text-lg">No staff members found</p>
+                      <p className="text-slate-600 font-semibold text-lg">{t("staff.empty")}</p>
                       <p className="text-slate-400 mt-1 max-w-[250px] mx-auto text-sm">
-                        Click "Add Staff" to create your first team member.
+                        {t("staff.emptyDesc")}
                       </p>
                     </div>
                   </td>
@@ -162,7 +164,7 @@ export default function StaffList() {
                   <td colSpan={5} className="py-16 text-center">
                     <div className="flex justify-center items-center gap-3">
                        <span className="animate-spin w-6 h-6 border-2 border-slate-200 border-t-[#1e3a8a] rounded-full"></span>
-                       <span className="text-slate-500 font-medium">Loading staff...</span>
+                       <span className="text-slate-500 font-medium">{t("staff.loading")}</span>
                     </div>
                   </td>
                 </tr>
@@ -176,16 +178,16 @@ export default function StaffList() {
         </CardContent>
       </Card>
 
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Staff">
+      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} title={t("staff.addNew")}>
         <form onSubmit={handleAddStaff} className="space-y-4">
           <Input 
-            label="Full Name" 
+            label={t("staff.fullName")} 
             value={newStaff.name} 
             onChange={(e) => setNewStaff({...newStaff, name: e.target.value})} 
             required 
           />
           <Input 
-            label="Phone Number" 
+            label={t("staff.phoneNumber")} 
             type="tel"
             pattern="[0-9]{10}"
             maxLength="10"
@@ -209,14 +211,14 @@ export default function StaffList() {
           </div>
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="bg-[#1e3a8a] text-white">Save Staff</Button>
+            <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="bg-[#1e3a8a] text-white">{t("staff.save")}</Button>
           </div>
         </form>
       </Modal>
 
-      <Modal open={!!deleteConfirmId} onClose={() => setDeleteConfirmId(null)} title="Delete Staff">
+      <Modal open={!!deleteConfirmId} onClose={() => setDeleteConfirmId(null)} title={t("staff.deleteTitle")}>
         <div className="space-y-4">
-          <p className="text-slate-600 text-sm font-medium">Are you sure you want to delete this staff member? This action cannot be undone.</p>
+          <p className="text-slate-600 text-sm font-medium">{t("staff.deleteConfirm")}</p>
           <div className="flex justify-end gap-3 pt-2">
             <Button type="button" variant="outline" onClick={() => setDeleteConfirmId(null)}>Cancel</Button>
             <Button type="button" onClick={handleDeleteStaff} className="bg-rose-600 text-white hover:bg-rose-700">Delete</Button>
