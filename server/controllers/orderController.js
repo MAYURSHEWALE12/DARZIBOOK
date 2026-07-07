@@ -170,9 +170,6 @@ export const updateOrderStatus = async (req, res) => {
   }
 
   const updateData = { status };
-  if (status === 'delivered') {
-    updateData.pendingAmount = 0;
-  }
 
   // Use { new: false } to get the original pendingAmount before the atomic update
   const oldOrder = await Order.findOneAndUpdate(
@@ -181,15 +178,6 @@ export const updateOrderStatus = async (req, res) => {
     { new: false }
   );
   if (!oldOrder) return res.status(404).json({ error: 'Order not found' });
-
-  // If it was just marked delivered AND had a pending amount, deduct from customer
-  if (status === 'delivered' && oldOrder.status !== 'delivered' && oldOrder.pendingAmount > 0) {
-    try {
-      await Customer.findByIdAndUpdate(oldOrder.customerId, { $inc: { totalPending: -oldOrder.pendingAmount } });
-    } catch (err) {
-      console.error('Failed to sync customer totalPending on delivery:', err);
-    }
-  }
 
   const order = { ...oldOrder.toObject(), ...updateData };
 
