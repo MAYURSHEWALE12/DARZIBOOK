@@ -279,6 +279,31 @@ export default function OrderDetail() {
         </div>
       </div>
 
+      {order.measurementId && (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('nav.measurements') || 'Measurements'}</h3>
+            <span className="material-symbols-outlined text-slate-400 text-[18px]">straighten</span>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {Object.entries(order.measurementId.values || {}).map(([key, value]) => (
+                <div key={key} className="bg-slate-50 border border-slate-100 rounded-lg p-3 flex flex-col justify-center text-center hover:border-slate-200 transition-colors">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 truncate" title={key.replace(/_/g, ' ')}>{key.replace(/_/g, ' ')}</p>
+                  <p className="text-sm font-black text-slate-800">{value}</p>
+                </div>
+              ))}
+            </div>
+            {order.measurementId.notes && (
+              <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
+                <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-1">Measurement Notes</p>
+                <p className="text-[13px] text-amber-900 font-medium">{order.measurementId.notes}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <Modal open={paymentModal} onClose={() => setPaymentModal(false)} title={t('payment.add')}>
         <div className="mb-4 mt-2 p-4 bg-[#1e3a8a]/5 rounded-xl border border-[#1e3a8a]/10 flex justify-between items-center">
           <span className="text-sm font-semibold text-[#1e3a8a]">Remaining Amount:</span>
