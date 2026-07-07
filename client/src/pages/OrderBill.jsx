@@ -49,8 +49,12 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
         <div className="flex justify-between items-start pt-8 px-8 relative z-10">
           {/* Left Navy Block */}
           <div className="bg-[#001f3f] w-[200px] rounded-br-[50px] p-6 text-center text-[#c5a059] shadow-lg relative -ml-8 -mt-8">
-            <div className="w-24 h-24 mx-auto rounded-full border-2 border-[#c5a059] flex items-center justify-center mb-2">
-              <span className="material-symbols-outlined text-5xl">checkroom</span>
+            <div className="w-24 h-24 mx-auto rounded-full border-2 border-[#c5a059] flex items-center justify-center mb-2 overflow-hidden bg-white/5">
+              {tenant?.logo?.url ? (
+                <img src={tenant.logo.url} alt="Shop Logo" className="w-full h-full object-contain" />
+              ) : (
+                <span className="material-symbols-outlined text-5xl">checkroom</span>
+              )}
             </div>
             <p className="text-xs font-bold tracking-widest mt-2">SINCE {new Date(tenant?.createdAt).getFullYear() || '1985'}</p>
           </div>
