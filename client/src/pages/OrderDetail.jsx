@@ -19,8 +19,9 @@ export default function OrderDetail() {
   const [payment, setPayment] = useState({ amount: '', method: 'cash', note: '' });
   const [staffList, setStaffList] = useState([]);
   const [assignModal, setAssignModal] = useState(false);
-  const [assignForm, setAssignForm] = useState({ staffId: '', notes: '', pieceRate: '' });
+  const [assignForm, setAssignForm] = useState({ staffId: '', itemId: '', notes: '', pieceRate: '' });
   const [hasAssignment, setHasAssignment] = useState(false);
+  const [measurements, setMeasurements] = useState([]);
 
   const [isAssigning, setIsAssigning] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
@@ -48,7 +49,7 @@ export default function OrderDetail() {
     setIsAssigning(true);
     try {
       const module = await import('../api/staff.js');
-      await module.createWorkAssignment({ staffId: assignForm.staffId, orderId: id, notes: assignForm.notes, pieceRate: Number(assignForm.pieceRate) });
+      await module.createWorkAssignment({ staffId: assignForm.staffId, orderId: id, itemId: assignForm.itemId || undefined, notes: assignForm.notes, pieceRate: Number(assignForm.pieceRate) });
       toast.success('Work assigned successfully');
       setHasAssignment(true);
       setAssignModal(false);
@@ -228,8 +229,12 @@ export default function OrderDetail() {
             <div className="space-y-4">
               <div className="flex justify-between items-center pb-3 border-b border-slate-100">
                 <span className="text-[13px] text-slate-500 font-medium">{t('order.garmentType')}</span>
-                <span className="text-[13px] text-[#1e3a8a] font-bold capitalize">
-                  {order.garmentType} {order.quantity > 1 && <span className="text-[11px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded ml-1">x{order.quantity}</span>}
+                <span className="text-[13px] text-[#1e3a8a] font-bold capitalize text-right">
+                  {order.items && order.items.length > 0 ? (
+                    order.items.map(i => `${i.garmentType} (x${i.quantity})`).join(', ')
+                  ) : (
+                    <>{order.garmentType} {order.quantity > 1 && <span className="text-[11px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded ml-1">x{order.quantity}</span>}</>
+                  )}
                 </span>
               </div>
               <div className="flex justify-between items-center py-3 border-b border-slate-100">
@@ -290,43 +295,37 @@ export default function OrderDetail() {
         </div>
       </div>
 
-      {order.measurementId && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
-            <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('nav.measurements') || 'Measurements'}</h3>
-            <span className="material-symbols-outlined text-slate-400 text-[18px]">straighten</span>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {Object.entries(order.measurementId.values || {}).map(([key, value]) => (
-                <div key={key} className="bg-slate-50 border border-slate-100 rounded-lg p-3 flex flex-col justify-center text-center hover:border-slate-200 transition-colors">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 truncate" title={key.replace(/_/g, ' ')}>{key.replace(/_/g, ' ')}</p>
-                  <p className="text-sm font-black text-slate-800">{value}</p>
-                </div>
-              ))}
-            </div>
-            {order.measurementId.notes && (
-              <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
-                <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-1">Measurement Notes</p>
-                <p className="text-[13px] text-amber-900 font-medium">{order.measurementId.notes}</p>
+      {(() => {
+        const itemsToRender = order.items && order.items.length > 0 ? order.items : [{ garmentType: order.garmentType }];
+        return itemsToRender.map((item, idx) => {
+          const measurement = measurements.find(m => m.garmentType?.toLowerCase().trim() === item.garmentType?.toLowerCase().trim());
+          if (!measurement) return null;
+          return (
+            <div key={idx} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col mt-6">
+              <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+                <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{item.garmentType} Measurements</h3>
+                <span className="material-symbols-outlined text-slate-400 text-[18px]">straighten</span>
               </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      <Modal open={paymentModal} onClose={() => setPaymentModal(false)} title={t('payment.add')}>
-        <div className="mb-4 mt-2 p-4 bg-[#1e3a8a]/5 rounded-xl border border-[#1e3a8a]/10 flex justify-between items-center">
-          <span className="text-sm font-semibold text-[#1e3a8a]">Remaining Amount:</span>
-          <span className="text-xl font-bold text-[#1e3a8a]">₹{order.pendingAmount}</span>
-        </div>
-        <form onSubmit={handlePayment} className="space-y-5">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">{t('payment.amount')}</label>
-            <input 
-              type="number" 
-              value={payment.amount} 
-              onChange={(e) => setPayment({ ...payment, amount: e.target.value })} 
+              <div className="p-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {Object.entries(measurement.values || {}).map(([key, value]) => (
+                    <div key={key} className="bg-slate-50 border border-slate-100 rounded-lg p-3 flex flex-col justify-center text-center hover:border-slate-200 transition-colors">
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 truncate" title={key.replace(/_/g, ' ')}>{key.replace(/_/g, ' ')}</p>
+                      <p className="text-sm font-black text-slate-800">{value}</p>
+                    </div>
+                  ))}
+                </div>
+                {measurement.notes && (
+                  <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
+                    <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-1">Measurement Notes</p>
+                    <p className="text-[13px] text-amber-900 font-medium">{measurement.notes}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        });
+      })()} 
               required 
               max={order.pendingAmount}
               className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent transition-all outline-none text-slate-700"
@@ -399,6 +398,22 @@ export default function OrderDetail() {
       {/* Assign Work Modal */}
       <Modal open={assignModal} onClose={() => setAssignModal(false)} title="Assign Work to Staff">
         <form onSubmit={handleAssignWork} className="space-y-5 mt-4">
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Select Item</label>
+            <div className="relative">
+              <select 
+                value={assignForm.itemId} 
+                onChange={(e) => setAssignForm({ ...assignForm, itemId: e.target.value })} 
+                className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent transition-all outline-none text-slate-700 appearance-none cursor-pointer"
+              >
+                <option value="">Whole Order (All Items)</option>
+                {order?.items?.map((item, idx) => (
+                  <option key={idx} value={item._id}>{item.garmentType} (x{item.quantity})</option>
+                ))}
+              </select>
+              <span className="material-symbols-outlined absolute right-3 top-3 text-slate-400 pointer-events-none">expand_more</span>
+            </div>
+          </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Select Staff</label>
             <div className="relative">

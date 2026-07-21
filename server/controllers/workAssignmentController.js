@@ -24,7 +24,7 @@ export const listAssignmentsByOrder = async (req, res) => {
 
 export const createAssignment = async (req, res) => {
   try {
-    const allowedFields = ['staffId', 'orderId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
+    const allowedFields = ['staffId', 'orderId', 'itemId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
     const assignmentData = {};
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) assignmentData[field] = req.body[field];
@@ -40,7 +40,7 @@ export const createAssignment = async (req, res) => {
 
 export const updateAssignment = async (req, res) => {
   try {
-    const allowedFields = ['staffId', 'orderId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
+    const allowedFields = ['staffId', 'orderId', 'itemId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
     const assignmentData = {};
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) assignmentData[field] = req.body[field];

@@ -163,22 +163,51 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
               </tr>
             </thead>
             <tbody>
-              {/* Row 1: Main Garment */}
-              <tr className="border-b border-slate-200">
-                <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">1</td>
-                <td className="py-4 px-4 border-r border-slate-200">
-                  <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
-                    <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
-                    {order.garmentType}
-                  </div>
-                </td>
-                <td className="py-4 px-4 border-r border-slate-200 text-xs text-slate-500 font-medium">
-                  {order.specialInstructions ? `Note: ${order.specialInstructions}` : 'Custom Stitching'}
-                </td>
-                <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{order.quantity || 1}</td>
-                <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{(order.totalPrice / (order.quantity || 1)).toFixed(2)}</td>
-                <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice.toFixed(2)}</td>
-              </tr>
+              {/* Dynamic Items Rendering */}
+              {order.items && order.items.length > 0 ? (
+                order.items.map((item, index) => (
+                  <tr key={index} className="border-b border-slate-200">
+                    <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">{index + 1}</td>
+                    <td className="py-4 px-4 border-r border-slate-200">
+                      <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
+                        <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
+                        {item.garmentType}
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 border-r border-slate-200 text-xs text-slate-500 font-medium">
+                      {order.specialInstructions && index === 0 ? `Note: ${order.specialInstructions}` : 'Custom Stitching'}
+                    </td>
+                    <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{item.quantity}</td>
+                    {order.items.length === 1 ? (
+                      <>
+                        <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{(order.totalPrice / (item.quantity || 1)).toFixed(2)}</td>
+                        <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice.toFixed(2)}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">-</td>
+                        <td className="py-4 px-4 text-right font-bold text-slate-800">{index === 0 ? order.totalPrice.toFixed(2) : '-'}</td>
+                      </>
+                    )}
+                  </tr>
+                ))
+              ) : (
+                <tr className="border-b border-slate-200">
+                  <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">1</td>
+                  <td className="py-4 px-4 border-r border-slate-200">
+                    <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
+                      <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
+                      {order.garmentType}
+                    </div>
+                  </td>
+                  <td className="py-4 px-4 border-r border-slate-200 text-xs text-slate-500 font-medium">
+                    {order.specialInstructions ? `Note: ${order.specialInstructions}` : 'Custom Stitching'}
+                  </td>
+                  <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{order.quantity || 1}</td>
+                  <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{(order.totalPrice / (order.quantity || 1)).toFixed(2)}</td>
+                  <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice.toFixed(2)}</td>
+                </tr>
+              )}
               {/* Empty Rows */}
               <tr className="border-b border-slate-200 bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
               <tr className="border-b border-slate-200 bg-white"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>

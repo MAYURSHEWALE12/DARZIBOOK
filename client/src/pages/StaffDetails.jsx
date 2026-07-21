@@ -153,7 +153,10 @@ export default function StaffDetails() {
                   {assignments.map(a => (
                     <tr key={a._id}>
                       <td className="px-6 py-4 text-[13px] font-semibold text-slate-700">
-                        {a.orderId?.garmentType || 'Unknown Garment'}
+                        {(() => {
+                          const item = a.itemId && a.orderId?.items ? a.orderId.items.find(i => String(i._id) === String(a.itemId)) : null;
+                          return item ? `${item.garmentType} (x${item.quantity})` : (a.orderId?.garmentType || 'Unknown Garment');
+                        })()}
                       </td>
                       <td className="px-6 py-4 text-[13px] text-slate-500">
                         {new Date(a.assignedDate).toLocaleDateString()}
