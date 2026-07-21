@@ -325,7 +325,20 @@ export default function OrderDetail() {
             </div>
           );
         });
-      })()} 
+      })()}
+
+      <Modal open={paymentModal} onClose={() => setPaymentModal(false)} title={t('payment.add')}>
+        <div className="mb-4 mt-2 p-4 bg-[#1e3a8a]/5 rounded-xl border border-[#1e3a8a]/10 flex justify-between items-center">
+          <span className="text-sm font-semibold text-[#1e3a8a]">Remaining Amount:</span>
+          <span className="text-xl font-bold text-[#1e3a8a]">₹{order.pendingAmount}</span>
+        </div>
+        <form onSubmit={handlePayment} className="space-y-5">
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">{t('payment.amount')}</label>
+            <input 
+              type="number" 
+              value={payment.amount} 
+              onChange={(e) => setPayment({ ...payment, amount: e.target.value })} 
               required 
               max={order.pendingAmount}
               className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent transition-all outline-none text-slate-700"
