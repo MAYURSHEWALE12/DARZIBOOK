@@ -42,7 +42,7 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
     return label.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  const showOptions = !(searchable && options.length > 5 && searchTerm.trim() === '');
+  const showOptions = true;
 
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
@@ -66,7 +66,7 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
       {isOpen && (
         <div className="absolute z-[100] top-full left-0 right-0 mt-2 max-h-[320px] bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200 origin-top">
           
-          {searchable && options.length > 5 && (
+          {searchable && (
             <div className="p-2 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10 shrink-0">
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-2.5 text-slate-400 text-[18px]">search</span>
