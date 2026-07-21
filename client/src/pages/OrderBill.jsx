@@ -156,7 +156,6 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
               <tr className="bg-[#001f3f] text-white text-[11px] font-bold uppercase tracking-wider">
                 <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-center w-12">SR.</th>
                 <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-left">PARTICULARS</th>
-                <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-left">DESCRIPTION</th>
                 <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-center w-16">QTY.</th>
                 <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-right w-24">RATE (₹)</th>
                 <th className="py-3 px-4 text-right w-24">AMOUNT (₹)</th>
@@ -171,11 +170,13 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                     <td className="py-4 px-4 border-r border-slate-200">
                       <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
                         <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
-                        {item.garmentType}
+                        <div>
+                          {item.garmentType}
+                          {order.specialInstructions && index === 0 && (
+                            <div className="text-[10px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
+                          )}
+                        </div>
                       </div>
-                    </td>
-                    <td className="py-4 px-4 border-r border-slate-200 text-xs text-slate-500 font-medium">
-                      {order.specialInstructions && index === 0 ? `Note: ${order.specialInstructions}` : 'Custom Stitching'}
                     </td>
                     <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{item.quantity}</td>
                     {order.items.length === 1 ? (
@@ -197,11 +198,13 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                   <td className="py-4 px-4 border-r border-slate-200">
                     <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
                       <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
-                      {order.garmentType}
+                      <div>
+                        {order.garmentType}
+                        {order.specialInstructions && (
+                          <div className="text-[10px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
+                        )}
+                      </div>
                     </div>
-                  </td>
-                  <td className="py-4 px-4 border-r border-slate-200 text-xs text-slate-500 font-medium">
-                    {order.specialInstructions ? `Note: ${order.specialInstructions}` : 'Custom Stitching'}
                   </td>
                   <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{order.quantity || 1}</td>
                   <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{(order.totalPrice / (order.quantity || 1)).toFixed(2)}</td>
@@ -209,9 +212,9 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                 </tr>
               )}
               {/* Empty Rows */}
-              <tr className="border-b border-slate-200 bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
-              <tr className="border-b border-slate-200 bg-white"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
-              <tr className="bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
+              <tr className="border-b border-slate-200 bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
+              <tr className="border-b border-slate-200 bg-white"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
+              <tr className="bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
             </tbody>
           </table>
         </div>
