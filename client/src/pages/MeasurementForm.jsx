@@ -6,6 +6,7 @@ import { listTemplates } from '../api/templates.js';
 import { listCustomers } from '../api/customers.js';
 import toast from 'react-hot-toast';
 import CustomSelect from '../components/CustomSelect.jsx';
+import AutocompleteSelect from '../components/AutocompleteSelect.jsx';
 
 export default function MeasurementForm() {
   const { t, i18n } = useTranslation();
@@ -137,7 +138,7 @@ export default function MeasurementForm() {
               <div className="flex items-center gap-3">
                 <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('customer.name', 'Customer Name')}</span>
                 <div className="flex-1 min-w-0">
-                  <CustomSelect
+                  <AutocompleteSelect
                     value={form.customerId}
                     onChange={(val) => setForm({ ...form, customerId: val })}
                     options={customers.map((c) => ({ value: c._id, label: c.name }))}
