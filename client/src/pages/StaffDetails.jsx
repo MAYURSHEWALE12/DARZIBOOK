@@ -21,6 +21,7 @@ export default function StaffDetails() {
   const [isTxModalOpen, setIsTxModalOpen] = useState(false);
   const [txType, setTxType] = useState('salary_credit'); // salary_credit, advance, payment
   const [txForm, setTxForm] = useState({ amount: '', notes: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -46,6 +47,8 @@ export default function StaffDetails() {
 
   const handleTxSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       await createSalaryTransaction({
         staffId: id,
@@ -59,6 +62,8 @@ export default function StaffDetails() {
       fetchData(); // refresh to get new balance and tx list
     } catch (err) {
       toast.error('Failed to record transaction');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -289,7 +294,7 @@ export default function StaffDetails() {
           </div>
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="outline" onClick={() => setIsTxModalOpen(false)}>Cancel</Button>
-            <Button type="submit" className="bg-[#1e3a8a] text-white">Save Transaction</Button>
+            <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="bg-[#1e3a8a] text-white">Save Transaction</Button>
           </div>
         </form>
       </Modal>
