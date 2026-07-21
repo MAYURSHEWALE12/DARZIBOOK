@@ -6,6 +6,7 @@ import { listCustomers } from '../api/customers.js';
 import { listTemplates } from '../api/templates.js';
 import Button from '../components/Button.jsx';
 import CustomSelect from '../components/CustomSelect.jsx';
+import AutocompleteSelect from '../components/AutocompleteSelect.jsx';
 import Card, { CardHeader, CardContent } from '../components/Card.jsx';
 import toast from 'react-hot-toast';
 import { User, Shirt, CalendarDays, IndianRupee, CreditCard, AlignLeft } from 'lucide-react';
@@ -148,13 +149,12 @@ export default function OrderForm() {
                   <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200 rounded-l-lg shrink-0">
                     <User className="w-4 h-4 text-slate-400" />
                   </div>
-                  <CustomSelect 
+                  <AutocompleteSelect 
                     value={form.customerId} 
                     onChange={(val) => setForm({ ...form, customerId: val })}
                     options={customers.map((c) => ({ value: c._id, label: `${c.name} (${c.phone})` }))}
-                    placeholder="Select customer"
+                    placeholder="Search customer by name or phone..."
                     className="flex-1 min-w-0"
-                    buttonClassName="!border-transparent !bg-transparent h-12 shadow-none focus:ring-0 rounded-l-none"
                   />
                 </div>
               </div>
@@ -177,6 +177,7 @@ export default function OrderForm() {
                           : "Select type"
                     }
                     emptyState={garmentEmptyState}
+                    searchable={false}
                     className="flex-1 min-w-0"
                     buttonClassName="!border-transparent !bg-transparent h-12 shadow-none focus:ring-0 rounded-l-none"
                   />
