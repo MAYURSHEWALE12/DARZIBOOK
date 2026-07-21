@@ -173,26 +173,7 @@ export default function MeasurementForm() {
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-3 opacity-60 pointer-events-none">
-                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('garment.fit', 'Fit')}</span>
-                <div className="flex-1 min-w-0">
-                  <CustomSelect
-                    value="Regular Fit"
-                    onChange={() => {}}
-                    options={[{ value: 'Regular Fit', label: 'Regular Fit' }]}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center gap-3 opacity-60 pointer-events-none">
-                <span className="w-24 shrink-0 text-[12px] font-semibold text-slate-500">{t('garment.fabric', 'Fabric')}</span>
-                <div className="flex-1 min-w-0">
-                  <CustomSelect
-                    value="Cotton"
-                    onChange={() => {}}
-                    options={[{ value: 'Cotton', label: 'Cotton' }]}
-                  />
-                </div>
-              </div>
+
             </div>
           </div>
 
