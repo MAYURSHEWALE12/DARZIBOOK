@@ -5,8 +5,12 @@ import { Order, Customer, Payment, Measurement } from '../models/index.js';
 const orderSchema = z.object({
   customerId: z.string().min(1),
   measurementId: z.string().optional(),
-  garmentType: z.string().min(1),
+  garmentType: z.string().optional(),
   quantity: z.number().int().min(1).optional().default(1),
+  items: z.array(z.object({
+    garmentType: z.string().min(1),
+    quantity: z.number().int().min(1).default(1)
+  })).optional(),
   deliveryDate: z.string().optional(),
   totalPrice: z.number().min(0),
   advancePaid: z.number().min(0).optional().default(0),
@@ -73,13 +77,25 @@ export const listOrders = async (req, res) => {
 export const createOrder = async (req, res) => {
   const data = orderSchema.parse(req.body);
 
-  const measurement = await Measurement.findOne({ 
-    tenantId: req.tenantId, 
-    customerId: data.customerId, 
-    garmentType: { $regex: new RegExp(`^${data.garmentType}$`, 'i') } 
-  });
-  if (!measurement) {
-    return res.status(400).json({ error: `Please add a ${data.garmentType} measurement for this customer first.` });
+  const itemsToProcess = data.items && data.items.length > 0 
+    ? data.items 
+    : (data.garmentType ? [{ garmentType: data.garmentType, quantity: data.quantity }] : []);
+
+  if (itemsToProcess.length === 0) {
+    return res.status(400).json({ error: 'Order must have at least one garment item.' });
+  }
+
+  let lastMeasurementId = null;
+  for (const item of itemsToProcess) {
+    const measurement = await Measurement.findOne({ 
+      tenantId: req.tenantId, 
+      customerId: data.customerId, 
+      garmentType: { $regex: new RegExp(`^${item.garmentType}$`, 'i') } 
+    });
+    if (!measurement) {
+      return res.status(400).json({ error: `Please add a ${item.garmentType} measurement for this customer first.` });
+    }
+    lastMeasurementId = measurement._id;
   }
 
   const pendingAmount = data.totalPrice - data.advancePaid;
@@ -93,7 +109,8 @@ export const createOrder = async (req, res) => {
         tenantId: req.tenantId,
         invoiceNumber,
         ...data,
-        measurementId: measurement._id,
+        items: itemsToProcess,
+        measurementId: lastMeasurementId,
         pendingAmount,
         deliveryDate: data.deliveryDate ? new Date(data.deliveryDate) : undefined,
       });
@@ -140,7 +157,7 @@ export const getOrder = async (req, res) => {
 };
 
 export const updateOrder = async (req, res) => {
-  const allowedFields = ['garmentType', 'quantity', 'deliveryDate', 'totalPrice', 'advancePaid', 'specialInstructions'];
+  const allowedFields = ['garmentType', 'quantity', 'items', 'deliveryDate', 'totalPrice', 'advancePaid', 'specialInstructions'];
   const updates = {};
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) updates[field] = req.body[field];

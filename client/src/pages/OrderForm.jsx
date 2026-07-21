@@ -20,8 +20,7 @@ export default function OrderForm() {
   const [customerMeasurements, setCustomerMeasurements] = useState([]);
   const [form, setForm] = useState({
     customerId: searchParams.get('customerId') || '',
-    garmentType: '',
-    quantity: 1,
+    items: [{ garmentType: '', quantity: 1 }],
     deliveryDate: '',
     totalPrice: '',
     advancePaid: '0',
@@ -50,11 +49,17 @@ export default function OrderForm() {
         .then(({ data }) => {
           setCustomerMeasurements(data.measurements || []);
           // If the currently selected garmentType is not in the new measurements list, clear it
-          if (form.garmentType && !data.measurements.find(m => 
-            m.garmentType?.toLowerCase().trim() === form.garmentType.toLowerCase().trim()
-          )) {
-            setForm(prev => ({ ...prev, garmentType: '' }));
-          }
+          
+          setForm(prev => {
+            const newItems = prev.items.map(item => {
+              if (item.garmentType && !data.measurements.find(m => m.garmentType?.toLowerCase().trim() === item.garmentType.toLowerCase().trim())) {
+                return { ...item, garmentType: '' };
+              }
+              return item;
+            });
+            return { ...prev, items: newItems };
+          });
+
         })
         .catch(() => toast.error('Failed to load customer measurements'));
     });
@@ -142,7 +147,7 @@ export default function OrderForm() {
             <h2 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Customer & Garment</h2>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-6">
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('customer.name')}</label>
                 <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white">
@@ -159,28 +164,58 @@ export default function OrderForm() {
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.garmentType')}</label>
-                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white">
-                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200 rounded-l-lg shrink-0">
-                    <Shirt className="w-4 h-4 text-slate-400" />
-                  </div>
-                  <CustomSelect 
-                    value={form.garmentType} 
-                    onChange={(val) => setForm({ ...form, garmentType: val })}
-                    options={availableGarments.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
-                    placeholder={
-                      !form.customerId 
-                        ? "Select customer first" 
-                        : availableGarments.length === 0 
-                          ? "No measurements found" 
-                          : "Select type"
-                    }
-                    emptyState={garmentEmptyState}
-                    searchable={false}
-                    className="flex-1 min-w-0"
-                    buttonClassName="!border-transparent !bg-transparent h-12 shadow-none focus:ring-0 rounded-l-none"
-                  />
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Garments</label>
+                  <button type="button" onClick={() => setForm({...form, items: [...form.items, {garmentType: '', quantity: 1}]})} className="text-[12px] font-bold text-[#1e3a8a] flex items-center gap-1 hover:underline">
+                    <span className="material-symbols-outlined text-[16px]">add</span> Add Garment
+                  </button>
+                </div>
+                
+                <div className="space-y-4">
+                  {form.items.map((item, index) => (
+                    <div key={index} className="flex items-start gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 relative group">
+                      {form.items.length > 1 && (
+                        <button type="button" onClick={() => {
+                          const newItems = [...form.items];
+                          newItems.splice(index, 1);
+                          setForm({...form, items: newItems});
+                        }} className="absolute -top-2 -right-2 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span className="material-symbols-outlined text-[14px]">close</span>
+                        </button>
+                      )}
+                      <div className="flex-1 space-y-1">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{t('order.garmentType')}</label>
+                        <CustomSelect 
+                          value={item.garmentType} 
+                          onChange={(val) => {
+                            const newItems = [...form.items];
+                            newItems[index].garmentType = val;
+                            setForm({ ...form, items: newItems });
+                          }}
+                          options={availableGarments.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
+                          placeholder={!form.customerId ? "Select customer first" : availableGarments.length === 0 ? "No measurements found" : "Select type"}
+                          emptyState={garmentEmptyState}
+                          searchable={false}
+                          className="w-full bg-white rounded-lg border-slate-200"
+                        />
+                      </div>
+                      <div className="w-24 space-y-1">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{t('order.quantity')}</label>
+                        <input 
+                          type="number"
+                          min="1"
+                          value={item.quantity || 1} 
+                          onChange={(e) => {
+                            const newItems = [...form.items];
+                            newItems[index].quantity = parseInt(e.target.value) || 1;
+                            setForm({ ...form, items: newItems });
+                          }}
+                          className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -193,22 +228,8 @@ export default function OrderForm() {
             <h2 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Order Details</h2>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="space-y-1">
-                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.quantity')}</label>
-                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all overflow-hidden bg-white">
-                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200">
-                    <span className="material-symbols-outlined text-[18px] text-slate-400">format_list_numbered</span>
-                  </div>
-                  <input 
-                    type="number"
-                    min="1"
-                    value={form.quantity || 1} 
-                    onChange={(e) => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })}
-                    className="w-full h-full px-4 bg-transparent outline-none text-[14px] text-slate-800 font-bold"
-                  />
-                </div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.deliveryDate')}</label>
                 <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white overflow-hidden">
@@ -326,7 +347,7 @@ export default function OrderForm() {
           <Button type="button" variant="outline" onClick={() => navigate(-1)} className="px-8 bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50">
             {t('common.cancel')}
           </Button>
-          <Button type="submit" loading={loading} disabled={!form.customerId || !form.garmentType} className="px-10 bg-[#1e3a8a] text-white hover:bg-[#152a66] font-bold">
+          <Button type="submit" loading={loading} disabled={!form.customerId || !form.items.some(i => i.garmentType)} className="px-10 bg-[#1e3a8a] text-white hover:bg-[#152a66] font-bold">
             {t('common.create')}
           </Button>
         </div>

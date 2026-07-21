@@ -4,6 +4,7 @@ const workAssignmentSchema = new mongoose.Schema({
   tenantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true },
   staffId: { type: mongoose.Schema.Types.ObjectId, ref: 'Staff', required: true },
   orderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
+  itemId: { type: mongoose.Schema.Types.ObjectId }, // Reference to a specific item inside the order
   status: { type: String, enum: ['pending', 'in_progress', 'completed'], default: 'pending' },
   assignedDate: { type: Date, default: Date.now },
   completedDate: { type: Date },

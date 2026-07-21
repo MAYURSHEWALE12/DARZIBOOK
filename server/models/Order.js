@@ -4,8 +4,14 @@ const orderSchema = new mongoose.Schema({
   tenantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true },
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
   measurementId: { type: mongoose.Schema.Types.ObjectId, ref: 'Measurement' },
-  garmentType: { type: String, required: true },
+  // Deprecated fields, keeping for backward compatibility
+  garmentType: { type: String, required: false },
   quantity: { type: Number, default: 1 },
+  // New items array
+  items: [{
+    garmentType: { type: String, required: true },
+    quantity: { type: Number, default: 1 }
+  }],
   deliveryDate: Date,
   totalPrice: { type: Number, default: 0 },
   advancePaid: { type: Number, default: 0 },
