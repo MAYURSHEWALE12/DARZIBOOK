@@ -112,7 +112,8 @@ export default function OrderForm() {
         try {
           await uploadOrderPhotos(data.order._id, formData);
         } catch (uploadErr) {
-          toast.error('Order created, but failed to upload some photos.');
+          const errMsg = uploadErr.response?.data?.message || uploadErr.response?.data?.error || 'failed to upload some photos.';
+          toast.error(`Order created, but ${errMsg}`);
         }
       }
 
