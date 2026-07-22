@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import OrderBill from './OrderBill.jsx';
 import MeasurementCard from './MeasurementCard.jsx';
 import { listCustomerMeasurements } from '../api/measurements.js';
+import CustomSelect from '../components/CustomSelect.jsx';
 
 export default function OrderDetail() {
   const { t } = useTranslation();
@@ -456,38 +457,26 @@ export default function OrderDetail() {
       {/* Assign Work Modal */}
       <Modal open={assignModal} onClose={() => setAssignModal(false)} title="Assign Work to Staff">
         <form onSubmit={handleAssignWork} className="space-y-5 mt-4">
-          <div>
+          <div className="relative z-50">
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Select Item</label>
-            <div className="relative">
-              <select 
-                value={assignForm.itemId} 
-                onChange={(e) => setAssignForm({ ...assignForm, itemId: e.target.value })} 
-                className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent transition-all outline-none text-slate-700 appearance-none cursor-pointer"
-              >
-                <option value="">Whole Order (All Items)</option>
-                {order?.items?.map((item, idx) => (
-                  <option key={idx} value={item._id}>{item.garmentType} (x{item.quantity})</option>
-                ))}
-              </select>
-              <span className="material-symbols-outlined absolute right-3 top-3 text-slate-400 pointer-events-none">expand_more</span>
-            </div>
+            <CustomSelect 
+              value={assignForm.itemId} 
+              onChange={(val) => setAssignForm({ ...assignForm, itemId: val })} 
+              options={[
+                { value: '', label: 'Whole Order (All Items)' },
+                ...(order?.items?.map(item => ({ value: item._id, label: `${item.garmentType} (x${item.quantity})` })) || [])
+              ]}
+              placeholder="Select an item..."
+            />
           </div>
-          <div>
+          <div className="relative z-40">
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Select Staff</label>
-            <div className="relative">
-              <select 
-                value={assignForm.staffId} 
-                onChange={(e) => setAssignForm({ ...assignForm, staffId: e.target.value })} 
-                required
-                className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent transition-all outline-none text-slate-700 appearance-none cursor-pointer"
-              >
-                <option value="">Choose a staff member...</option>
-                {staffList.map(staff => (
-                  <option key={staff._id} value={staff._id}>{staff.name} ({staff.role})</option>
-                ))}
-              </select>
-              <span className="material-symbols-outlined absolute right-3 top-3 text-slate-400 pointer-events-none">expand_more</span>
-            </div>
+            <CustomSelect 
+              value={assignForm.staffId} 
+              onChange={(val) => setAssignForm({ ...assignForm, staffId: val })} 
+              options={staffList.map(staff => ({ value: staff._id, label: `${staff.name} (${staff.role})` }))}
+              placeholder="Choose a staff member..."
+            />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Piece Rate / Amount (₹)</label>
