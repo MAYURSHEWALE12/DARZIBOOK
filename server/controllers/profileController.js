@@ -1,22 +1,38 @@
-import fs from 'fs';
+import { z } from 'zod';
 import { Tenant } from '../models/index.js';
+import { cloudinary } from '../config/cloudinary.js';
+
+const updateProfileSchema = z.object({
+  shopName: z.string().min(1).optional(),
+  ownerName: z.string().min(1).optional(),
+  phone: z.string().min(10).optional(),
+  whatsapp: z.string().optional(),
+  address: z.object({
+    line1: z.string().optional(),
+    line2: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    pincode: z.string().optional(),
+  }).optional(),
+  gstNumber: z.string().optional(),
+  language: z.enum(['en', 'hi', 'mr']).optional(),
+});
 
 export const getProfile = async (req, res) => {
   res.json({ tenant: req.tenant });
 };
 
 export const updateProfile = async (req, res) => {
-  const allowedFields = ['shopName', 'ownerName', 'phone', 'whatsapp', 'address', 'gstNumber', 'language'];
-  const updates = {};
-  for (const field of allowedFields) {
-    if (req.body[field] !== undefined) updates[field] = req.body[field];
+  try {
+    const data = updateProfileSchema.parse(req.body);
+
+    const tenant = await Tenant.findByIdAndUpdate(req.tenantId, data, { new: true }).select('-passwordHash');
+    res.json({ tenant });
+  } catch (error) {
+    if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
+    res.status(500).json({ error: error.message });
   }
-
-  const tenant = await Tenant.findByIdAndUpdate(req.tenantId, updates, { new: true }).select('-passwordHash');
-  res.json({ tenant });
 };
-
-import { cloudinary } from '../config/cloudinary.js';
 
 export const uploadLogo = async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });

@@ -134,11 +134,11 @@ export default function Layout() {
                   className={cn(
                     'flex items-center gap-3 px-4 py-2.5 md:py-3 md:gap-4 rounded-xl transition-all duration-300 relative group overflow-hidden',
                     isActive 
-                      ? 'bg-[#1e3a8a] text-white shadow-lg border border-[#2563eb]/20' 
+                      ? 'bg-[#2596be] text-white shadow-lg border border-white/10' 
                       : 'text-white/70 hover:bg-white/5 hover:text-white'
                   )}
                 >
-                  {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-400 rounded-r-full" />}
+                  {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/50 rounded-r-full" />}
                   <span className={cn("material-symbols-outlined transition-transform duration-300", isActive ? "scale-110" : "group-hover:scale-110")} style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}>{item.icon}</span>
                   <span className="text-[15px] font-medium tracking-wide">{t(item.label)}</span>
                 </Link>

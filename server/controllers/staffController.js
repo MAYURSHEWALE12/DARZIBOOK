@@ -1,6 +1,29 @@
+import { z } from 'zod';
 import Staff from '../models/Staff.js';
 import SalaryTransaction from '../models/SalaryTransaction.js';
 import WorkAssignment from '../models/WorkAssignment.js';
+
+const createStaffSchema = z.object({
+  name: z.string().min(1),
+  phone: z.string().optional().default(''),
+  role: z.enum(['Master', 'Tailor', 'Helper', 'Cutter', 'Other']).optional().default('Tailor'),
+  salaryType: z.enum(['weekly', 'monthly', 'piece_rate']).optional().default('weekly'),
+  baseSalary: z.number().min(0).optional().default(0),
+  status: z.enum(['active', 'inactive']).optional().default('active'),
+  joinDate: z.string().optional(),
+  notes: z.string().optional().default(''),
+});
+
+const updateStaffSchema = z.object({
+  name: z.string().min(1).optional(),
+  phone: z.string().optional(),
+  role: z.enum(['Master', 'Tailor', 'Helper', 'Cutter', 'Other']).optional(),
+  salaryType: z.enum(['weekly', 'monthly', 'piece_rate']).optional(),
+  baseSalary: z.number().min(0).optional(),
+  status: z.enum(['active', 'inactive']).optional(),
+  joinDate: z.string().optional(),
+  notes: z.string().optional(),
+});
 
 export const listStaff = async (req, res) => {
   try {
@@ -30,17 +53,15 @@ export const listStaff = async (req, res) => {
 
 export const createStaff = async (req, res) => {
   try {
-    const allowedFields = ['name', 'phone', 'role', 'salaryType', 'baseSalary', 'status', 'joinDate', 'notes'];
-    const staffData = {};
-    allowedFields.forEach(field => {
-      if (req.body[field] !== undefined) staffData[field] = req.body[field];
-    });
-    staffData.tenantId = req.tenantId;
-    
+    const data = createStaffSchema.parse(req.body);
+    const staffData = { ...data, tenantId: req.tenantId };
+    if (data.joinDate) staffData.joinDate = new Date(data.joinDate);
+
     const staff = new Staff(staffData);
     await staff.save();
     res.status(201).json({ staff });
   } catch (error) {
+    if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
     res.status(400).json({ error: error.message });
   }
 };
@@ -57,20 +78,18 @@ export const getStaff = async (req, res) => {
 
 export const updateStaff = async (req, res) => {
   try {
-    const allowedFields = ['name', 'phone', 'role', 'salaryType', 'baseSalary', 'status', 'joinDate', 'notes'];
-    const staffData = {};
-    allowedFields.forEach(field => {
-      if (req.body[field] !== undefined) staffData[field] = req.body[field];
-    });
+    const data = updateStaffSchema.parse(req.body);
+    if (data.joinDate) data.joinDate = new Date(data.joinDate);
 
     const staff = await Staff.findOneAndUpdate(
       { _id: req.params.id, tenantId: req.tenantId },
-      staffData,
+      data,
       { new: true, runValidators: true }
     );
     if (!staff) return res.status(404).json({ error: 'Staff not found' });
     res.json({ staff });
   } catch (error) {
+    if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
     res.status(400).json({ error: error.message });
   }
 };

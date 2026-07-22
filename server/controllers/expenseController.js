@@ -1,23 +1,28 @@
+import { z } from 'zod';
 import { Expense } from '../models/index.js';
+
+const createExpenseSchema = z.object({
+  amount: z.number().min(0),
+  category: z.enum(['Rent', 'Electricity/Water', 'Maintenance', 'Thread/Materials', 'Marketing', 'Other']).optional().default('Other'),
+  description: z.string().min(1),
+  date: z.string().optional(),
+});
 
 export const createExpense = async (req, res) => {
   try {
-    const { amount, category, description, date } = req.body;
-    
-    if (!amount || !description) {
-      return res.status(400).json({ error: 'Amount and description are required' });
-    }
+    const data = createExpenseSchema.parse(req.body);
 
     const expense = await Expense.create({
       tenantId: req.tenantId,
-      amount: Number(amount),
-      category: category || 'Other',
-      description,
-      date: date ? new Date(date) : new Date()
+      amount: data.amount,
+      category: data.category,
+      description: data.description,
+      date: data.date ? new Date(data.date) : new Date()
     });
 
     res.status(201).json({ expense });
   } catch (error) {
+    if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
     res.status(500).json({ error: error.message });
   }
 };

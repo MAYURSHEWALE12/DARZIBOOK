@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Order, Customer, Payment, Expense, SalaryTransaction, WorkAssignment } from '../models/index.js';
 
 export const getSummary = async (req, res) => {
@@ -134,14 +135,7 @@ export const getSalaryReport = async (req, res) => {
   const filter = { tenantId: req.tenantId };
   
   if (staffId && staffId !== 'all') {
-    const mongoose = await import('mongoose');
-    filter._id = new mongoose.default.Types.ObjectId(staffId); // Wait, SalaryTransaction groups by $staffId which comes from SalaryTransaction schema
-  }
-
-  // Wait, I should filter SalaryTransaction by staffId. The field in SalaryTransaction is staffId.
-  if (staffId && staffId !== 'all') {
-    const mongoose = await import('mongoose');
-    filter.staffId = new mongoose.default.Types.ObjectId(staffId);
+    filter.staffId = new mongoose.Types.ObjectId(staffId);
   }
 
   if (month && year) {

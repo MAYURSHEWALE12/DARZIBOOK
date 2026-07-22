@@ -1,4 +1,29 @@
+import { z } from 'zod';
 import WorkAssignment from '../models/WorkAssignment.js';
+import SalaryTransaction from '../models/SalaryTransaction.js';
+import Staff from '../models/Staff.js';
+
+const createAssignmentSchema = z.object({
+  staffId: z.string().min(1),
+  orderId: z.string().min(1),
+  itemId: z.string().optional(),
+  status: z.enum(['pending', 'in_progress', 'completed']).optional().default('pending'),
+  assignedDate: z.string().optional(),
+  completedDate: z.string().optional().nullable(),
+  pieceRate: z.number().min(0).optional().default(0),
+  notes: z.string().optional().default(''),
+});
+
+const updateAssignmentSchema = z.object({
+  staffId: z.string().min(1).optional(),
+  orderId: z.string().min(1).optional(),
+  itemId: z.string().optional(),
+  status: z.enum(['pending', 'in_progress', 'completed']).optional(),
+  assignedDate: z.string().optional(),
+  completedDate: z.string().optional().nullable(),
+  pieceRate: z.number().min(0).optional(),
+  notes: z.string().optional(),
+});
 
 export const listAssignments = async (req, res) => {
   try {
@@ -24,29 +49,30 @@ export const listAssignmentsByOrder = async (req, res) => {
 
 export const createAssignment = async (req, res) => {
   try {
-    const allowedFields = ['staffId', 'orderId', 'itemId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
-    const assignmentData = {};
-    allowedFields.forEach(field => {
-      if (req.body[field] !== undefined) assignmentData[field] = req.body[field];
-    });
-    assignmentData.tenantId = req.tenantId;
+    const data = createAssignmentSchema.parse(req.body);
+    const assignmentData = {
+      ...data,
+      tenantId: req.tenantId,
+      assignedDate: data.assignedDate ? new Date(data.assignedDate) : new Date(),
+      completedDate: data.completedDate ? new Date(data.completedDate) : undefined,
+    };
+
     const assignment = new WorkAssignment(assignmentData);
     await assignment.save();
     res.status(201).json({ assignment });
   } catch (error) {
+    if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
     res.status(400).json({ error: error.message });
   }
 };
 
 export const updateAssignment = async (req, res) => {
   try {
-    const allowedFields = ['staffId', 'orderId', 'itemId', 'status', 'assignedDate', 'completedDate', 'pieceRate', 'notes'];
-    const assignmentData = {};
-    allowedFields.forEach(field => {
-      if (req.body[field] !== undefined) assignmentData[field] = req.body[field];
-    });
+    const data = updateAssignmentSchema.parse(req.body);
+    const assignmentData = { ...data };
+    if (data.assignedDate) assignmentData.assignedDate = new Date(data.assignedDate);
+    if (data.completedDate !== undefined) assignmentData.completedDate = data.completedDate ? new Date(data.completedDate) : null;
 
-    // We need the old assignment to check status change
     const oldAssignment = await WorkAssignment.findOne({ _id: req.params.id, tenantId: req.tenantId });
     if (!oldAssignment) return res.status(404).json({ error: 'Assignment not found' });
 
@@ -56,40 +82,29 @@ export const updateAssignment = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    // Handle Salary hooks for piece-rate
-    if (req.body.status === 'completed' && oldAssignment.status !== 'completed') {
+    if (data.status === 'completed' && oldAssignment.status !== 'completed') {
       const pieceRate = assignment.pieceRate || 0;
       if (pieceRate > 0) {
-        // Credit the staff
-        await import('../models/SalaryTransaction.js').then(async ({ default: SalaryTransaction }) => {
-          await SalaryTransaction.create({
-            tenantId: req.tenantId,
-            staffId: assignment.staffId,
-            type: 'salary_credit',
-            amount: pieceRate,
-            notes: `Piece rate for completed assignment on order`
-          });
+        await SalaryTransaction.create({
+          tenantId: req.tenantId,
+          staffId: assignment.staffId,
+          type: 'salary_credit',
+          amount: pieceRate,
+          notes: `Piece rate for completed assignment on order`
         });
-        await import('../models/Staff.js').then(async ({ default: Staff }) => {
-          await Staff.findOneAndUpdate({ _id: assignment.staffId, tenantId: req.tenantId }, { $inc: { balance: pieceRate } });
-        });
+        await Staff.findOneAndUpdate({ _id: assignment.staffId, tenantId: req.tenantId }, { $inc: { balance: pieceRate } });
       }
-    } else if (req.body.status && req.body.status !== 'completed' && oldAssignment.status === 'completed') {
-      // Revert the credit if unmarked
+    } else if (data.status && data.status !== 'completed' && oldAssignment.status === 'completed') {
       const pieceRate = oldAssignment.pieceRate || 0;
       if (pieceRate > 0) {
-        await import('../models/SalaryTransaction.js').then(async ({ default: SalaryTransaction }) => {
-          await SalaryTransaction.create({
-            tenantId: req.tenantId,
-            staffId: assignment.staffId,
-            type: 'advance', // Deducts balance logically
-            amount: pieceRate,
-            notes: `Reversed piece rate for un-completed assignment`
-          });
+        await SalaryTransaction.create({
+          tenantId: req.tenantId,
+          staffId: assignment.staffId,
+          type: 'advance',
+          amount: pieceRate,
+          notes: `Reversed piece rate for un-completed assignment`
         });
-        await import('../models/Staff.js').then(async ({ default: Staff }) => {
-          await Staff.findOneAndUpdate({ _id: assignment.staffId, tenantId: req.tenantId }, { $inc: { balance: -pieceRate } });
-        });
+        await Staff.findOneAndUpdate({ _id: assignment.staffId, tenantId: req.tenantId }, { $inc: { balance: -pieceRate } });
       }
     }
 
