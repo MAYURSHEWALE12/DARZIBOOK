@@ -22,7 +22,7 @@ export default function OrderForm() {
   const [form, setForm] = useState({
     customerId: searchParams.get('customerId') || '',
     items: [{ garmentType: '', quantity: 1 }],
-    deliveryDate: '',
+    deliveryDate: new Date().toISOString().split('T')[0],
     totalPrice: '',
     advancePaid: '0',
     specialInstructions: '',
