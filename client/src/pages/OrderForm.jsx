@@ -6,6 +6,7 @@ import { listCustomers } from '../api/customers.js';
 import { listTemplates } from '../api/templates.js';
 import Button from '../components/Button.jsx';
 import CustomSelect from '../components/CustomSelect.jsx';
+import DatePicker from '../components/DatePicker.jsx';
 import AutocompleteSelect from '../components/AutocompleteSelect.jsx';
 import Card, { CardHeader, CardContent } from '../components/Card.jsx';
 import toast from 'react-hot-toast';
@@ -234,11 +235,10 @@ export default function OrderForm() {
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.deliveryDate')}</label>
                 <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white overflow-hidden">
-                  <input 
-                    type="date"
-                    value={form.deliveryDate} 
-                    onChange={(e) => setForm({ ...form, deliveryDate: e.target.value })}
-                    className="w-full h-full px-4 bg-transparent outline-none text-[13px] text-slate-800 font-medium cursor-pointer"
+                  <DatePicker 
+                    selected={form.deliveryDate} 
+                    onChange={(date) => setForm({ ...form, deliveryDate: date.toISOString().split('T')[0] })} 
+                    className="!border-0 !shadow-none !h-full !bg-transparent" 
                   />
                 </div>
               </div>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { listExpenses, createExpense, deleteExpense } from '../api/expenses.js';
 import Button from '../components/Button.jsx';
 import CustomSelect from '../components/CustomSelect.jsx';
+import DatePicker from '../components/DatePicker.jsx';
 import toast from 'react-hot-toast';
 
 export default function Expenses() {
@@ -130,12 +131,10 @@ export default function Expenses() {
 
             <div className="space-y-1">
               <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Date</label>
-              <input 
-                type="date" 
-                value={form.date} 
-                onChange={(e) => setForm({...form, date: e.target.value})}
-                className="w-full h-10 px-3.5 rounded-lg border border-slate-200 text-[13px] font-medium outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
-                required
+              <DatePicker 
+                selected={form.date} 
+                onChange={(date) => setForm({...form, date: date.toISOString().split('T')[0]})} 
+                required 
               />
             </div>
 
