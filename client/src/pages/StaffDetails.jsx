@@ -47,6 +47,11 @@ export default function StaffDetails() {
 
   const handleTxSubmit = async (e) => {
     e.preventDefault();
+    
+    if (txType === 'payment' && Number(txForm.amount) > staff.balance) {
+      return toast.error(`Settle amount cannot exceed the current balance (₹${staff.balance})`);
+    }
+
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
@@ -282,6 +287,8 @@ export default function StaffDetails() {
           <Input 
             label="Amount (₹)" 
             type="number"
+            min="1"
+            max={txType === 'payment' && staff?.balance > 0 ? staff.balance : undefined}
             value={txForm.amount} 
             onChange={(e) => setTxForm({...txForm, amount: e.target.value})} 
             required 
