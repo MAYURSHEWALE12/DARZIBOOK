@@ -7,6 +7,8 @@ import Badge from '../components/Badge.jsx';
 import Modal from '../components/Modal.jsx';
 import toast from 'react-hot-toast';
 import OrderBill from './OrderBill.jsx';
+import MeasurementCard from './MeasurementCard.jsx';
+import { listCustomerMeasurements } from '../api/measurements.js';
 
 export default function OrderDetail() {
   const { t } = useTranslation();
@@ -16,6 +18,7 @@ export default function OrderDetail() {
   const [loading, setLoading] = useState(true);
   const [paymentModal, setPaymentModal] = useState(false);
   const [billModal, setBillModal] = useState(false);
+  const [measurementModal, setMeasurementModal] = useState(false);
   const [payment, setPayment] = useState({ amount: '', method: 'cash', note: '' });
   const [staffList, setStaffList] = useState([]);
   const [assignModal, setAssignModal] = useState(false);
@@ -29,7 +32,11 @@ export default function OrderDetail() {
 
   useEffect(() => {
     getOrder(id)
-      .then(({ data }) => setOrder(data.order))
+      .then(({ data }) => {
+        setOrder(data.order);
+        const custId = typeof data.order.customerId === 'object' ? data.order.customerId._id : data.order.customerId;
+        listCustomerMeasurements(custId).then(m => setMeasurements(m.data.measurements)).catch(() => {});
+      })
       .catch(() => toast.error('Order not found'))
       .finally(() => setLoading(false));
 

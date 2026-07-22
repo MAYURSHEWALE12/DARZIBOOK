@@ -27,6 +27,7 @@ import SuperAdminDashboard from './pages/SuperAdminDashboard.jsx';
 import SuperAdminTenants from './pages/SuperAdminTenants.jsx';
 import SuperAdminPlans from './pages/SuperAdminPlans.jsx';
 import OrderBill from './pages/OrderBill.jsx';
+import MeasurementCard from './pages/MeasurementCard.jsx';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuthStore();
@@ -58,6 +59,7 @@ export default function App() {
         <Route path="/superadmin/tenants" element={<SuperAdminTenants />} />
         <Route path="/superadmin/plans" element={<SuperAdminPlans />} />
         <Route path="/orders/:id/bill" element={<ProtectedRoute><OrderBill /></ProtectedRoute>} />
+        <Route path="/orders/:id/measurement-card" element={<ProtectedRoute><MeasurementCard /></ProtectedRoute>} />
         <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/customers" element={<CustomerList />} />
