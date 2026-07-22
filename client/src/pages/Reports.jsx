@@ -261,7 +261,7 @@ export default function Reports() {
             <div className="p-2.5 bg-[#1e3a8a]/10 text-[#1e3a8a] rounded-xl shadow-sm border border-[#1e3a8a]/10">
               <span className="material-symbols-outlined text-[24px]">analytics</span>
             </div>
-            Comprehensive Reports
+            {t("report.title")}
           </h1>
           <p className="text-slate-500 mt-1 text-[15px]">{t("report.subtitle")}</p>
         </div>

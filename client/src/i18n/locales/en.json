@@ -162,7 +162,7 @@
   "staff.save": "Save Staff",
   "staff.deleteTitle": "Delete Staff",
   "staff.deleteConfirm": "Are you sure you want to delete this staff member? This action cannot be undone.",
-  "report.title": "Comprehensive Reports",
+  "report.title": "Reports",
   "report.subtitle": "Analyze your shop's financials, orders, and staff performance.",
   "report.tabOverview": "Overview & Financials",
   "report.tabOrders": "Order Status",
