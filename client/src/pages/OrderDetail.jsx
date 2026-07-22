@@ -318,9 +318,9 @@ export default function OrderDetail() {
                 <span className="material-symbols-outlined text-slate-400 text-[18px]">straighten</span>
               </div>
               <div className="p-6">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div className="flex flex-nowrap overflow-x-auto custom-scrollbar pb-2 gap-4">
                   {Object.entries(measurement.values || {}).map(([key, value]) => (
-                    <div key={key} className="bg-slate-50 border border-slate-100 rounded-lg p-3 flex flex-col justify-center text-center hover:border-slate-200 transition-colors">
+                    <div key={key} className="min-w-[100px] flex-1 bg-slate-50 border border-slate-100 rounded-lg p-3 flex flex-col justify-center text-center hover:border-slate-200 transition-colors shrink-0">
                       <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 truncate" title={key.replace(/_/g, ' ')}>{key.replace(/_/g, ' ')}</p>
                       <p className="text-sm font-black text-slate-800">{value}</p>
                     </div>
