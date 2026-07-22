@@ -59,3 +59,15 @@ export const createPayment = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const listOrderPayments = async (req, res) => {
+  try {
+    const payments = await Payment.find({
+      tenantId: req.tenantId,
+      orderId: req.params.orderId,
+    }).sort({ date: -1 }).populate('customerId', 'name');
+    res.json({ payments });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to list payments' });
+  }
+};

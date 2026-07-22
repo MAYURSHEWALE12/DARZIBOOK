@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getOrder, updateOrder, updateOrderStatus, deleteOrder, uploadOrderPhotos, deleteOrderPhoto } from '../api/orders.js';
-import { createPayment } from '../api/payments.js';
+import { createPayment, listOrderPayments } from '../api/payments.js';
 import Badge from '../components/Badge.jsx';
 import Modal from '../components/Modal.jsx';
 import toast from 'react-hot-toast';
@@ -22,6 +22,7 @@ export default function OrderDetail() {
   const [assignForm, setAssignForm] = useState({ staffId: '', itemId: '', notes: '', pieceRate: '' });
   const [hasAssignment, setHasAssignment] = useState(false);
   const [measurements, setMeasurements] = useState([]);
+  const [payments, setPayments] = useState([]);
 
   const [isAssigning, setIsAssigning] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
@@ -31,6 +32,8 @@ export default function OrderDetail() {
       .then(({ data }) => setOrder(data.order))
       .catch(() => toast.error('Order not found'))
       .finally(() => setLoading(false));
+
+    listOrderPayments(id).then(({ data }) => setPayments(data.payments)).catch(() => {});
       
     import('../api/staff.js').then((module) => {
       module.listStaff().then(({ data }) => setStaffList(data.staff)).catch(() => {});
@@ -89,6 +92,7 @@ export default function OrderDetail() {
       setOrder(data.order);
       toast.success('Payment recorded');
       setPaymentModal(false);
+      setPayments([data.payment, ...payments]);
       setPayment({ amount: '', method: 'cash', note: '' });
     } catch (err) {
       toast.error(err.response?.data?.error || 'Failed');
@@ -326,6 +330,40 @@ export default function OrderDetail() {
           );
         });
       })()}
+
+      {/* Payment History Card */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col mt-6">
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Payment History</h3>
+          <span className="material-symbols-outlined text-slate-400 text-[18px]">history</span>
+        </div>
+        <div className="p-0 overflow-x-auto">
+          {payments.length === 0 ? (
+            <div className="p-6 text-center text-slate-500 text-sm">No payments recorded yet.</div>
+          ) : (
+            <table className="w-full text-left text-sm whitespace-nowrap">
+              <thead className="bg-slate-50 text-slate-500 text-xs">
+                <tr>
+                  <th className="px-6 py-3 font-semibold">Date</th>
+                  <th className="px-6 py-3 font-semibold">Amount</th>
+                  <th className="px-6 py-3 font-semibold">Method</th>
+                  <th className="px-6 py-3 font-semibold">Note</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {payments.map((p) => (
+                  <tr key={p._id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 text-slate-600">{new Date(p.date).toLocaleDateString()} {new Date(p.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+                    <td className="px-6 py-4 font-bold text-emerald-600">₹{p.amount}</td>
+                    <td className="px-6 py-4"><span className="capitalize text-xs font-semibold px-2 py-1 rounded bg-slate-100 text-slate-600">{p.method}</span></td>
+                    <td className="px-6 py-4 text-slate-500 italic">{p.note || '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
 
       <Modal open={paymentModal} onClose={() => setPaymentModal(false)} title={t('payment.add')}>
         <div className="mb-4 mt-2 p-4 bg-[#1e3a8a]/5 rounded-xl border border-[#1e3a8a]/10 flex justify-between items-center">
