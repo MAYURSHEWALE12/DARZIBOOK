@@ -467,6 +467,7 @@ export default function OrderDetail() {
                 ...(order?.items?.map(item => ({ value: item._id, label: `${item.garmentType} (x${item.quantity})` })) || [])
               ]}
               placeholder="Select an item..."
+              searchable={false}
             />
           </div>
           <div className="relative z-40">
@@ -476,6 +477,7 @@ export default function OrderDetail() {
               onChange={(val) => setAssignForm({ ...assignForm, staffId: val })} 
               options={staffList.map(staff => ({ value: staff._id, label: `${staff.name} (${staff.role})` }))}
               placeholder="Choose a staff member..."
+              searchable={false}
             />
           </div>
           <div>
