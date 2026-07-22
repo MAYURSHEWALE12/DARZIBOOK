@@ -179,17 +179,10 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                       </div>
                     </td>
                     <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{item.quantity}</td>
-                    {order.items.length === 1 ? (
-                      <>
-                        <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{(order.totalPrice / (item.quantity || 1)).toFixed(2)}</td>
-                        <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice.toFixed(2)}</td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">-</td>
-                        <td className="py-4 px-4 text-right font-bold text-slate-800">{index === 0 ? order.totalPrice.toFixed(2) : '-'}</td>
-                      </>
-                    )}
+                    <>
+                      <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">-</td>
+                      <td className="py-4 px-4 text-right font-bold text-slate-800">-</td>
+                    </>
                   </tr>
                 ))
               ) : (
@@ -207,8 +200,8 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                     </div>
                   </td>
                   <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{order.quantity || 1}</td>
-                  <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{(order.totalPrice / (order.quantity || 1)).toFixed(2)}</td>
-                  <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice.toFixed(2)}</td>
+                  <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">-</td>
+                  <td className="py-4 px-4 text-right font-bold text-slate-800">-</td>
                 </tr>
               )}
               {/* Empty Rows */}
