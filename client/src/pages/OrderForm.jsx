@@ -234,7 +234,7 @@ export default function OrderForm() {
               
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.deliveryDate')}</label>
-                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white overflow-hidden">
+                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white">
                   <DatePicker 
                     selected={form.deliveryDate} 
                     onChange={(date) => setForm({ ...form, deliveryDate: date.toISOString().split('T')[0] })} 
