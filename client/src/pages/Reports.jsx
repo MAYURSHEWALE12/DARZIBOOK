@@ -11,6 +11,7 @@ import {
 } from '../api/reports.js';
 import Select from '../components/Select.jsx';
 import Button from '../components/Button.jsx';
+import { listStaff } from '../api/staff.js';
 import { cn } from '../utils/cn.js';
 
 export default function Reports() {
@@ -25,6 +26,10 @@ export default function Reports() {
   const [expenses, setExpenses] = useState([]);
   const [salaries, setSalaries] = useState([]);
   const [dailyStitching, setDailyStitching] = useState([]);
+  const [salaryMonth, setSalaryMonth] = useState(new Date().getMonth() + 1);
+  const [salaryYear, setSalaryYear] = useState(new Date().getFullYear());
+  const [salaryStaff, setSalaryStaff] = useState('all');
+  const [staffList, setStaffList] = useState([]);
   
   const [loading, setLoading] = useState(true);
 
@@ -36,20 +41,27 @@ export default function Reports() {
       getRevenueReport(),
       getOrderReport({ period }),
       getExpenseReport({ period }),
-      getSalaryReport({ period }),
+      
       getDailyStitchingReport()
-    ]).then(([summaryRes, duesRes, revenueRes, orderRes, expenseRes, salaryRes, stitchRes]) => {
+    ]).then(([summaryRes, duesRes, revenueRes, orderRes, expenseRes, stitchRes]) => {
       setSummary(summaryRes.data);
       setDues(duesRes.data.customers);
       setRevenue(revenueRes.data.revenue);
       setOrders(orderRes.data.orders);
       setExpenses(expenseRes.data.expenses);
-      setSalaries(salaryRes.data.salaries);
+      
       setDailyStitching(stitchRes.data.assignments);
+      listStaff().then(res => setStaffList(res.data.staff)).catch(() => {});
     }).finally(() => {
       setLoading(false);
     });
   }, [period]);
+
+  useEffect(() => {
+    getSalaryReport({ month: salaryMonth, year: salaryYear, staffId: salaryStaff })
+      .then(res => setSalaries(res.data.salaries))
+      .catch(() => {});
+  }, [salaryMonth, salaryYear, salaryStaff]);
 
   const tabs = [
     { id: 'overview', label: t('report.tabOverview'), icon: 'analytics' },
@@ -182,8 +194,38 @@ export default function Reports() {
 
       {/* Salary Reports */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[600px]">
-        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50">
-          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('report.salaryPayouts')} ({t(`period.${period}`)})</h3>
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('report.salaryPayouts')}</h3>
+          <div className="flex items-center gap-2">
+            <select 
+              value={salaryMonth} 
+              onChange={(e) => setSalaryMonth(e.target.value)}
+              className="text-xs bg-white border border-slate-200 rounded px-2 py-1 outline-none focus:border-[#1e3a8a]"
+            >
+              {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
+                <option key={m} value={m}>{new Date(0, m - 1).toLocaleString('default', { month: 'short' })}</option>
+              ))}
+            </select>
+            <select 
+              value={salaryYear} 
+              onChange={(e) => setSalaryYear(e.target.value)}
+              className="text-xs bg-white border border-slate-200 rounded px-2 py-1 outline-none focus:border-[#1e3a8a]"
+            >
+              {[new Date().getFullYear(), new Date().getFullYear() - 1, new Date().getFullYear() - 2].map(y => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+            <select 
+              value={salaryStaff} 
+              onChange={(e) => setSalaryStaff(e.target.value)}
+              className="text-xs bg-white border border-slate-200 rounded px-2 py-1 outline-none focus:border-[#1e3a8a] max-w-[120px]"
+            >
+              <option value="all">All Staff</option>
+              {staffList.map(s => (
+                <option key={s._id} value={s._id}>{s.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
           {salaries.length > 0 ? (

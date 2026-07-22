@@ -130,10 +130,26 @@ export const getExpenseReport = async (req, res) => {
 };
 
 export const getSalaryReport = async (req, res) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate, month, year, staffId } = req.query;
   const filter = { tenantId: req.tenantId };
+  
+  if (staffId && staffId !== 'all') {
+    const mongoose = await import('mongoose');
+    filter._id = new mongoose.default.Types.ObjectId(staffId); // Wait, SalaryTransaction groups by $staffId which comes from SalaryTransaction schema
+  }
 
-  if (startDate || endDate) {
+  // Wait, I should filter SalaryTransaction by staffId. The field in SalaryTransaction is staffId.
+  if (staffId && staffId !== 'all') {
+    const mongoose = await import('mongoose');
+    filter.staffId = new mongoose.default.Types.ObjectId(staffId);
+  }
+
+  if (month && year) {
+    // month is 1-12
+    const start = new Date(year, month - 1, 1);
+    const end = new Date(year, month, 0, 23, 59, 59, 999);
+    filter.date = { $gte: start, $lte: end };
+  } else if (startDate || endDate) {
     filter.date = {};
     if (startDate) filter.date.$gte = new Date(startDate);
     if (endDate) filter.date.$lte = new Date(endDate);
