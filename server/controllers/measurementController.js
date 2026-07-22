@@ -44,6 +44,16 @@ export const createMeasurement = async (req, res) => {
       imageUrl = req.file.path;
     }
 
+    const existingMeasurement = await Measurement.findOne({
+      tenantId: req.tenantId,
+      customerId: data.customerId,
+      garmentType: data.garmentType
+    });
+    
+    if (existingMeasurement) {
+      return res.status(400).json({ error: `A measurement for ${data.garmentType} already exists for this customer. Please edit the existing one.` });
+    }
+
     const measurement = await Measurement.create({
       tenantId: req.tenantId,
       customerId: data.customerId,
