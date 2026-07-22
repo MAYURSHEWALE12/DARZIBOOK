@@ -43,6 +43,28 @@ const generateSystemNotifications = async (tenantId) => {
       });
     }
   }
+  // 3. Check for upcoming deliveries (within next 2 days)
+  const inTwoDays = new Date(now);
+  inTwoDays.setDate(inTwoDays.getDate() + 2);
+
+  const upcomingOrders = await Order.find({
+    tenantId,
+    deliveryDate: { $gt: now, $lte: inTwoDays },
+    status: { $in: ['received', 'in_progress'] }
+  }).populate('customerId', 'name');
+
+  for (const order of upcomingOrders) {
+    const exists = await Notification.exists({ tenantId, orderId: order._id, type: 'upcoming' });
+    if (!exists) {
+      const customerName = order.customerId?.name || 'Customer';
+      await Notification.create({
+        tenantId,
+        orderId: order._id,
+        type: 'upcoming',
+        message: `Upcoming delivery for ${customerName} (Order ${order.invoiceNumber}) in 2 days or less.`
+      });
+    }
+  }
 };
 
 export const getNotifications = async (req, res) => {
