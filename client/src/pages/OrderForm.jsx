@@ -174,50 +174,68 @@ export default function OrderForm() {
                   </button>
                 </div>
                 
-                <div className="space-y-4">
-                  {form.items.map((item, index) => (
-                    <div key={index} className="flex items-start gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 relative group">
-                      {form.items.length > 1 && (
-                        <button type="button" onClick={() => {
-                          const newItems = [...form.items];
-                          newItems.splice(index, 1);
-                          setForm({...form, items: newItems});
-                        }} className="absolute -top-2 -right-2 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span className="material-symbols-outlined text-[14px]">close</span>
-                        </button>
-                      )}
-                      <div className="flex-1 space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{t('order.garmentType')}</label>
-                        <CustomSelect 
-                          value={item.garmentType} 
-                          onChange={(val) => {
-                            const newItems = [...form.items];
-                            newItems[index].garmentType = val;
-                            setForm({ ...form, items: newItems });
-                          }}
-                          options={availableGarments.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
-                          placeholder={!form.customerId ? "Select customer first" : availableGarments.length === 0 ? "No measurements found" : "Select type"}
-                          emptyState={garmentEmptyState}
-                          searchable={false}
-                          className="w-full bg-white rounded-lg border-slate-200"
-                        />
-                      </div>
-                      <div className="w-24 space-y-1">
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{t('order.quantity')}</label>
-                        <input 
-                          type="number"
-                          min="1"
-                          value={item.quantity || 1} 
-                          onChange={(e) => {
-                            const newItems = [...form.items];
-                            newItems[index].quantity = parseInt(e.target.value) || 1;
-                            setForm({ ...form, items: newItems });
-                          }}
-                          className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
-                        />
-                      </div>
-                    </div>
-                  ))}
+                <div className="mt-2 border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                        <th className="px-4 py-3">{t('order.garmentType')}</th>
+                        <th className="px-4 py-3 w-32">{t('order.quantity')}</th>
+                        <th className="px-4 py-3 w-16 text-center"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {form.items.map((item, index) => (
+                        <tr key={index} className="group hover:bg-slate-50/50 transition-colors">
+                          <td className="px-4 py-3">
+                            <CustomSelect 
+                              value={item.garmentType} 
+                              onChange={(val) => {
+                                const newItems = [...form.items];
+                                newItems[index].garmentType = val;
+                                setForm({ ...form, items: newItems });
+                              }}
+                              options={availableGarments.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
+                              placeholder={!form.customerId ? "Select customer first" : availableGarments.length === 0 ? "No measurements found" : "Select type"}
+                              emptyState={garmentEmptyState}
+                              searchable={false}
+                              className="w-full bg-white rounded-lg border-slate-200"
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <input 
+                              type="number"
+                              min="1"
+                              value={item.quantity || 1} 
+                              onChange={(e) => {
+                                const newItems = [...form.items];
+                                newItems[index].quantity = parseInt(e.target.value) || 1;
+                                setForm({ ...form, items: newItems });
+                              }}
+                              className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                            />
+                          </td>
+                          <td className="px-4 py-3 text-center align-middle">
+                            {form.items.length > 1 ? (
+                              <button 
+                                type="button" 
+                                onClick={() => {
+                                  const newItems = [...form.items];
+                                  newItems.splice(index, 1);
+                                  setForm({...form, items: newItems});
+                                }} 
+                                className="w-8 h-8 rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600 flex items-center justify-center transition-colors mx-auto"
+                                title="Remove Garment"
+                              >
+                                <span className="material-symbols-outlined text-[20px]">delete</span>
+                              </button>
+                            ) : (
+                              <div className="w-8 h-8 mx-auto"></div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
