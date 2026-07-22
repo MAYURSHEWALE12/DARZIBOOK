@@ -39,11 +39,11 @@ export default function AutocompleteSelect({ value, onChange, options = [], plac
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
       <div
-        className={`w-full h-10 px-3.5 flex items-center justify-between rounded-lg text-[13px] border transition-all duration-200 outline-none font-semibold ${
+        className={`w-full h-12 px-4 flex items-center justify-between rounded-xl text-[14px] border transition-all duration-200 outline-none font-semibold ${
           isOpen 
-            ? 'border-[#1e3a8a] bg-blue-50/30 ring-4 ring-[#1e3a8a]/10' 
-            : 'border-slate-200 bg-transparent hover:border-slate-300'
-        } h-full border-none shadow-none bg-transparent rounded-l-none`}
+            ? 'border-[#2596be] bg-[#2596be]/5 ring-4 ring-[#2596be]/10' 
+            : 'border-slate-200 bg-white hover:border-[#2596be]/40'
+        }`}
       >
         <input
           ref={inputRef}

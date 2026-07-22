@@ -152,18 +152,13 @@ export default function OrderForm() {
             <div className="space-y-6">
               <div className="space-y-1">
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('customer.name')}</label>
-                <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-200 focus-within:ring-1 focus-within:ring-[#1e3a8a] focus-within:border-[#1e3a8a] transition-all bg-white">
-                  <div className="h-full px-4 flex items-center justify-center bg-slate-50 border-r border-slate-200 rounded-l-lg shrink-0">
-                    <User className="w-4 h-4 text-slate-400" />
-                  </div>
-                  <AutocompleteSelect 
-                    value={form.customerId} 
-                    onChange={(val) => setForm({ ...form, customerId: val })}
-                    options={customers.map((c) => ({ value: c._id, label: `${c.name} (${c.phone})` }))}
-                    placeholder="Search customer by name or phone..."
-                    className="flex-1 min-w-0"
-                  />
-                </div>
+                <AutocompleteSelect 
+                  value={form.customerId} 
+                  onChange={(val) => setForm({ ...form, customerId: val })}
+                  options={customers.map((c) => ({ value: c._id, label: `${c.name} (${c.phone})` }))}
+                  placeholder="Search customer by name or phone..."
+                  className="w-full"
+                />
               </div>
 
               <div>
