@@ -103,7 +103,7 @@ export default function Layout() {
 
       {/* Sidebar */}
       <aside className={cn(
-        "w-72 bg-[#0f172a] text-white flex-col shadow-2xl z-[70] transition-transform duration-300",
+        "w-72 bg-[#2465bf] text-white flex-col shadow-2xl z-[70] transition-transform duration-300",
         isMobileMenuOpen ? "fixed inset-y-0 left-0 flex animate-in slide-in-from-left" : "hidden md:flex relative"
       )}>
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
