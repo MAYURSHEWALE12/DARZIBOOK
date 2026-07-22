@@ -215,6 +215,11 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
               <tr className="border-b border-slate-200 bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
               <tr className="border-b border-slate-200 bg-white"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
               <tr className="bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
+              {/* Total Row */}
+              <tr className="border-t-2 border-[#001f3f] bg-white">
+                <td colSpan="4" className="py-3 px-4 border-r border-slate-200 text-right font-bold text-[#001f3f] text-[11px] uppercase tracking-wider">Overall Amount</td>
+                <td className="py-3 px-4 text-right font-bold text-[#001f3f] text-[14px]">₹ {order.totalPrice.toFixed(2)}</td>
+              </tr>
             </tbody>
           </table>
         </div>
