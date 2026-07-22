@@ -46,6 +46,7 @@ export default function DatePicker({
   return (
     <div className="custom-datepicker-wrapper w-full">
       <ReactDatePicker
+        wrapperClassName="w-full"
         selected={selected ? new Date(selected) : null}
         onChange={(date) => onChange && onChange(date)}
         customInput={<CustomInput label={label} className={className} placeholder={placeholder} disabled={disabled} />}

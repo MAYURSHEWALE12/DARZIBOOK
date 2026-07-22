@@ -102,3 +102,10 @@ body {
 .custom-datepicker-wrapper .react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
   border-color: #2596be;
 }
+
+/* Fix Datepicker full width */
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  display: block;
+  width: 100%;
+}
