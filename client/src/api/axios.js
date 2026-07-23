@@ -20,34 +20,40 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (
-      error.response?.status === 401 && 
-      (error.response?.data?.error === 'TOKEN_EXPIRED' || error.response?.data?.error === 'Authentication required') && 
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      try {
-        const rToken = localStorage.getItem('refreshToken');
-        const { data } = await axios.post(`${API_URL}/auth/refresh-token`, { refreshToken: rToken }, { withCredentials: true });
-        
-        if (data.accessToken) {
-          localStorage.setItem('accessToken', data.accessToken);
-          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+    
+    if (error.response?.status === 401) {
+      const errMessage = error.response?.data?.error;
+      
+      // If token expired or missing, try to refresh
+      if ((errMessage === 'TOKEN_EXPIRED' || errMessage === 'Authentication required') && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+          const rToken = localStorage.getItem('refreshToken');
+          const { data } = await axios.post(`${API_URL}/auth/refresh-token`, { refreshToken: rToken }, { withCredentials: true });
+          
+          if (data.accessToken) {
+            localStorage.setItem('accessToken', data.accessToken);
+            originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+          }
+          if (data.refreshToken) {
+            localStorage.setItem('refreshToken', data.refreshToken);
+          }
+          
+          return api(originalRequest);
+        } catch {
+          // Fall through to logout
         }
-        if (data.refreshToken) {
-          localStorage.setItem('refreshToken', data.refreshToken);
-        }
-        
-        return api(originalRequest);
-      } catch {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        if (window.location.pathname !== '/login' && window.location.pathname !== '/superadmin/login') {
-          window.location.href = '/login';
-        }
-        return Promise.reject(error);
       }
+      
+      // If refresh failed OR error was "Invalid or deactivated account" OR "Invalid tenant"
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/superadmin/login') {
+        window.location.href = '/login';
+      }
+      return Promise.reject(error);
     }
+    
     return Promise.reject(error);
   }
 );
