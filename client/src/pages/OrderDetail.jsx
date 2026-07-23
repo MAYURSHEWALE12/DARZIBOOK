@@ -437,16 +437,16 @@ export default function OrderDetail() {
               </button>
             </div>
           </div>
-          <div className="flex-1 w-full flex justify-center items-start overflow-hidden">
-             {/* Use zoom/scale to make it a cute small preview card */}
+          <div className="flex-1 w-full flex justify-center items-start overflow-y-auto overflow-x-hidden">
+             {/* Use dynamic zoom/scale to fit mobile screens */}
              <div 
                className="shadow-2xl rounded-lg overflow-hidden border border-white/10"
                style={{ 
-                 transform: 'scale(0.55)', 
+                 transform: 'scale(min(0.55, calc(100vw / 850)))', 
                  transformOrigin: 'top center',
                  width: '793px',
                  height: '1122px',
-                 marginBottom: '-45%' // Counteracts the unscaled height for the container
+                 marginBottom: 'calc(-1122px * (1 - min(0.55, calc(100vw / 850))))'
                }}
              >
                <OrderBill orderId={id} isPreview={true} />
