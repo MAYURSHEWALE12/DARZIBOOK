@@ -56,7 +56,6 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                 <span className="material-symbols-outlined text-5xl">checkroom</span>
               )}
             </div>
-            <p className="text-xs font-bold tracking-widest mt-2">SINCE {new Date(tenant?.createdAt).getFullYear() || '1985'}</p>
           </div>
 
           {/* Center Title */}
