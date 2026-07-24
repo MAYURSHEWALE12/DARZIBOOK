@@ -56,7 +56,8 @@ export default function MeasurementForm() {
   };
 
   const handleValueChange = (key, value) => {
-    setForm({ ...form, values: { ...form.values, [key]: value } });
+    const numericValue = value.replace(/[^0-9.]/g, '');
+    setForm({ ...form, values: { ...form.values, [key]: numericValue } });
   };
 
   const handleSubmit = async (e) => {
