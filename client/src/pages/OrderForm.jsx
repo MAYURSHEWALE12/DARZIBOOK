@@ -136,7 +136,7 @@ export default function OrderForm() {
         </button>
         <div>
           <h1 className="text-3xl font-bold text-slate-800 tracking-tight">{t('order.new')}</h1>
-          <p className="text-slate-500 mt-1">Create a new tailoring order and track payment.</p>
+          <p className="text-slate-500 mt-1">{t('order.newDesc')}</p>
         </div>
       </div>
 
@@ -146,7 +146,7 @@ export default function OrderForm() {
         {/* Customer & Garment */}
         <Card>
           <CardHeader>
-            <h2 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Customer & Garment</h2>
+            <h2 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('order.customerAndGarment')}</h2>
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-6">
@@ -156,16 +156,16 @@ export default function OrderForm() {
                   value={form.customerId} 
                   onChange={(val) => setForm({ ...form, customerId: val })}
                   options={customers.map((c) => ({ value: c._id, label: `${c.name} (${c.phone})` }))}
-                  placeholder="Search customer by name or phone..."
+                  placeholder={t('customer.searchPlaceholder')}
                   className="w-full"
                 />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Garments</label>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">{t('order.garments')}</label>
                   <button type="button" onClick={() => setForm({...form, items: [...form.items, {garmentType: '', quantity: 1}]})} className="text-[12px] font-bold text-[#1e3a8a] flex items-center gap-1 hover:underline">
-                    <span className="material-symbols-outlined text-[16px]">add</span> Add Garment
+                    <span className="material-symbols-outlined text-[16px]">add</span> {t('order.addGarment')}
                   </button>
                 </div>
                 
@@ -190,7 +190,7 @@ export default function OrderForm() {
                                 setForm({ ...form, items: newItems });
                               }}
                               options={availableGarments.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
-                              placeholder={!form.customerId ? "Select customer first" : availableGarments.length === 0 ? "No measurements found" : "Select"}
+                              placeholder={!form.customerId ? t('order.selectCustomerFirst') : availableGarments.length === 0 ? t('order.noMeasurements') : t('order.selectType')}
                               emptyState={garmentEmptyState}
                               searchable={false}
                               className="w-full bg-white rounded-lg border-slate-200"
@@ -219,7 +219,7 @@ export default function OrderForm() {
                                   setForm({...form, items: newItems});
                                 }} 
                                 className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600 flex items-center justify-center transition-colors mx-auto"
-                                title="Remove Garment"
+                                title={t('order.removeGarment')}
                               >
                                 <span className="material-symbols-outlined text-[18px] sm:text-[20px]">delete</span>
                               </button>
@@ -240,7 +240,7 @@ export default function OrderForm() {
         {/* Order Details */}
         <Card>
           <CardHeader>
-            <h2 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">Order Details</h2>
+            <h2 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{t('order.details')}</h2>
           </CardHeader>
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -311,7 +311,7 @@ export default function OrderForm() {
               </div>
 
               <div className="space-y-1">
-                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Order Reference Images</label>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t('order.referenceImages')}</label>
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-wrap items-center gap-3">
                     {form.photos?.length > 0 && Array.from(form.photos).map((file, idx) => (
@@ -348,7 +348,7 @@ export default function OrderForm() {
                       </label>
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-500 font-medium">Upload up to 5 reference images for design or fabric details.</p>
+                  <p className="text-[11px] text-slate-500 font-medium">{t('order.referenceImagesDesc')}</p>
                 </div>
               </div>
             </div>

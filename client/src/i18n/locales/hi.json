@@ -184,5 +184,17 @@
   "period.daily": "दैनिक",
   "period.weekly": "साप्ताहिक",
   "period.monthly": "मासिक",
-  "period.yearly": "वार्षिक"
+  "period.yearly": "वार्षिक",
+  "order.newDesc": "नया सिलाई ऑर्डर बनाएं और भुगतान ट्रैक करें।",
+  "order.customerAndGarment": "ग्राहक और परिधान",
+  "customer.searchPlaceholder": "नाम या फोन से ग्राहक खोजें...",
+  "order.garments": "परिधान",
+  "order.addGarment": "परिधान जोड़ें",
+  "order.selectCustomerFirst": "पहले ग्राहक चुनें",
+  "order.noMeasurements": "कोई माप नहीं मिला",
+  "order.selectType": "प्रकार चुनें",
+  "order.removeGarment": "परिधान हटाएं",
+  "order.details": "ऑर्डर विवरण",
+  "order.referenceImages": "ऑर्डर संदर्भ चित्र",
+  "order.referenceImagesDesc": "डिज़ाइन या फैब्रिक विवरण के लिए अधिकतम 5 संदर्भ चित्र अपलोड करें।"
 }

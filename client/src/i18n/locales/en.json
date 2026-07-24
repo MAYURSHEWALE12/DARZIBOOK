@@ -184,5 +184,17 @@
   "period.daily": "Daily",
   "period.weekly": "Weekly",
   "period.monthly": "Monthly",
-  "period.yearly": "Yearly"
+  "period.yearly": "Yearly",
+  "order.newDesc": "Create a new tailoring order and track payment.",
+  "order.customerAndGarment": "Customer & Garment",
+  "customer.searchPlaceholder": "Search customer by name or phone...",
+  "order.garments": "Garments",
+  "order.addGarment": "Add Garment",
+  "order.selectCustomerFirst": "Select customer first",
+  "order.noMeasurements": "No measurements found",
+  "order.selectType": "Select type",
+  "order.removeGarment": "Remove Garment",
+  "order.details": "Order Details",
+  "order.referenceImages": "Order Reference Images",
+  "order.referenceImagesDesc": "Upload up to 5 reference images for design or fabric details."
 }

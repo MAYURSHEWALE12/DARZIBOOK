@@ -184,5 +184,17 @@
   "period.daily": "दैनिक",
   "period.weekly": "साप्ताहिक",
   "period.monthly": "मासिक",
-  "period.yearly": "वार्षिक"
+  "period.yearly": "वार्षिक",
+  "order.newDesc": "नवीन टेलरिंग ऑर्डर तयार करा आणि पेमेंट ट्रॅक करा.",
+  "order.customerAndGarment": "ग्राहक आणि पोशाख",
+  "customer.searchPlaceholder": "नाव किंवा फोनवरून ग्राहक शोधा...",
+  "order.garments": "पोशाख",
+  "order.addGarment": "पोशाख जोडा",
+  "order.selectCustomerFirst": "प्रथम ग्राहक निवडा",
+  "order.noMeasurements": "कोणतेही माप आढळले नाही",
+  "order.selectType": "प्रकार निवडा",
+  "order.removeGarment": "पोशाख काढा",
+  "order.details": "ऑर्डर तपशील",
+  "order.referenceImages": "ऑर्डर संदर्भ प्रतिमा",
+  "order.referenceImagesDesc": "डिझाइन किंवा फॅब्रिक तपशीलासाठी जास्तीत जास्त 5 संदर्भ प्रतिमा अपलोड करा."
 }
