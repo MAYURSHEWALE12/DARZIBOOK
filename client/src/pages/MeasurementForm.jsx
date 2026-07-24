@@ -169,7 +169,10 @@ export default function MeasurementForm() {
                   <CustomSelect
                     value={form.templateId}
                     onChange={(val) => handleTemplateChange(val)}
-                    options={templates.map((t) => ({ value: t._id, label: t.garmentType }))}
+                    options={templates.map((t) => {
+                      const formatted = t.garmentType?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                      return { value: t._id, label: formatted };
+                    })}
                     placeholder={t('garment.select', 'Select garment...')}
                   />
                 </div>
