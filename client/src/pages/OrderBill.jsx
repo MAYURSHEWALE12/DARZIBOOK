@@ -152,12 +152,12 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
         <div className="px-10 mb-8 relative z-10">
           <table className="w-full text-sm border-collapse border border-slate-200 bg-white">
             <thead>
-              <tr className="bg-[#001f3f] text-white text-[11px] font-bold uppercase tracking-wider">
-                <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-center w-12">SR.</th>
-                <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-left">PARTICULARS</th>
-                <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-center w-16">QTY.</th>
-                <th className="py-3 px-4 border-r border-[#001f3f] border-x-white/20 text-right w-24">RATE (₹)</th>
-                <th className="py-3 px-4 text-right w-24">AMOUNT (₹)</th>
+              <tr className="bg-[#001f3f] text-white text-[10px] font-bold uppercase tracking-wider">
+                <th className="py-2 px-3 border-r border-[#001f3f] border-x-white/20 text-center w-10">SR.</th>
+                <th className="py-2 px-3 border-r border-[#001f3f] border-x-white/20 text-left">PARTICULARS</th>
+                <th className="py-2 px-3 border-r border-[#001f3f] border-x-white/20 text-center w-12">QTY.</th>
+                <th className="py-2 px-3 border-r border-[#001f3f] border-x-white/20 text-right w-20">RATE (₹)</th>
+                <th className="py-2 px-3 text-right w-20">AMOUNT (₹)</th>
               </tr>
             </thead>
             <tbody>
@@ -174,22 +174,22 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
 
                     return (
                       <tr key={index} className="border-b border-slate-200">
-                        <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">{index + 1}</td>
-                        <td className="py-4 px-4 border-r border-slate-200">
-                          <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
-                            <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
+                        <td className="py-2 px-3 border-r border-slate-200 text-center text-[11px] font-semibold text-slate-500">{index + 1}</td>
+                        <td className="py-2 px-3 border-r border-slate-200">
+                          <div className="flex items-center gap-2 font-bold text-slate-800 capitalize text-[11px]">
+                            <span className="material-symbols-outlined text-[18px] text-slate-400">apparel</span>
                             <div>
                               {item.garmentType}
                               {order.specialInstructions && index === 0 && (
-                                <div className="text-[10px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
+                                <div className="text-[9px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
                               )}
                             </div>
                           </div>
                         </td>
-                        <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{item.quantity}</td>
+                        <td className="py-2 px-3 border-r border-slate-200 text-center font-semibold text-slate-700 text-[11px]">{item.quantity}</td>
                         <>
-                          <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{rateToUse.toFixed(2)}</td>
-                          <td className="py-4 px-4 text-right font-bold text-slate-800">{amountToUse.toFixed(2)}</td>
+                          <td className="py-2 px-3 border-r border-slate-200 text-right font-semibold text-slate-700 text-[11px]">{rateToUse.toFixed(2)}</td>
+                          <td className="py-2 px-3 text-right font-bold text-slate-800 text-[11px]">{amountToUse.toFixed(2)}</td>
                         </>
                       </tr>
                     );
@@ -197,31 +197,27 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                 })()
               ) : (
                 <tr className="border-b border-slate-200">
-                  <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">1</td>
-                  <td className="py-4 px-4 border-r border-slate-200">
-                    <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
-                      <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
+                  <td className="py-2 px-3 border-r border-slate-200 text-center text-[11px] font-semibold text-slate-500">1</td>
+                  <td className="py-2 px-3 border-r border-slate-200">
+                    <div className="flex items-center gap-2 font-bold text-slate-800 capitalize text-[11px]">
+                      <span className="material-symbols-outlined text-[18px] text-slate-400">apparel</span>
                       <div>
                         {order.garmentType}
                         {order.specialInstructions && (
-                          <div className="text-[10px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
+                          <div className="text-[9px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{order.quantity || 1}</td>
-                  <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{order.quantity ? (order.totalPrice / order.quantity).toFixed(2) : '0.00'}</td>
-                  <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice ? order.totalPrice.toFixed(2) : '0.00'}</td>
+                  <td className="py-2 px-3 border-r border-slate-200 text-center font-semibold text-slate-700 text-[11px]">{order.quantity || 1}</td>
+                  <td className="py-2 px-3 border-r border-slate-200 text-right font-semibold text-slate-700 text-[11px]">{order.quantity ? (order.totalPrice / order.quantity).toFixed(2) : '0.00'}</td>
+                  <td className="py-2 px-3 text-right font-bold text-slate-800 text-[11px]">{order.totalPrice ? order.totalPrice.toFixed(2) : '0.00'}</td>
                 </tr>
               )}
-              {/* Empty Rows */}
-              <tr className="border-b border-slate-200 bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
-              <tr className="border-b border-slate-200 bg-white"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
-              <tr className="bg-[#fdfdfc]"><td className="py-6 border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td className="border-r border-slate-200"></td><td></td></tr>
               {/* Total Row */}
               <tr className="border-t-2 border-[#001f3f] bg-white">
-                <td colSpan="4" className="py-3 px-4 border-r border-slate-200 text-right font-bold text-[#001f3f] text-[11px] uppercase tracking-wider">Overall Amount</td>
-                <td className="py-3 px-4 text-right font-bold text-[#001f3f] text-[14px]">₹ {order.totalPrice.toFixed(2)}</td>
+                <td colSpan="4" className="py-2.5 px-3 border-r border-slate-200 text-right font-bold text-[#001f3f] text-[10px] uppercase tracking-wider">Overall Amount</td>
+                <td className="py-2.5 px-3 text-right font-bold text-[#001f3f] text-[12px]">₹ {order.totalPrice.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
