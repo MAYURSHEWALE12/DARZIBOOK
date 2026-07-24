@@ -114,7 +114,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
             </div>
             <table className="w-full text-xs font-semibold text-slate-700 border-separate border-spacing-y-2">
               <tbody>
-                <tr><td className="w-6 text-slate-400"><span className="material-symbols-outlined text-[16px]">person</span></td><td className="w-16 text-slate-500">Name</td><td>: {order.customerId?.name}</td></tr>
+                <tr><td className="w-6 text-slate-400"><span className="material-symbols-outlined text-[16px]">person</span></td><td className="w-16 text-slate-500">Name</td><td>: {order.customerId?.name} {order.customerId?.customerNumber ? <span className="text-[10px] text-slate-400">({order.customerId.customerNumber})</span> : ''}</td></tr>
                 <tr><td className="w-6 text-slate-400"><Phone className="w-3.5 h-3.5" /></td><td className="w-16 text-slate-500">Mobile</td><td>: {order.customerId?.phone}</td></tr>
                 <tr><td className="w-6 text-slate-400"><MapPin className="w-3.5 h-3.5" /></td><td className="w-16 text-slate-500 align-top">Address</td><td className="align-top">: {order.customerId?.address || '-'}</td></tr>
               </tbody>

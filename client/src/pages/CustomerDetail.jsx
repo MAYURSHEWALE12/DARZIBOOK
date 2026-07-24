@@ -73,7 +73,10 @@ export default function CustomerDetail() {
             {customer.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{customer.name}</h2>
+            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
+              {customer.name}
+              {customer.customerNumber && <span className="ml-3 text-sm text-slate-400 font-medium tracking-normal align-middle">{customer.customerNumber}</span>}
+            </h2>
             <div className="flex items-center gap-4 mt-1 text-slate-500 font-medium text-[13px]">
               <p className="flex items-center gap-1.5"><span className="material-symbols-outlined text-[16px]">call</span> {customer.phone}</p>
               {customer.address && <p className="flex items-center gap-1.5"><span className="material-symbols-outlined text-[16px]">location_on</span> {customer.address}</p>}

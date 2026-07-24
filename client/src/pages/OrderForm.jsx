@@ -158,7 +158,7 @@ export default function OrderForm() {
                 <AutocompleteSelect 
                   value={form.customerId} 
                   onChange={(val) => setForm({ ...form, customerId: val })}
-                  options={customers.map((c) => ({ value: c._id, label: `${c.name} (${c.phone})` }))}
+                  options={customers.map((c) => ({ value: c._id, label: `${c.customerNumber ? c.customerNumber + ' - ' : ''}${c.name} (${c.phone})` }))}
                   placeholder={t('customer.searchPlaceholder')}
                   className="w-full"
                 />

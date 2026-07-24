@@ -18,6 +18,7 @@ export const listCustomers = async (req, res) => {
     filter.$or = [
       { name: { $regex: search, $options: 'i' } },
       { phone: { $regex: search, $options: 'i' } },
+      { customerNumber: { $regex: search, $options: 'i' } },
     ];
   }
   if (pending === 'true') filter.totalPending = { $gt: 0 };
@@ -42,7 +43,12 @@ export const listCustomers = async (req, res) => {
 
 export const createCustomer = async (req, res) => {
   const data = customerSchema.parse(req.body);
-  const customer = await Customer.create({ tenantId: req.tenantId, ...data });
+  
+  // Generate unique customer number
+  const count = await Customer.countDocuments({ tenantId: req.tenantId });
+  const customerNumber = `CUST-${String(count + 1).padStart(4, '0')}`;
+  
+  const customer = await Customer.create({ tenantId: req.tenantId, customerNumber, ...data });
   res.status(201).json({ customer });
 };
 

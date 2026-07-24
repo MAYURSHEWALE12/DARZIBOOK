@@ -89,7 +89,12 @@ export default function CustomerList() {
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-[#1e3a8a] font-bold text-sm uppercase shadow-sm border border-white/50">
                         {customer.name?.charAt(0) || '?'}
                       </div>
-                      <span className="text-slate-700 font-semibold group-hover:text-[#1e3a8a] transition-colors">{customer.name}</span>
+                      <div className="flex flex-col">
+                        <span className="text-slate-700 font-semibold group-hover:text-[#1e3a8a] transition-colors">{customer.name}</span>
+                        {customer.customerNumber && (
+                          <span className="text-xs text-slate-400 font-medium">{customer.customerNumber}</span>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-slate-500 font-medium">{customer.phone || '-'}</td>
