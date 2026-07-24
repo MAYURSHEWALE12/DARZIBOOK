@@ -177,7 +177,6 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                         <td className="py-2 px-3 border-r border-slate-200 text-center text-[11px] font-semibold text-slate-500">{index + 1}</td>
                         <td className="py-2 px-3 border-r border-slate-200">
                           <div className="flex items-center gap-2 font-bold text-slate-800 capitalize text-[11px]">
-                            <span className="material-symbols-outlined text-[18px] text-slate-400">apparel</span>
                             <div>
                               {item.garmentType}
                               {order.specialInstructions && index === 0 && (
@@ -200,7 +199,6 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                   <td className="py-2 px-3 border-r border-slate-200 text-center text-[11px] font-semibold text-slate-500">1</td>
                   <td className="py-2 px-3 border-r border-slate-200">
                     <div className="flex items-center gap-2 font-bold text-slate-800 capitalize text-[11px]">
-                      <span className="material-symbols-outlined text-[18px] text-slate-400">apparel</span>
                       <div>
                         {order.garmentType}
                         {order.specialInstructions && (
