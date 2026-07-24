@@ -22,8 +22,14 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
 
   useEffect(() => {
     if (!loading && order && !isPreview) {
+      // Set document title for PDF saving
+      const originalTitle = document.title;
+      document.title = `${order.customerId?.name || 'Customer'} - ${order.invoiceNumber}`;
+
       setTimeout(() => {
         window.print();
+        // Restore title after print dialog opens
+        setTimeout(() => { document.title = originalTitle; }, 500);
       }, 1000);
     }
   }, [loading, order, isPreview]);
