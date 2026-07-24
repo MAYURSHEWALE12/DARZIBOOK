@@ -10,7 +10,8 @@ const orderSchema = new mongoose.Schema({
   // New items array
   items: [{
     garmentType: { type: String, required: true },
-    quantity: { type: Number, default: 1 }
+    quantity: { type: Number, default: 1 },
+    price: { type: Number, default: 0 }
   }],
   deliveryDate: Date,
   totalPrice: { type: Number, default: 0 },

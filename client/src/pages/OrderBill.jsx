@@ -179,8 +179,8 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                     </td>
                     <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{item.quantity}</td>
                     <>
-                      <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">-</td>
-                      <td className="py-4 px-4 text-right font-bold text-slate-800">-</td>
+                      <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{item.price ? item.price.toFixed(2) : '0.00'}</td>
+                      <td className="py-4 px-4 text-right font-bold text-slate-800">{item.price ? (item.quantity * item.price).toFixed(2) : '0.00'}</td>
                     </>
                   </tr>
                 ))
@@ -199,8 +199,8 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
                     </div>
                   </td>
                   <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{order.quantity || 1}</td>
-                  <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">-</td>
-                  <td className="py-4 px-4 text-right font-bold text-slate-800">-</td>
+                  <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{order.quantity ? (order.totalPrice / order.quantity).toFixed(2) : '0.00'}</td>
+                  <td className="py-4 px-4 text-right font-bold text-slate-800">{order.totalPrice ? order.totalPrice.toFixed(2) : '0.00'}</td>
                 </tr>
               )}
               {/* Empty Rows */}

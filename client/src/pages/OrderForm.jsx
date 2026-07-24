@@ -21,7 +21,7 @@ export default function OrderForm() {
   const [customerMeasurements, setCustomerMeasurements] = useState([]);
   const [form, setForm] = useState({
     customerId: searchParams.get('customerId') || '',
-    items: [{ garmentType: '', quantity: 1 }],
+    items: [{ garmentType: '', quantity: 1, price: '' }],
     deliveryDate: new Date().toISOString().split('T')[0],
     totalPrice: '',
     advancePaid: '0',
@@ -97,14 +97,17 @@ export default function OrderForm() {
     </div>
   ) : undefined;
 
+  const calculatedTotal = form.items.reduce((sum, item) => sum + (Number(item.quantity || 1) * Number(item.price || 0)), 0);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const { data } = await createOrder({
         ...form,
-        totalPrice: Number(form.totalPrice),
+        totalPrice: calculatedTotal,
         advancePaid: Number(form.advancePaid),
+        items: form.items.map(i => ({ ...i, quantity: Number(i.quantity || 1), price: Number(i.price || 0) }))
       });
 
       if (form.photos && form.photos.length > 0) {
@@ -164,7 +167,7 @@ export default function OrderForm() {
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">{t('order.garments')}</label>
-                  <button type="button" onClick={() => setForm({...form, items: [...form.items, {garmentType: '', quantity: 1}]})} className="text-[12px] font-bold text-[#1e3a8a] flex items-center gap-1 hover:underline">
+                  <button type="button" onClick={() => setForm({...form, items: [...form.items, {garmentType: '', quantity: 1, price: ''}]})} className="text-[12px] font-bold text-[#1e3a8a] flex items-center gap-1 hover:underline">
                     <span className="material-symbols-outlined text-[16px]">add</span> {t('order.addGarment')}
                   </button>
                 </div>
@@ -173,9 +176,10 @@ export default function OrderForm() {
                   <table className="w-full text-left table-fixed">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                        <th className="px-2 sm:px-4 py-3 w-[60%] sm:w-auto rounded-tl-xl">{t('order.garmentType')}</th>
-                        <th className="px-2 sm:px-4 py-3 w-[25%] sm:w-32">{t('order.quantity')}</th>
-                        <th className="px-2 sm:px-4 py-3 w-[15%] sm:w-16 text-center rounded-tr-xl"></th>
+                        <th className="px-2 sm:px-4 py-3 w-[45%] sm:w-auto rounded-tl-xl">{t('order.garmentType')}</th>
+                        <th className="px-2 sm:px-4 py-3 w-[20%] sm:w-24">{t('order.quantity')}</th>
+                        <th className="px-2 sm:px-4 py-3 w-[25%] sm:w-28">Rate (₹)</th>
+                        <th className="px-2 sm:px-4 py-3 w-[10%] sm:w-12 text-center rounded-tr-xl"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
@@ -206,6 +210,20 @@ export default function OrderForm() {
                                 newItems[index].quantity = parseInt(e.target.value) || 1;
                                 setForm({ ...form, items: newItems });
                               }}
+                              className="w-full h-[42px] px-2 sm:px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                            />
+                          </td>
+                          <td className="px-2 sm:px-4 py-3 align-top sm:align-middle">
+                            <input 
+                              type="number"
+                              min="0"
+                              value={item.price ?? ''} 
+                              onChange={(e) => {
+                                const newItems = [...form.items];
+                                newItems[index].price = e.target.value;
+                                setForm({ ...form, items: newItems });
+                              }}
+                              placeholder="0"
                               className="w-full h-[42px] px-2 sm:px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
                             />
                           </td>
@@ -261,11 +279,10 @@ export default function OrderForm() {
                   </div>
                   <input 
                     type="number"
-                    value={form.totalPrice} 
-                    onChange={(e) => setForm({ ...form, totalPrice: e.target.value })}
-                    required
+                    value={calculatedTotal} 
+                    readOnly
                     placeholder="0"
-                    className="w-full h-full px-4 bg-transparent outline-none text-[14px] text-slate-800 font-bold"
+                    className="w-full h-full px-4 bg-transparent outline-none text-[14px] text-slate-800 font-bold cursor-not-allowed opacity-70"
                   />
                 </div>
               </div>
