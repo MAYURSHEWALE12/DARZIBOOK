@@ -24,7 +24,7 @@ export default function OrderForm() {
     items: [{ garmentType: '', quantity: 1, price: '' }],
     deliveryDate: new Date().toISOString().split('T')[0],
     totalPrice: '',
-    advancePaid: '0',
+    advancePaid: '',
     specialInstructions: '',
   });
   const [loading, setLoading] = useState(false);
@@ -204,10 +204,11 @@ export default function OrderForm() {
                             <input 
                               type="number"
                               min="1"
-                              value={item.quantity || 1} 
+                              value={item.quantity !== undefined ? item.quantity : 1} 
                               onChange={(e) => {
                                 const newItems = [...form.items];
-                                newItems[index].quantity = parseInt(e.target.value) || 1;
+                                const val = e.target.value;
+                                newItems[index].quantity = val === '' ? '' : parseInt(val);
                                 setForm({ ...form, items: newItems });
                               }}
                               className="w-full h-[42px] px-2 sm:px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
