@@ -357,10 +357,12 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
             print-color-adjust: exact;
             margin: 0;
             padding: 0;
+            height: auto;
+            overflow: visible;
           }
-          html, body {
-            height: 100vh;
-            overflow: hidden;
+          html {
+            height: auto;
+            overflow: visible;
           }
         }
       `}} />
