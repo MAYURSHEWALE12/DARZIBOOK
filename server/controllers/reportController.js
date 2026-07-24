@@ -40,10 +40,10 @@ export const getSummary = async (req, res) => {
     ])
   ]);
 
-  const totalRevenue = paymentStats[0]?.total || 0;
+  const totalSales = orderStats[0]?.totalRevenue || 0;
   const totalExpenses = expenseStats[0]?.total || 0;
   const totalSalaries = salaryStats[0]?.total || 0;
-  const netProfit = totalRevenue - totalExpenses - totalSalaries;
+  const netProfit = totalSales - totalExpenses - totalSalaries;
 
   res.json({
     orders: orderStats[0] || { count: 0, totalRevenue: 0, pendingAmount: 0 },

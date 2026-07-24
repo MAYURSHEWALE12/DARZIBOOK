@@ -74,8 +74,8 @@ export default function Reports() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
-          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">{t("report.totalRevenue")}</p>
-          <h3 className="text-2xl font-bold text-emerald-600">₹{summary?.payments?.total || 0}</h3>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">TOTAL SALES</p>
+          <h3 className="text-2xl font-bold text-emerald-600">₹{summary?.orders?.totalRevenue || 0}</h3>
         </div>
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 relative overflow-hidden">
           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">{t("report.totalExpenses")}</p>
