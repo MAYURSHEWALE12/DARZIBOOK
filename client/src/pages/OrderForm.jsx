@@ -355,7 +355,7 @@ export default function OrderForm() {
           </CardContent>
         </Card>
 
-        <div className="flex items-center justify-end gap-3 pt-2">
+        <div className="flex items-center justify-center gap-4 pt-2 pb-8">
           <Button type="button" variant="outline" onClick={() => navigate(-1)} className="px-8 bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50">
             {t('common.cancel')}
           </Button>
