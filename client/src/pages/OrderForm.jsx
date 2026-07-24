@@ -169,13 +169,13 @@ export default function OrderForm() {
                   </button>
                 </div>
                 
-                <div className="mt-2 border border-slate-200 rounded-xl bg-white shadow-sm overflow-hidden w-full">
+                <div className="mt-2 border border-slate-200 rounded-xl bg-white shadow-sm w-full relative z-10">
                   <table className="w-full text-left table-fixed">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                        <th className="px-2 sm:px-4 py-3 w-[60%] sm:w-auto">{t('order.garmentType')}</th>
+                        <th className="px-2 sm:px-4 py-3 w-[60%] sm:w-auto rounded-tl-xl">{t('order.garmentType')}</th>
                         <th className="px-2 sm:px-4 py-3 w-[25%] sm:w-32">{t('order.quantity')}</th>
-                        <th className="px-2 sm:px-4 py-3 w-[15%] sm:w-16 text-center"></th>
+                        <th className="px-2 sm:px-4 py-3 w-[15%] sm:w-16 text-center rounded-tr-xl"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
