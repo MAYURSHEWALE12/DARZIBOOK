@@ -163,27 +163,38 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
             <tbody>
               {/* Dynamic Items Rendering */}
               {order.items && order.items.length > 0 ? (
-                order.items.map((item, index) => (
-                  <tr key={index} className="border-b border-slate-200">
-                    <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">{index + 1}</td>
-                    <td className="py-4 px-4 border-r border-slate-200">
-                      <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
-                        <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
-                        <div>
-                          {item.garmentType}
-                          {order.specialInstructions && index === 0 && (
-                            <div className="text-[10px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{item.quantity}</td>
-                    <>
-                      <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{item.price ? item.price.toFixed(2) : '0.00'}</td>
-                      <td className="py-4 px-4 text-right font-bold text-slate-800">{item.price ? (item.quantity * item.price).toFixed(2) : '0.00'}</td>
-                    </>
-                  </tr>
-                ))
+                (() => {
+                  const hasValidPrices = order.items.some(i => i.price > 0);
+                  const totalQty = order.items.reduce((sum, i) => sum + (i.quantity || 1), 0);
+                  const fallbackRate = (!hasValidPrices && order.totalPrice > 0 && totalQty > 0) ? (order.totalPrice / totalQty) : 0;
+
+                  return order.items.map((item, index) => {
+                    const rateToUse = item.price || fallbackRate;
+                    const amountToUse = rateToUse * (item.quantity || 1);
+
+                    return (
+                      <tr key={index} className="border-b border-slate-200">
+                        <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">{index + 1}</td>
+                        <td className="py-4 px-4 border-r border-slate-200">
+                          <div className="flex items-center gap-3 font-bold text-slate-800 capitalize">
+                            <span className="material-symbols-outlined text-2xl text-slate-400">apparel</span>
+                            <div>
+                              {item.garmentType}
+                              {order.specialInstructions && index === 0 && (
+                                <div className="text-[10px] text-slate-500 font-normal normal-case mt-0.5">Note: {order.specialInstructions}</div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 border-r border-slate-200 text-center font-semibold text-slate-700">{item.quantity}</td>
+                        <>
+                          <td className="py-4 px-4 border-r border-slate-200 text-right font-semibold text-slate-700">{rateToUse.toFixed(2)}</td>
+                          <td className="py-4 px-4 text-right font-bold text-slate-800">{amountToUse.toFixed(2)}</td>
+                        </>
+                      </tr>
+                    );
+                  });
+                })()
               ) : (
                 <tr className="border-b border-slate-200">
                   <td className="py-4 px-4 border-r border-slate-200 text-center text-xs font-semibold text-slate-500">1</td>
