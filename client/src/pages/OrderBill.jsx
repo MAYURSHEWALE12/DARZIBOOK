@@ -98,7 +98,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
         </div>
 
         {/* RECEIPT / INVOICE Title Pill */}
-        <div className="flex justify-center -mt-4 mb-6 relative z-10">
+        <div className="flex justify-center mt-4 mb-6 relative z-10">
           <div className="bg-[#001f3f] text-white px-8 py-2 rounded-full border border-[#c5a059] shadow-md">
             <h2 className="text-sm font-bold tracking-widest">RECEIPT / INVOICE</h2>
           </div>
