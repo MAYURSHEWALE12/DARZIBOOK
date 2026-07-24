@@ -215,7 +215,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
               {/* Total Row */}
               <tr className="border-t-2 border-[#001f3f] bg-white">
                 <td colSpan="4" className="py-2.5 px-3 border-r border-slate-200 text-right font-bold text-[#001f3f] text-[10px] uppercase tracking-wider">Overall Amount</td>
-                <td className="py-2.5 px-3 text-right font-bold text-[#001f3f] text-[12px]">₹ {order.totalPrice.toFixed(2)}</td>
+                <td className="py-2.5 px-3 text-right font-bold text-[#001f3f] text-[12px] whitespace-nowrap">₹ {order.totalPrice.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
