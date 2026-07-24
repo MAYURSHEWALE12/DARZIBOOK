@@ -193,7 +193,7 @@ export default function OrderForm() {
                                 newItems[index].garmentType = val;
                                 setForm({ ...form, items: newItems });
                               }}
-                              options={availableGarments.map((t) => ({ value: t.garmentType, label: t.garmentType }))}
+                              options={availableGarments.map((t) => t.garmentType)}
                               placeholder={!form.customerId ? t('order.selectCustomerFirst') : availableGarments.length === 0 ? t('order.noMeasurements') : t('order.selectType')}
                               emptyState={garmentEmptyState}
                               searchable={false}
