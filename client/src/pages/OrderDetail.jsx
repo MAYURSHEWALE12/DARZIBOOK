@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getOrder, updateOrder, updateOrderStatus, deleteOrder, uploadOrderPhotos, deleteOrderPhoto } from '../api/orders.js';
@@ -30,6 +30,24 @@ export default function OrderDetail() {
 
   const [isAssigning, setIsAssigning] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
+
+  const previewContainerRef = useRef(null);
+  const [previewScale, setPreviewScale] = useState(1);
+
+  useEffect(() => {
+    if (billModal && previewContainerRef.current) {
+      const observer = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          const { width, height } = entry.contentRect;
+          const scaleX = (width - 32) / 793;
+          const scaleY = (height - 32) / 1122;
+          setPreviewScale(Math.min(scaleX, scaleY));
+        }
+      });
+      observer.observe(previewContainerRef.current);
+      return () => observer.disconnect();
+    }
+  }, [billModal]);
 
   useEffect(() => {
     getOrder(id)
@@ -437,19 +455,18 @@ export default function OrderDetail() {
               </button>
             </div>
           </div>
-          <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center custom-scrollbar">
-             {/* Bulletproof responsive scaling wrapper */}
+          <div ref={previewContainerRef} className="flex-1 w-full overflow-hidden flex justify-center items-center custom-scrollbar">
              <div 
                className="relative shrink-0"
                style={{
-                 width: 'min(436px, calc(100vw - 48px))',
-                 height: 'calc(min(436px, calc(100vw - 48px)) * 1.414)',
+                 width: `${793 * previewScale}px`,
+                 height: `${1122 * previewScale}px`,
                }}
              >
                <div 
                  className="shadow-2xl rounded-lg overflow-hidden border border-white/10 bg-white absolute top-0 left-0"
                  style={{ 
-                   transform: 'scale(calc(min(436px, calc(100vw - 48px)) / 793))', 
+                   transform: `scale(${previewScale})`, 
                    transformOrigin: 'top left',
                    width: '793px',
                    height: '1122px',
