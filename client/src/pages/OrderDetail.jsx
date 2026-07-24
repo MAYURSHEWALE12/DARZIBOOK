@@ -441,7 +441,7 @@ export default function OrderDetail() {
 
       {/* Bill Preview Modal */}
       {billModal && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200 p-6">
+        <div className="fixed inset-0 z-[100] flex flex-col bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200 p-6 pb-safe">
           <div className="flex justify-between items-center mb-6 max-w-3xl mx-auto w-full px-4">
             <h2 className="text-xl font-bold text-white tracking-wide flex items-center gap-2">
               <span className="material-symbols-outlined text-[#c5a059]">receipt_long</span> Invoice Preview
