@@ -9,7 +9,8 @@ const orderSchema = z.object({
   quantity: z.number().int().min(1).optional().default(1),
   items: z.array(z.object({
     garmentType: z.string().min(1),
-    quantity: z.number().int().min(1).default(1)
+    quantity: z.number().int().min(1).default(1),
+    price: z.number().min(0).optional().default(0)
   })).optional(),
   deliveryDate: z.string().optional(),
   totalPrice: z.number().min(0),
