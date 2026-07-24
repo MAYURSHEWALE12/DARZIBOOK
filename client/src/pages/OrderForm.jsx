@@ -250,6 +250,7 @@ export default function OrderForm() {
                 <DatePicker 
                   selected={form.deliveryDate} 
                   onChange={(date) => setForm({ ...form, deliveryDate: date.toISOString().split('T')[0] })} 
+                  minDate={new Date()}
                 />
               </div>
               <div className="space-y-1">
