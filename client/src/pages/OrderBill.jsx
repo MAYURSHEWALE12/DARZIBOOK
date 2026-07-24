@@ -346,23 +346,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
           </div>
         </div>
 
-        {/* Bottom Absolute Bar */}
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-[#001f3f] text-[#c5a059] flex items-center justify-between px-10 text-xs font-bold shadow-[0_-10px_20px_rgba(0,0,0,0.1)] z-20">
-           <div className="flex items-center gap-4">
-             <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {tenant?.phone}</span>
-             {tenant?.whatsapp && <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-[14px]">chat</span> {tenant?.whatsapp}</span>}
-           </div>
-           
-           <div className="text-center text-[9px] uppercase tracking-[0.2em] leading-tight text-white/90">
-             Stitched with precision,<br/><span className="text-[#c5a059]">Tailored for perfection.</span>
-           </div>
 
-           <div className="flex items-center gap-3">
-             <span className="text-[9px] uppercase tracking-widest text-white/50">FOLLOW US</span>
-             <Facebook className="w-3.5 h-3.5" />
-             <Instagram className="w-3.5 h-3.5" />
-           </div>
-        </div>
 
       </div>
       
