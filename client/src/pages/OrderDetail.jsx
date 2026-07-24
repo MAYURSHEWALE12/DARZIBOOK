@@ -325,11 +325,37 @@ export default function OrderDetail() {
         return itemsToRender.map((item, idx) => {
           const measurement = measurements.find(m => m.garmentType?.toLowerCase().trim() === item.garmentType?.toLowerCase().trim());
           if (!measurement) return null;
+
+          const handleShare = () => {
+            let text = `${order.customerId?.name || 'Customer'} - ${item.garmentType} Measurements\n\n`;
+            Object.entries(measurement.values || {}).forEach(([key, value]) => {
+              text += `${key.replace(/_/g, ' ').toUpperCase()}: ${value}\n`;
+            });
+            if (measurement.notes) {
+              text += `\nNotes: ${measurement.notes}\n`;
+            }
+
+            if (navigator.share) {
+              navigator.share({
+                title: `${item.garmentType} Measurements`,
+                text: text,
+              }).catch(err => {
+                console.log('Error sharing:', err);
+              });
+            } else {
+              navigator.clipboard.writeText(text);
+              toast.success('Measurements copied to clipboard');
+            }
+          };
+
           return (
             <div key={idx} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col mt-6">
               <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
                 <h3 className="text-[11px] font-bold text-[#1e3a8a] uppercase tracking-wider">{item.garmentType} Measurements</h3>
-                <span className="material-symbols-outlined text-slate-400 text-[18px]">straighten</span>
+                <div className="flex gap-3">
+                  <button type="button" onClick={handleShare} className="material-symbols-outlined text-slate-400 text-[18px] hover:text-[#1e3a8a] transition-colors" title="Share Measurements">share</button>
+                  <span className="material-symbols-outlined text-slate-400 text-[18px]">straighten</span>
+                </div>
               </div>
               <div className="p-6">
                 <div className="flex flex-nowrap overflow-x-auto custom-scrollbar pb-2 gap-4">
