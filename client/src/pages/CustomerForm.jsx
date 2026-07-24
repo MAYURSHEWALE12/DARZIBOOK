@@ -69,7 +69,7 @@ export default function CustomerForm() {
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input icon={User} label={t('customer.name')} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="E.g. John Doe" />
-            <Input icon={Phone} label={t('customer.phone')} type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="10-digit number" />
+            <Input icon={Phone} label={t('customer.phone')} type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/\D/g, '').slice(0, 10) })} placeholder="10-digit number" maxLength={10} />
             
             <div className="relative">
               <div className="flex justify-between items-end mb-1.5">
@@ -87,8 +87,9 @@ export default function CustomerForm() {
                 icon={MessageCircle} 
                 type="tel" 
                 value={form.whatsapp} 
-                onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} 
-                placeholder="WhatsApp number" 
+                onChange={(e) => setForm({ ...form, whatsapp: e.target.value.replace(/\D/g, '').slice(0, 10) })} 
+                placeholder="10-digit WhatsApp number" 
+                maxLength={10}
               />
             </div>
             
