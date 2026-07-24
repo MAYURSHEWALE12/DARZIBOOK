@@ -176,16 +176,16 @@ export default function OrderForm() {
                   <table className="w-full text-left table-fixed">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                        <th className="px-2 sm:px-4 py-3 w-[45%] sm:w-auto rounded-tl-xl">{t('order.garmentType')}</th>
-                        <th className="px-2 sm:px-4 py-3 w-[20%] sm:w-24">{t('order.quantity')}</th>
-                        <th className="px-2 sm:px-4 py-3 w-[25%] sm:w-28">Rate (₹)</th>
-                        <th className="px-2 sm:px-4 py-3 w-[10%] sm:w-12 text-center rounded-tr-xl"></th>
+                        <th className="px-1 sm:px-4 py-3 w-[42%] sm:w-auto rounded-tl-xl break-words">{t('order.garmentType')}</th>
+                        <th className="px-1 sm:px-4 py-3 w-[22%] sm:w-24 break-words leading-tight text-[9px] sm:text-[10px]">{t('order.quantity')}</th>
+                        <th className="px-1 sm:px-4 py-3 w-[26%] sm:w-28 break-words leading-tight text-[9px] sm:text-[10px]">Rate (₹)</th>
+                        <th className="px-1 sm:px-4 py-3 w-[10%] sm:w-12 text-center rounded-tr-xl"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {form.items.map((item, index) => (
                         <tr key={index} className="group hover:bg-slate-50/50 transition-colors">
-                          <td className="px-2 sm:px-4 py-3 align-top sm:align-middle">
+                          <td className="px-1 sm:px-4 py-3 align-top sm:align-middle">
                             <CustomSelect 
                               value={item.garmentType} 
                               onChange={(val) => {
@@ -200,7 +200,7 @@ export default function OrderForm() {
                               className="w-full bg-white rounded-lg border-slate-200"
                             />
                           </td>
-                          <td className="px-2 sm:px-4 py-3 align-top sm:align-middle">
+                          <td className="px-1 sm:px-4 py-3 align-top sm:align-middle">
                             <input 
                               type="number"
                               min="1"
@@ -213,7 +213,7 @@ export default function OrderForm() {
                               className="w-full h-[42px] px-2 sm:px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
                             />
                           </td>
-                          <td className="px-2 sm:px-4 py-3 align-top sm:align-middle">
+                          <td className="px-1 sm:px-4 py-3 align-top sm:align-middle">
                             <input 
                               type="number"
                               min="0"
@@ -227,7 +227,7 @@ export default function OrderForm() {
                               className="w-full h-[42px] px-2 sm:px-3 bg-white border border-slate-200 rounded-lg outline-none text-[13px] text-slate-800 font-bold focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
                             />
                           </td>
-                          <td className="px-2 sm:px-4 py-3 text-center align-top sm:align-middle pt-4 sm:pt-3">
+                          <td className="px-1 sm:px-4 py-3 text-center align-top sm:align-middle pt-4 sm:pt-3">
                             {form.items.length > 1 ? (
                               <button 
                                 type="button" 

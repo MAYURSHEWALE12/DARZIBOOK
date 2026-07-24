@@ -49,7 +49,7 @@ export default function CustomSelect({ value, onChange, options = [], placeholde
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full h-10 px-3.5 flex items-center justify-between rounded-lg text-[13px] border transition-all duration-200 outline-none font-semibold ${
+        className={`w-full h-10 px-2 sm:px-3.5 flex items-center justify-between rounded-lg text-[13px] border transition-all duration-200 outline-none font-semibold ${
           isOpen 
             ? 'border-[#1e3a8a] bg-blue-50/30 ring-4 ring-[#1e3a8a]/10' 
             : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
