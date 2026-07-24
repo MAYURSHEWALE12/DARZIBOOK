@@ -39,7 +39,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
   return (
     <div className="min-h-screen bg-slate-200 py-8 print:bg-transparent print:py-0 font-sans text-slate-800">
       {/* A4 Container */}
-      <div className="w-[210mm] min-h-[297mm] bg-[#fcfbf7] mx-auto shadow-2xl print:shadow-none overflow-hidden relative" style={{ WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+      <div className="w-[210mm] min-h-[296mm] bg-[#fcfbf7] mx-auto shadow-2xl print:shadow-none overflow-hidden relative" style={{ WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
         
         {/* Outer Gold Border */}
         <div className="absolute inset-1.5 border-4 border-[#001f3f] pointer-events-none z-50"></div>
