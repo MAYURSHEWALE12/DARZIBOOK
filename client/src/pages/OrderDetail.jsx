@@ -190,9 +190,9 @@ export default function OrderDetail() {
           </div>
         </div>
 
-        <div className={`px-5 py-3 rounded-lg flex flex-col items-end border ${order.pendingAmount > 0 ? 'bg-rose-50 border-rose-100' : 'bg-emerald-50 border-emerald-100'}`}>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-0.5">{t('order.pendingAmount')}</p>
-          <p className={`text-2xl font-bold ${order.pendingAmount > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
+        <div className={`w-full lg:w-auto px-5 py-4 rounded-lg flex flex-col items-center lg:items-end border ${order.pendingAmount > 0 ? 'bg-rose-50 border-rose-100' : 'bg-emerald-50 border-emerald-100'}`}>
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-0.5">{t('order.pendingAmount')}</p>
+          <p className={`text-3xl font-bold ${order.pendingAmount > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
             ₹{order.pendingAmount}
           </p>
         </div>
@@ -200,28 +200,23 @@ export default function OrderDetail() {
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-3">
-        <div className="flex gap-3 w-full sm:w-auto relative group">
+        <div className="grid grid-cols-2 sm:flex gap-3 w-full sm:w-auto relative group">
           <button 
             onClick={handleStatusUpdate} 
             disabled={order.status === 'delivered' || (order.status === 'received' && !hasAssignment)}
-            className={`flex-1 sm:flex-none justify-center px-5 py-2.5 rounded-lg border font-bold shadow-sm transition-all flex items-center gap-2 text-[13px] ${
+            className={`col-span-2 sm:col-span-1 justify-center px-5 py-3 rounded-xl border font-bold shadow-sm transition-all flex items-center gap-2 text-[14px] ${
               order.status === 'delivered' || (order.status === 'received' && !hasAssignment)
                 ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed'
                 : 'bg-white border-slate-200 text-[#1e3a8a] hover:bg-slate-50'
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">
+            <span className="material-symbols-outlined text-[20px]">
               {order.status === 'delivered' ? 'check_circle' : 'update'}
             </span>
-            <span className="hidden sm:inline">
+            <span>
               {order.status === 'delivered' 
                 ? 'Delivered' 
                 : `Mark as ${t(`order.status.${['received', 'in_progress', 'ready', 'delivered'][['received', 'in_progress', 'ready', 'delivered'].indexOf(order.status) + 1]}`)}`}
-            </span>
-            <span className="sm:hidden">
-              {order.status === 'delivered' 
-                ? 'Delivered' 
-                : t(`order.status.${['received', 'in_progress', 'ready', 'delivered'][['received', 'in_progress', 'ready', 'delivered'].indexOf(order.status) + 1]}`)}
             </span>
           </button>
           
@@ -232,17 +227,17 @@ export default function OrderDetail() {
             </div>
           )}
 
-          <button onClick={() => setBillModal(true)} className="flex-1 sm:flex-none justify-center px-5 py-2.5 rounded-lg bg-[#1e3a8a] text-white font-bold shadow-sm hover:bg-[#152a66] transition-all flex items-center gap-2 text-[13px]">
-            <span className="material-symbols-outlined text-[18px]">preview</span> <span className="hidden sm:inline">Preview Bill</span><span className="sm:hidden">Bill</span>
+          <button onClick={() => setBillModal(true)} className="justify-center px-5 py-3 rounded-xl bg-[#1e3a8a] text-white font-bold shadow-sm hover:bg-[#152a66] transition-all flex items-center gap-2 text-[14px]">
+            <span className="material-symbols-outlined text-[20px]">preview</span> <span>Bill</span>
           </button>
-          <button onClick={() => setAssignModal(true)} className="flex-1 sm:flex-none justify-center px-5 py-2.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 font-bold shadow-sm hover:bg-blue-100 transition-all flex items-center gap-2 text-[13px]">
-            <span className="material-symbols-outlined text-[18px]">engineering</span>
-            <span className="hidden sm:inline">Assign Work</span><span className="sm:hidden">Assign</span>
+          <button onClick={() => setAssignModal(true)} className="justify-center px-5 py-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 font-bold shadow-sm hover:bg-blue-100 transition-all flex items-center gap-2 text-[14px]">
+            <span className="material-symbols-outlined text-[20px]">engineering</span>
+            <span>Assign</span>
           </button>
         </div>
         {order.pendingAmount > 0 && (
-          <button onClick={() => setPaymentModal(true)} className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-white border border-slate-200 text-rose-600 font-bold shadow-sm hover:bg-rose-50 hover:border-rose-200 transition-all flex items-center justify-center gap-2 sm:ml-auto text-[13px]">
-            <span className="material-symbols-outlined text-[18px]">payments</span> {t('payment.add')}
+          <button onClick={() => setPaymentModal(true)} className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white border border-slate-200 text-rose-600 font-bold shadow-sm hover:bg-rose-50 hover:border-rose-200 transition-all flex items-center justify-center gap-2 sm:ml-auto text-[14px]">
+            <span className="material-symbols-outlined text-[20px]">payments</span> {t('payment.add')}
           </button>
         )}
       </div>
