@@ -52,7 +52,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
         <div className="absolute inset-2 border border-[#c5a059] pointer-events-none z-50"></div>
 
         {/* Header Section */}
-        <div className="flex justify-between items-start pt-8 px-8 relative z-10">
+        <div className="flex justify-between items-start pt-8 px-8 print:pt-5 print:px-6 relative z-10">
           {/* Left Navy Block */}
           <div className="bg-[#001f3f] w-[200px] rounded-br-[50px] p-6 text-center text-[#c5a059] shadow-lg relative -ml-8 -mt-8">
             <div className="w-24 h-24 mx-auto rounded-full border-2 border-[#c5a059] flex items-center justify-center mb-2 overflow-hidden bg-white/5">
@@ -104,14 +104,14 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
         </div>
 
         {/* RECEIPT / INVOICE Title Pill */}
-        <div className="flex justify-center mt-4 mb-6 relative z-10">
+        <div className="flex justify-center mt-4 mb-6 print:mt-2 print:mb-3 relative z-10">
           <div className="bg-[#001f3f] text-white px-8 py-2 rounded-full border border-[#c5a059] shadow-md">
             <h2 className="text-sm font-bold tracking-widest">RECEIPT / INVOICE</h2>
           </div>
         </div>
 
         {/* Details Cards Section */}
-        <div className="px-10 grid grid-cols-3 gap-6 mb-8 items-start relative z-10">
+        <div className="px-10 print:px-6 grid grid-cols-3 gap-6 mb-8 print:mb-4 items-start relative z-10">
           
           {/* Customer Details */}
           <div className="border border-[#c5a059] rounded-xl pt-6 p-4 relative bg-white h-full">
@@ -154,8 +154,8 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
           </div>
         </div>
 
-        {/* Itemized Table */}
-        <div className="px-10 mb-8 relative z-10">
+        {/* Garments Table Section */}
+        <div className="px-10 print:px-6 mb-8 print:mb-2 relative z-10">
           <table className="w-full text-sm border-collapse border border-slate-200 bg-white">
             <thead>
               <tr className="bg-[#001f3f] text-white text-[10px] font-bold uppercase tracking-wider">
@@ -228,7 +228,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
         </div>
 
         {/* Summary & Payments Section */}
-        <div className="px-10 grid grid-cols-3 gap-6 mb-8 items-stretch relative z-10">
+        <div className="px-10 print:px-6 grid grid-cols-3 gap-6 mb-8 print:mb-2 items-stretch relative z-10">
           
           {/* Payment Details Box */}
           <div className="bg-white border-2 border-[#001f3f] rounded-xl relative h-full flex flex-col overflow-hidden">
