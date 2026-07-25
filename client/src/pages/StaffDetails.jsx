@@ -213,7 +213,7 @@ export default function StaffDetails() {
                 </span>
               </h3>
             </div>
-            <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex items-center gap-3">
+            <div className="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Button onClick={() => openTxModal('salary_credit')} className="bg-[#1e3a8a] text-white flex-1 hover:bg-[#152a66]">
                 <span className="material-symbols-outlined mr-2 text-[18px]">account_balance_wallet</span>
                 Add Custom Credit
