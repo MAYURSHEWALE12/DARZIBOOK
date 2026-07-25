@@ -199,7 +199,7 @@ export default function Layout() {
               <button 
                 onClick={() => setShowDropdown(!showDropdown)}
                 className={cn(
-                  "relative p-2.5 rounded-lg transition-colors border hidden sm:block",
+                  "relative p-2.5 rounded-lg transition-colors border block",
                   showDropdown ? "bg-slate-100 border-slate-200 text-slate-700" : "text-slate-500 hover:bg-slate-100 hover:border-slate-200 border-transparent"
                 )}
               >
