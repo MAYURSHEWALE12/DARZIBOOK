@@ -365,6 +365,7 @@ export default function OrderBill({ orderId: propOrderId, isPreview = false }) {
             padding: 0;
             height: auto;
             overflow: visible;
+            zoom: 0.95;
           }
           html {
             height: auto;
