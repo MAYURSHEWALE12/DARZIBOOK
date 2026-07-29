@@ -41,6 +41,7 @@ const seedDefaultTemplates = async (tenantId, language = 'en') => {
   const shirtFields = [
     { key: 'chest', labelEn: 'Chest', labelHi: 'छाती', labelMr: 'छाती' },
     { key: 'waist', labelEn: 'Waist', labelHi: 'कमर', labelMr: 'कंबर' },
+    { key: 'stomach', labelEn: 'Stomach', labelHi: 'पेट', labelMr: 'पोट' },
     { key: 'shoulder', labelEn: 'Shoulder', labelHi: 'कंधा', labelMr: 'खांदा' },
     { key: 'sleeve', labelEn: 'Sleeve Length', labelHi: 'आस्तीन की लंबाई', labelMr: 'बाहीची लांबी' },
     { key: 'length', labelEn: 'Shirt Length', labelHi: 'कमीज़ की लंबाई', labelMr: 'शर्टची लांबी' },
@@ -63,6 +64,7 @@ const seedDefaultTemplates = async (tenantId, language = 'en') => {
     { key: 'length', labelEn: 'Length', labelHi: 'लंबाई', labelMr: 'लांबी' },
     { key: 'chest', labelEn: 'Chest', labelHi: 'छाती', labelMr: 'छाती' },
     { key: 'waist', labelEn: 'Waist', labelHi: 'कमर', labelMr: 'कंबर' },
+    { key: 'stomach', labelEn: 'Stomach', labelHi: 'पेट', labelMr: 'पोट' },
     { key: 'shoulder', labelEn: 'Shoulder', labelHi: 'कंधा', labelMr: 'खांदा' },
     { key: 'sleeve', labelEn: 'Sleeve', labelHi: 'आस्तीन', labelMr: 'बाही' },
     { key: 'neck', labelEn: 'Neck', labelHi: 'गर्दन', labelMr: 'मान' },

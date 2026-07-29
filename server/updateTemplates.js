@@ -7,6 +7,7 @@ dotenv.config();
 const shirtFields = [
   { key: 'chest', labelEn: 'Chest', labelHi: 'छाती', labelMr: 'छाती' },
   { key: 'waist', labelEn: 'Waist', labelHi: 'कमर', labelMr: 'कंबर' },
+  { key: 'stomach', labelEn: 'Stomach', labelHi: 'पेट', labelMr: 'पोट' },
   { key: 'shoulder', labelEn: 'Shoulder', labelHi: 'कंधा', labelMr: 'खांदा' },
   { key: 'sleeve', labelEn: 'Sleeve Length', labelHi: 'आस्तीन की लंबाई', labelMr: 'बाहीची लांबी' },
   { key: 'length', labelEn: 'Shirt Length', labelHi: 'कमीज़ की लंबाई', labelMr: 'शर्टची लांबी' },
@@ -29,12 +30,14 @@ const genericTopFields = [
   { key: 'length', labelEn: 'Length', labelHi: 'लंबाई', labelMr: 'लांबी' },
   { key: 'chest', labelEn: 'Chest', labelHi: 'छाती', labelMr: 'छाती' },
   { key: 'waist', labelEn: 'Waist', labelHi: 'कमर', labelMr: 'कंबर' },
+  { key: 'stomach', labelEn: 'Stomach', labelHi: 'पेट', labelMr: 'पोट' },
   { key: 'shoulder', labelEn: 'Shoulder', labelHi: 'कंधा', labelMr: 'खांदा' },
   { key: 'sleeve', labelEn: 'Sleeve', labelHi: 'आस्तीन', labelMr: 'बाही' },
   { key: 'neck', labelEn: 'Neck', labelHi: 'गर्दन', labelMr: 'मान' },
 ];
 
 const newTemplates = [
+  { type: 'shirt', fields: shirtFields },
   { type: 'kurta', fields: genericTopFields },
   { type: 'paijama', fields: pantFields },
   { type: 'nawabi', fields: genericTopFields },
@@ -56,7 +59,7 @@ const run = async () => {
       for (const tpl of newTemplates) {
         await MeasurementTemplate.updateOne(
           { tenantId: tenant._id, garmentType: tpl.type },
-          { $setOnInsert: { fields: tpl.fields, isDefault: true } },
+          { $set: { fields: tpl.fields } },
           { upsert: true }
         );
       }
